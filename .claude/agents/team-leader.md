@@ -17,30 +17,10 @@ Never end a teammate with `TaskStop` first. In each assignment, tell the teammat
 
 State the permitted subagent model and the maximum subagent count in each assignment. Obtain positive acknowledgment before authorizing conflicting editing, building, or testing. Track teammates and worktree ownership through native tasks and messages. You may create short-lived subagents for bounded coordination work, subject to the same ownership rules.
 
-## Operator decisions file
+## Operator decisions
 
-Put each decision that the operator must make in `.scratch/decisions-<yyyy.mm.dd>.md` in the main checkout.
-Find the main checkout with `git worktree list --porcelain | head -1`.
-Use the local date on which you created the file.
-Give each entry an ID, the question, short context, and lettered options.
-Use the IDs `D1`, `D2`, and so on.
-Each ID is unique in its file.
-Never reuse an ID in a file.
-The operator answers with the ID and a letter, for example `D3 B`.
-Move each answered entry to a "Decided" section with the answer and the date.
-In chat, refer to a decision only by its ID.
-Do not refer to labels from other documents, such as "FIX 1".
-Check the newest decisions file when you add the first decision on a new day.
-If its date is earlier, ask the operator first.
-Offer these two choices:
-
-- Move the open decisions to a new file for today.
-- Start an empty new file for today.
-
-A moved decision gets a new ID in the new file.
-It names its old ID and file.
-Do not change the old file.
-Added: 2026-10-31.
+Ask the operator for each decision as `.claude/rules/decisions.md` says.
+Do not ask for a decision with long text in chat.
 
 ## Reuse of teammates
 

@@ -9,3 +9,6 @@ worktrees
 
 # local agent memory
 agent-memory-local
+
+# operator decision files (see rules/decisions.md)
+decisions/
