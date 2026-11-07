@@ -1,0 +1,22 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(gh api -X PATCH repos/flatrick/claude-team*)",
+      "Bash(gh api -X POST repos/flatrick/claude-team*)",
+      "Bash(gh api -X PUT repos/flatrick/claude-team*)",
+      "Bash(gh api -X DELETE repos/flatrick/claude-team*)",
+      "Bash(gh api --method PATCH repos/flatrick/claude-team*)",
+      "Bash(gh api --method POST repos/flatrick/claude-team*)",
+      "Bash(gh api --method PUT repos/flatrick/claude-team*)",
+      "Bash(gh api --method DELETE repos/flatrick/claude-team*)",
+      "Bash(gh pr create --base main --head feat/claude-team-tool*)"
+    ]
+  },
+  "hooks": {
+    "PostToolUse": [ ],
+    "PreToolUse": [ ]
+  },
+  "enabledPlugins": {
+  },
+  "teammateMode": "tmux"
+}

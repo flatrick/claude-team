@@ -1,0 +1,8 @@
+# user local settings
+settings.local.json
+
+# user local claude lock-file
+scheduled_tasks.lock
+
+# claude git worktrees
+worktrees
