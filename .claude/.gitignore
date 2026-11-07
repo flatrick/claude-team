@@ -6,3 +6,6 @@ scheduled_tasks.lock
 
 # claude git worktrees
 worktrees
+
+# local agent memory
+agent-memory-local
