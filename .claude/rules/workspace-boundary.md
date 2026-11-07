@@ -55,6 +55,15 @@ Do not run `git config --global` or `git config --system`, edit `.git/hooks/`, o
 
 ## Allowed exceptions
 
+These repository commands may write outside the workspace without a prompt:
+
+- `dotnet run --file scripts/install-tool.cs -- install`
+- `dotnet run --file scripts/install-tool.cs -- reinstall`
+- `dotnet run --file scripts/install-tool.cs -- uninstall`
+
+They change the user-global dotnet tool store.
+Announce the command to the team lead before you run it.
+
 Test code may use the system temp directory through `Directory.CreateTempSubdirectory`.
 See [test-temp-paths.md](test-temp-paths.md).
 

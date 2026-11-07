@@ -26,6 +26,24 @@ When you dispatch an agent into a worktree prepared with this command, give it t
 path and do not also request automatic worktree isolation. Manual preparation and host-managed
 isolation are separate workflows; use only one for a dispatch.
 
+### Confirm which build is installed
+
+Added: 2026-11-07.
+
+One global install serves every session on the machine.
+The code of a worktree is live only after `dotnet run --file scripts/install-tool.cs -- install` from that worktree.
+Installing from one worktree changes the `claude-team` command for every other session.
+Ask the other leaders first, as [claude-team-peer-leaders.md](claude-team-peer-leaders.md) requires.
+
+Check the installed build without a change:
+
+```bash
+dotnet run --file scripts/install-tool.cs -- status
+```
+
+The output names the installed version and the branch of this checkout.
+A running leader keeps its old build until you restart it.
+
 ### `core.hooksPath` must be relative, not an absolute path into one checkout
 
 `core.hooksPath` lives in the shared `.git/config` that every worktree of this repository reads.
