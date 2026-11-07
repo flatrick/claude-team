@@ -19,3 +19,4 @@ Do not write them to the repository root or to a committed path.
 - Confirm the ignore rule once per checkout with `git check-ignore -q .scratch/probe.log`.
 - Prefer one logical run per log file.
 - Keep a log until you need disk space.
+- Decision files are an exception. They live in `.claude/decisions/`, not in `.scratch/`. See [decisions.md](decisions.md).
