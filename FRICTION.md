@@ -8,7 +8,7 @@
 - Evidence: `ls scripts/run-tests.cs test.runsettings DotNetMcpServer.slnx` in the main checkout returned "No such file or directory" for all three.
 - Effect: The work on `feat/claude-team-tool` could not follow these rules as written.
   It used plain `dotnet build` and `dotnet test` with logs in `.scratch/`, per the user's global CLAUDE.md.
-- Cause: inferred. The files were copied from the dotnet-mcp repository without adaptation.
+- Cause: inferred. The files were copied from another repository without adaptation.
 - Status: open. The user decides later which copied files to keep.
 
 ## F-002 — The copied `.claude/` cited scripts and paths that do not exist
