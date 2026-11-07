@@ -49,6 +49,26 @@ Verify it against **ground truth** before you act on it, and before you commit a
   Set `git config core.hooksPath .githooks` once, and see [worktree-workflow.md](worktree-workflow.md).
 - **Tests**: Every project under `tests/` runs from `ClaudeTeam.slnx`. All tests run locally.
 
+## Build, test, and install the tool
+
+Added: 2026-11-07.
+
+The tool is `src/ClaudeTeam/ClaudeTeam.csproj`.
+It is a .NET tool: `PackAsTool` is on, and the `PackageId` and the command are both `claude-team`.
+The solution is `ClaudeTeam.slnx`.
+
+1. Install the .NET 10 SDK.
+2. Build: `dotnet build ClaudeTeam.slnx`.
+3. Test: `dotnet test ClaudeTeam.slnx`.
+4. Pack and install or update the user-global tool: `dotnet run --file scripts/install-tool.cs -- install`.
+5. If a running `claude-team` process blocks the install, run `dotnet run --file scripts/install-tool.cs -- reinstall`.
+6. Remove the tool: `dotnet run --file scripts/install-tool.cs -- uninstall`.
+
+Make sure `~/.dotnet/tools` is on `PATH`. The `status` mode warns when it is not.
+The install writes outside the workspace.
+Read [workspace-boundary.md](workspace-boundary.md) before you run steps 4 to 6.
+The script writes the package to `.scratch/nuget-local/` in the checkout.
+
 ## Secrets and configuration
 
 - **No secrets in the repository**: Do not store API keys, license keys, or authentication information.
