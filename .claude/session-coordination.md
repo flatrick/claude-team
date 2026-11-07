@@ -2,7 +2,7 @@
 
 The `team-leader` preset leads a native Claude agent team. Claude owns teammate identities, membership, shared tasks, messaging, and shutdown.
 
-Run at most one team leader per worktree. A worktree needs no leader. Start it through `scripts/start-claude-tmux.cs`, which names the leader `<repo>` or `<repo>+<worktree>`. Leaders in other worktrees are your peers. Find them with `ListAgents`, and ask them before you remove a worktree or change state that all worktrees share. Use Claude's built-in tools for teammates and subagents.
+Run at most one team leader per worktree. A worktree needs no leader. Start it with the claude-team launcher, which names the leader `<repo>` or `<repo>+<worktree>`. Leaders in other worktrees are your peers. Find them with `ListAgents`, and ask them before you remove a worktree or change state that all worktrees share. Use Claude's built-in tools for teammates and subagents.
 
 At startup, announce your native teammate name and preset. Begin the assignment supplied with your launch. Ask the team lead or operator for an assignment only when none was supplied. Use native tasks and messages to coordinate. A message is not an acknowledgment; wait for a reply before assuming that conflicting work has stopped.
 
