@@ -1,3 +1,15 @@
 .DS_Store
 Thumbs.db
 .env
+
+# local scratch, artifacts, and worktrees
+.scratch/
+.artifacts/
+.worktrees/
+
+# one user's Claude overrides
+.claude/settings.local.json
+
+# .NET build output
+bin/
+obj/
