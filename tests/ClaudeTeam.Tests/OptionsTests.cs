@@ -25,6 +25,39 @@ public class OptionsTests
         Assert.Equal(["--model", "opus", "--dry-run"], options.Forwarded);
     }
 
+    [Fact]
+    public void Parses_version()
+    {
+        Assert.True(Options.Parse(["--version"]).Options!.Version);
+        Assert.False(Options.Parse([]).Options!.Version);
+    }
+
+    [Fact]
+    public void Rejects_a_short_version_alias()
+    {
+        var result = Options.Parse(["-v"]);
+        Assert.Null(result.Options);
+        Assert.Equal("Unknown option '-v'. Put Claude arguments after --.", result.Error);
+    }
+
+    [Fact]
+    public void Version_with_an_unknown_option_fails()
+    {
+        var result = Options.Parse(["--version", "--unknown"]);
+        Assert.Null(result.Options);
+        Assert.Equal("Unknown option '--unknown'. Put Claude arguments after --.", result.Error);
+    }
+
+    [Theory]
+    [InlineData("--version", "--help")]
+    [InlineData("--help", "--version")]
+    public void Version_and_help_set_both_flags(string first, string second)
+    {
+        var options = Options.Parse([first, second]).Options!;
+        Assert.True(options.Version);
+        Assert.True(options.Help);
+    }
+
     [Theory]
     [InlineData("-h")]
     [InlineData("--help")]

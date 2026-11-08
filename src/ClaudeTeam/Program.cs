@@ -15,13 +15,21 @@ var home = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
 var git = Git.Read();
 var session = options.Session ?? SessionName.Resolve(git, workingDirectory);
 
-if (options.Help)
+var kind = CommandResolver.Resolve(options);
+
+if (kind == CommandKind.Help)
 {
     Console.WriteLine(Help.Text(backend, session));
     return 0;
 }
 
-if (options.InstallPeerRule is not null || options.InstallLeaderAgent is not null)
+if (kind == CommandKind.Version)
+{
+    Console.WriteLine(VersionLine.Current());
+    return 0;
+}
+
+if (kind == CommandKind.Install)
 {
     var run = Installer.Run(
         peerRule: options.InstallPeerRule,

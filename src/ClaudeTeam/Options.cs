@@ -6,6 +6,7 @@ public sealed record Options(
     string? Session,
     bool DryRun,
     bool Help,
+    bool Version,
     string[] Forwarded,
     InstallTarget? InstallPeerRule,
     InstallTarget? InstallLeaderAgent,
@@ -15,7 +16,7 @@ public sealed record Options(
     {
         string? session = null;
         InstallTarget? install = null, installAgent = null;
-        bool dryRun = false, help = false, force = false;
+        bool dryRun = false, help = false, version = false, force = false;
         string[] forwarded = [];
 
         for (var i = 0; i < args.Length; i++)
@@ -55,6 +56,9 @@ public sealed record Options(
                 case "-h" or "--help":
                     help = true;
                     break;
+                case "--version":
+                    version = true;
+                    break;
                 default:
                     return ParseResult.Fail($"Unknown option '{args[i]}'. Put Claude arguments after --.");
             }
@@ -63,7 +67,7 @@ public sealed record Options(
         if (force && install is null && installAgent is null)
             return ParseResult.Fail("Use --force only with --install-peer-rule or --install-leader-agent.");
 
-        return new ParseResult(new Options(session, dryRun, help, forwarded, install, installAgent, force), null);
+        return new ParseResult(new Options(session, dryRun, help, version, forwarded, install, installAgent, force), null);
     }
 
     private static bool TryParseInstallTarget(string value, out InstallTarget target)
