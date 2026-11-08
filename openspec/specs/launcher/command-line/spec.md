@@ -60,8 +60,8 @@ Source: `src/ClaudeTeam/Options.cs` (`case "--session"`), `tests/ClaudeTeam.Test
 
 ### Requirement: Install target values
 
-The tool SHALL accept `repo`, `global`, or `both`, in any letter case, as the value of `--install-peer-rule` and `--install-leader-agent`, and SHALL reject a missing value.
-Source: `src/ClaudeTeam/Options.cs` (`InstallTarget`, `Enum.TryParse` with `ignoreCase: true`), `tests/ClaudeTeam.Tests/OptionsTests.cs`.
+The tool SHALL accept `repo`, `global`, or `both`, in any letter case, as the value of `--install-peer-rule` and `--install-leader-agent`, and SHALL reject a missing value, a numeric value, a comma-separated list, and a value with surrounding whitespace.
+Source: `src/ClaudeTeam/Options.cs` (`InstallTarget`, `TryParseInstallTarget`), `tests/ClaudeTeam.Tests/OptionsTests.cs`.
 
 #### Scenario: Case-insensitive target
 
@@ -72,6 +72,11 @@ Source: `src/ClaudeTeam/Options.cs` (`InstallTarget`, `Enum.TryParse` with `igno
 
 - **WHEN** the tool runs with `--install-leader-agent` as the last argument, or with `--install-leader-agent elsewhere`
 - **THEN** parsing fails with the message `Supply repo, global, or both after --install-leader-agent.`
+
+#### Scenario: Numeric, list, or padded target
+
+- **WHEN** the tool runs with `--install-peer-rule 0`, `--install-peer-rule repo,global`, or `--install-peer-rule " repo "`
+- **THEN** parsing fails with the message `Supply repo, global, or both after --install-peer-rule.`
 
 #### Scenario: Both install options in one run
 

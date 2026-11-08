@@ -63,6 +63,28 @@ public class OptionsTests
     }
 
     [Theory]
+    [InlineData("--install-peer-rule", "0")]
+    [InlineData("--install-peer-rule", "2")]
+    [InlineData("--install-peer-rule", "7")]
+    [InlineData("--install-peer-rule", "-1")]
+    [InlineData("--install-peer-rule", "repo,global")]
+    [InlineData("--install-peer-rule", "global,both")]
+    [InlineData("--install-peer-rule", " repo ")]
+    [InlineData("--install-leader-agent", "0")]
+    [InlineData("--install-leader-agent", "2")]
+    [InlineData("--install-leader-agent", "7")]
+    [InlineData("--install-leader-agent", "-1")]
+    [InlineData("--install-leader-agent", "repo,global")]
+    [InlineData("--install-leader-agent", "global,both")]
+    [InlineData("--install-leader-agent", " repo ")]
+    public void Rejects_numeric_list_and_padded_install_targets(string option, string value)
+    {
+        var result = Options.Parse([option, value, "--force"]);
+        Assert.Null(result.Options);
+        Assert.Equal($"Supply repo, global, or both after {option}.", result.Error);
+    }
+
+    [Theory]
     [InlineData("--install-leader-agent")]
     [InlineData("--install-leader-agent", "elsewhere")]
     [InlineData("--session")]
