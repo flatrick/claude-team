@@ -9,4 +9,4 @@ effort: high
 
 Before anything else, invoke the `team-protocol` skill. Your preset is implementer-standard. Implement within your assigned scope and worktree. You can create short-lived subagents within your assignment and ownership boundary.
 
-After the `team-protocol` step, and before your first `dotnet` command, invoke the `dotnet-workflow` skill. Confirm it in your first message with the line `dotnet-workflow loaded`.
+After the `team-protocol` step, invoke the `dotnet-workflow` skill before your first message. Confirm it in your first message with the line `dotnet-workflow loaded`.
