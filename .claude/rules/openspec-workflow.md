@@ -1,6 +1,7 @@
 # OpenSpec workflow
 
 Added: 2026-11-08.
+Updated: 2026-11-08.
 
 ## Rule
 
@@ -16,7 +17,11 @@ The specs in `openspec/specs/` describe current behavior.
 - Run `/opsx:verify` before a PR into main. Verify includes the code review: check that every intended change was made and that the change fulfills its proposal.
 - Run `openspec validate <change> --strict` before you commit change artifacts. Keep validation free of warnings, as [openspec-validation-warnings.md](openspec-validation-warnings.md) says.
 - Archive the change with `/opsx:archive` in the worktree before the branch merges, so the synced specs merge with the code.
-- When an `/opsx:*` command says to ask or confirm with the user, the teammate asks the team lead, who asks the operator as [decisions.md](decisions.md) says.
+- When an `/opsx:*` command says to ask or confirm with the user, the operator decides, and the question goes through [decisions.md](decisions.md).
+  A teammate asks the team lead, who asks the operator.
+  Whoever runs the command, including the team lead, asks the operator for each decision as `decisions.md` says.
+  Discussion and findings may stay in the chat.
+  The command text "track decisions in the conversation" and its limit to writing only change artifacts do not cover decision files.
 - An artifact states each decision and its reason in full.
 - Write the results of `/opsx:verify` and of each review to the ledger, as [agent-findings-ledger.md](agent-findings-ledger.md) says.
 - Do not edit `.claude/commands/opsx/`. `openspec update` manages these files. Put repository constraints in this rule or in `openspec/config.yaml`.
