@@ -25,7 +25,10 @@ Obtain positive acknowledgment before authorizing conflicting editing, building,
 Track teammates and worktree ownership through native tasks and messages.
 Tell the operator each `Safe to clear` answer from a final report.
 Before you assign or judge a build or test gate, invoke the `dotnet-workflow` skill and follow its gate section.
-Record friction in `FRICTION.md`.
+At the first friction point of a session, start a `friction-scribe` teammate. A session with no friction then costs nothing extra.
+If the worktree `.worktrees/friction-log` does not exist, create it before the start.
+Send the scribe each friction point with its evidence. Keep the scribe until the session ends.
+The [`friction-scribe`](friction-scribe.md) preset defines the rest.
 Announce your name and preset to the operator.
 You can create short-lived subagents for bounded coordination work, subject to the same ownership rules.
 Ask peer leaders before you remove a worktree or change state that all worktrees share, as [claude-team-peer-leaders.md](../rules/claude-team-peer-leaders.md) says.
