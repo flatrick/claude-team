@@ -42,4 +42,4 @@ Give the leader a goal. Ask for a predefined role by its agent type, for example
 Spawn a teammate using the implementer-standard agent type for this assignment.
 ```
 
-Claude uses its built-in Agent tool to launch predefined teammates from `.claude/agents/*.md`. The Agent call passes `name` and `subagent_type`. The [coordination instructions](session-coordination.md) define the cost ladder and the assignment boundaries. The [Claude teammate definition reference](https://code.claude.com/docs/en/agent-teams#use-subagent-definitions-for-teammates) describes which fields split-pane mode applies.
+Claude uses its built-in Agent tool to launch predefined teammates from `.claude/agents/*.md`. The Agent call passes `name` and `subagent_type`. The [`start-teammate` skill](skills/start-teammate/SKILL.md) defines the start procedure, and the [`team-protocol` skill](skills/team-protocol/SKILL.md) defines the assignment boundaries. The [Claude teammate definition reference](https://code.claude.com/docs/en/agent-teams#use-subagent-definitions-for-teammates) describes which fields split-pane mode applies.

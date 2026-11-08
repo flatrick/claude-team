@@ -43,13 +43,11 @@ carriage-return pattern — that check has produced false negatives on a pure-LF
 
 ## A measured fact belongs in one place; every copy is a future lie
 
-When a number or a decision is recorded in several documents, updating one of them silently
-falsifies the rest — and the stale copies read exactly like the fresh one, because a plausible
-figure looks like a checked figure. This is the single most common defect in this repository's
-documentation, and it is never caught by the person making the change.
-
-Prefer citing the source over restating it. Where restating is genuinely clearer, expect the copy
-to go stale and give it a mechanical check.
+A fact recorded in several documents goes stale in all but one of them, and the stale copies read
+exactly like the fresh one, because a plausible figure looks like a checked figure.
+[AGENTS.md](../../AGENTS.md) ("Where instructions live") requires one home for each instruction.
+The same holds for a measured fact. Prefer citing the source over restating it.
+Where restating is genuinely clearer, expect the copy to go stale and give it a mechanical check.
 
 No script checks this. Review it by hand.
 
