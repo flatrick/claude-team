@@ -8,11 +8,15 @@
     <PackAsTool>true</PackAsTool>
     <ToolCommandName>claude-team</ToolCommandName>
     <PackageId>claude-team</PackageId>
-    <Version>0.1.0</Version>
+    <MinVerTagPrefix>v</MinVerTagPrefix>
     <Authors>flatrick</Authors>
     <Description>Starts a Claude team leader in a tmux (Linux, WSL) or psmux (Windows) session named after the current repository.</Description>
     <PackageLicenseExpression>Unlicense</PackageLicenseExpression>
   </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="MinVer" Version="8.0.0" PrivateAssets="all" />
+  </ItemGroup>
 
   <ItemGroup>
     <EmbeddedResource Include="claude-team-peer-leaders.md" LogicalName="claude-team-peer-leaders.md" />
