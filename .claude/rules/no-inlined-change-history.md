@@ -3,7 +3,7 @@
 ## Rule
 
 A document that states **current truth** contains only what is true now.
-Current-truth documents are rules, skills, agent briefs, and the README.
+Current-truth documents are rules, skills, agent briefs, the README, and the specs in `openspec/specs/`.
 Do not write the history of the document inside it.
 
 Forbidden inside a current-truth document:
@@ -34,7 +34,7 @@ A live warning about a trap is a current fact. Do not remove it.
 
 ## Scope
 
-This rule applies to `.claude/rules/`, `.claude/skills/`, `.claude/agents/`, and `README.md`.
+This rule applies to `.claude/rules/`, `.claude/skills/`, `.claude/agents/`, `openspec/specs/`, and `README.md`.
 It does not apply to commit messages, PR text, friction logs, or files under `.scratch/`.
 
 ## Enforcement

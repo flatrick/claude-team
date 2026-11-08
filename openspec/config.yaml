@@ -13,7 +13,7 @@ context: |
   Never write a bare count: .claude/rules/repo-conventions.md.
   Write text in ASD-STE100 Simplified Technical English: .claude/rules/writing-style.md.
   Preset choice and escalation: the agent descriptions in .claude/agents/ and the escalation policy in .claude/agents/team-leader.md.
-  Launch and process code has a Windows (psmux) path and a non-Windows (tmux) path: .claude/rules/cross-platform-tooling.md.
+  Every tool in scripts/ is a single-file C# program that runs on native Windows without a shell: .claude/rules/cross-platform-tooling.md.
 
 rules:
   proposal:
