@@ -88,6 +88,9 @@ static int RunStatus(string checkoutRoot)
         ? "Global tool: not installed."
         : $"Global tool: {PackageId} {globalVersion}");
 
+    if (globalVersion is not null)
+        Console.WriteLine($"Installed commit: {GetInstalledCommit()}");
+
     var branch = GetCurrentBranch(checkoutRoot);
     Console.WriteLine($"This checkout: branch {branch ?? "(detached HEAD)"}.");
 
@@ -183,6 +186,34 @@ static string? GetInstalledVersion()
 {
     var (exitCode, stdout) = RunProcessCapture("dotnet", ["tool", "list", "--global"]);
     return exitCode == 0 ? ParseInstalledVersion(stdout) : null;
+}
+
+// Reads the commit from `claude-team --version`, for example "claude-team 0.1.1-alpha.0.3+bf37b92".
+static string GetInstalledCommit()
+{
+    try
+    {
+        var psi = new ProcessStartInfo(ToolCommandName, ["--version"])
+        {
+            UseShellExecute = false,
+            RedirectStandardOutput = true,
+            RedirectStandardError = true
+        };
+        using var process = Process.Start(psi) ?? throw new InvalidOperationException($"Failed to start {ToolCommandName}.");
+        var stdout = process.StandardOutput.ReadToEnd();
+        process.StandardError.ReadToEnd();
+        process.WaitForExit();
+        if (process.ExitCode != 0)
+            return "unknown";
+
+        var line = stdout.Trim();
+        var plus = line.IndexOf('+');
+        return plus >= 0 && plus < line.Length - 1 ? line[(plus + 1)..] : "unknown";
+    }
+    catch (Win32Exception)
+    {
+        return "unknown";
+    }
 }
 
 static (int ExitCode, string StdOut) RunGitCapture(string checkoutRoot, params string[] gitArgs)
