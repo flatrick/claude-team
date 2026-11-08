@@ -7,6 +7,9 @@ description: Build and test workflow for this repository's .NET projects. Load b
 
 Use `ClaudeTeam.slnx` as the solution.
 This skill is the one home of the build and test rules.
+Install the .NET 10 SDK.
+The tool is `src/ClaudeTeam/ClaudeTeam.csproj`.
+The rule `.claude/rules/worktree-workflow.md` says how to install the tool.
 
 ## Never run two `dotnet` commands in parallel
 

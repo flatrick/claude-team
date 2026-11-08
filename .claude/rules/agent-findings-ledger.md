@@ -277,6 +277,23 @@ FINDINGS LEDGER (read before starting, write before replying):
   Read only the entries whose key matches your assignment.
 ```
 
+## Verify a finding before you act on it
+
+A **finding** is a review comment, a claimed bug, a "the SDK does X" assertion, or a hypothesis about
+why something behaves in a certain way.
+A finding is a *claim to check*, never a directive to obey.
+Verify it against **ground truth** before you act on it, and before you commit any code that acts on it.
+
+- **Use ground truth, not authority or confidence.** Check the claim against the thing that decides it:
+  the source, the SDK, a runtime observation, or a focused test.
+  A confident finding can be wrong, and a tentative finding can be right.
+- **Resolve the finding. Do not comply by reflex.** Apply a finding only after verification confirms it.
+  If verification refutes it, reject it and state the reason. Record both outcomes.
+- **Exploration is cheap. Large rewrites are not.** Validate a premise with throwaway code before
+  you commit to a pattern or rewrite a large section.
+  Do not commit the throwaway code as the solution.
+  Keep the conclusion reproducible, for example a recorded command and its output.
+
 ## Enforcement
 
 Behavioral. No test can tell a skipped ledger from a run that found nothing. An agent
