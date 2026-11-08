@@ -2,7 +2,8 @@
 
 ## Purpose
 
-This is a shared spec for the tooling area. It defines the form of every repository tool under `scripts/`, so its requirements apply to every spec under `tooling/`.
+This is a shared spec for the tooling area.
+It defines the form of every repository tool under `scripts/`, so its requirements apply to every spec under `tooling/`.
 
 ## Requirements
 

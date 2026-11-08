@@ -2,7 +2,8 @@
 
 ## Purpose
 
-Defines the command-line surface of `claude-team`: which options it accepts, how it rejects invalid input, how it forwards arguments to `claude`, and how it shows help. This is a shared spec for the launcher area: every invocation of `claude-team` parses its options first, so these requirements apply to every spec under `launcher/`.
+This spec defines the command-line surface of `claude-team`: the options it accepts, how it rejects invalid input, how it forwards arguments to `claude`, and how it shows help.
+It is a shared spec for the launcher area. Every run of `claude-team` parses its options first, so these requirements apply to every spec under `launcher/`.
 
 ## Requirements
 
@@ -60,7 +61,8 @@ Source: `src/ClaudeTeam/Options.cs` (`case "--session"`), `tests/ClaudeTeam.Test
 
 ### Requirement: Install target values
 
-The tool SHALL accept `repo`, `global`, or `both`, in any letter case, as the value of `--install-peer-rule` and `--install-leader-agent`, and SHALL reject a missing value, a numeric value, a comma-separated list, and a value with surrounding whitespace.
+The tool SHALL accept `repo`, `global`, or `both`, in any letter case, as the value of `--install-peer-rule` and `--install-leader-agent`.
+The tool SHALL reject a missing value, a numeric value, a comma-separated list, and a value with surrounding whitespace.
 Source: `src/ClaudeTeam/Options.cs` (`InstallTarget`, `TryParseInstallTarget`), `tests/ClaudeTeam.Tests/OptionsTests.cs`.
 
 #### Scenario: Case-insensitive target

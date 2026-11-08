@@ -2,7 +2,8 @@
 
 ## Purpose
 
-Defines how `claude-team` installs its two starter files, the peer-leader rule and the team-leader agent, into a repository, into the user profile, or both. Both files use one install mechanism, so this capability covers them together.
+This spec defines how `claude-team` installs its two starter files: the peer-leader rule and the team-leader agent.
+It installs them into a repository, into the user profile, or into both. Both files use one install mechanism, so this spec covers them together.
 
 ## Requirements
 
@@ -30,7 +31,8 @@ Source: `src/ClaudeTeam/Installer.cs` (`Install`), `src/ClaudeTeam/PeerRule.cs`,
 
 ### Requirement: Install order
 
-The tool SHALL write the repository file before the user profile file for the target `both`, and SHALL install the peer-leader rule before the team-leader agent when both install options are given.
+For the target `both`, the tool SHALL write the repository file before the user profile file.
+If both install options are given, the tool SHALL install the peer-leader rule before the team-leader agent.
 Source: `src/ClaudeTeam/Installer.cs` (`Install`, `Run`), `tests/ClaudeTeam.Tests/InstallerTests.cs` (`Combined_run_writes_rule_and_agent`).
 
 #### Scenario: Both targets
@@ -41,8 +43,8 @@ Source: `src/ClaudeTeam/Installer.cs` (`Install`, `Run`), `tests/ClaudeTeam.Test
 
 ### Requirement: Keep existing files unless forced
 
-The tool SHALL keep an existing target file and print `Kept the existing <path>. Use --force to replace it.` when `--force` is not given.
-With `--force`, the tool SHALL replace the file.
+If `--force` is not given, the tool SHALL keep an existing target file and print `Kept the existing <path>. Use --force to replace it.`
+If `--force` is given, the tool SHALL replace the file.
 Source: `src/ClaudeTeam/Installer.cs` (`Write`, `Run`), `tests/ClaudeTeam.Tests/PeerRuleTests.cs` (`Install_keeps_an_existing_file_without_force`), `tests/ClaudeTeam.Tests/LeaderAgentTests.cs` (`Install_keeps_an_existing_file_without_force`).
 
 #### Scenario: File exists without force
@@ -58,7 +60,8 @@ Source: `src/ClaudeTeam/Installer.cs` (`Write`, `Run`), `tests/ClaudeTeam.Tests/
 
 ### Requirement: Repository target outside git
 
-The tool SHALL print `Cannot install .claude/<folder>/<file> to the repository: the current folder is not in a git repository.` for each repository target when the current folder is not in a git repository, and SHALL exit with code 1.
+If the current folder is not in a git repository, the tool SHALL print `Cannot install .claude/<folder>/<file> to the repository: the current folder is not in a git repository.` for each repository target.
+The tool SHALL then exit with code 1.
 The tool SHALL still write the user profile file of a `both` target.
 Source: `src/ClaudeTeam/Installer.cs` (`Install`, `Run`), `tests/ClaudeTeam.Tests/InstallerTests.cs` (`Outside_git_reports_the_path_and_exits_1`).
 
@@ -71,7 +74,9 @@ Source: `src/ClaudeTeam/Installer.cs` (`Install`, `Run`), `tests/ClaudeTeam.Test
 
 ### Requirement: Dry run of an install
 
-When `--dry-run` is given with an install option, the tool SHALL write no file, SHALL print `Would write <path>` or `Would keep the existing <path>. Use --force to replace it.` for each target, and SHALL return the same exit code as a real run.
+If `--dry-run` is given with an install option, the tool SHALL write no file.
+The tool SHALL print `Would write <path>` or `Would keep the existing <path>. Use --force to replace it.` for each target.
+The tool SHALL return the same exit code as a real run.
 Source: `src/ClaudeTeam/Installer.cs` (`Run`, `Write`), `tests/ClaudeTeam.Tests/InstallerTests.cs` (`Dry_run_writes_nothing_and_reports_what_would_happen`, `Dry_run_outside_git_still_exits_1`).
 
 #### Scenario: Dry run outside git

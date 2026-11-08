@@ -2,7 +2,8 @@
 
 ## Purpose
 
-Defines how `claude-team` names the multiplexer session and the Claude leader. The default name comes from the git repository and worktree of the current folder, so each worktree gets its own leader and peers can tell leaders apart.
+This spec defines how `claude-team` names the multiplexer session and the Claude leader.
+The default name comes from the git repository and worktree of the current folder. Each worktree gets its own leader, and peers can tell the leaders apart.
 
 ## Requirements
 
@@ -19,7 +20,8 @@ Source: `src/ClaudeTeam/Program.cs` (line 16).
 ### Requirement: Read git state
 
 The tool SHALL read the git state of the current folder with `git rev-parse --path-format=absolute --show-toplevel --git-dir --git-common-dir`, and SHALL read the origin URL with `git remote get-url origin`.
-The tool SHALL treat the folder as outside git when the first command fails or does not print exactly three lines, and SHALL treat the origin as absent when the second command fails or prints nothing.
+The tool SHALL treat the folder as outside git when the first command fails or does not print exactly three lines.
+The tool SHALL treat the origin as absent when the second command fails or prints nothing.
 Source: `src/ClaudeTeam/Git.cs` (`Read`).
 
 #### Scenario: Folder outside git
@@ -55,7 +57,8 @@ Source: `src/ClaudeTeam/SessionName.cs` (`Resolve`), `tests/ClaudeTeam.Tests/Ses
 
 ### Requirement: Default name in a linked worktree
 
-The tool SHALL name the session `<repository>+<worktree folder>` when the git directory differs from the common git directory, where `<repository>` is resolved as in the main checkout and `<worktree folder>` is the last segment of the worktree top-level path.
+If the git directory differs from the common git directory, the tool SHALL name the session `<repository>+<worktree folder>`.
+The tool SHALL resolve `<repository>` as in the main checkout. The tool SHALL use the last segment of the worktree top-level path as `<worktree folder>`.
 Source: `src/ClaudeTeam/SessionName.cs` (`Resolve`), `tests/ClaudeTeam.Tests/SessionNameTests.cs` (`Resolve_appends_the_worktree_folder_in_a_linked_worktree`).
 
 #### Scenario: Linked worktree
@@ -65,8 +68,10 @@ Source: `src/ClaudeTeam/SessionName.cs` (`Resolve`), `tests/ClaudeTeam.Tests/Ses
 
 ### Requirement: Repository name from a remote URL
 
-The tool SHALL derive the repository name from the last path segment of the remote URL, after it trims surrounding whitespace and trailing slashes or backslashes and removes a trailing `.git` in any letter case.
-For a URL with a scheme, only the part after the host SHALL count as the path. The tool SHALL derive no name when nothing remains.
+The tool SHALL derive the repository name from the last path segment of the remote URL.
+First, the tool trims surrounding whitespace and trailing slashes or backslashes. Then it removes a trailing `.git` in any letter case.
+For a URL with a scheme, only the part after the host SHALL count as the path.
+The tool SHALL derive no name when nothing remains.
 Source: `src/ClaudeTeam/SessionName.cs` (`FromRemoteUrl`), `tests/ClaudeTeam.Tests/SessionNameTests.cs`.
 
 #### Scenario: Supported URL forms

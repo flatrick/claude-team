@@ -2,7 +2,9 @@
 
 ## Purpose
 
-This is a shared spec for the whole solution. It defines how both `claude-team` and `scripts/install-tool.cs` start other programs, such as `git`, `tmux`, `psmux`, `claude`, `dotnet`, and `ps`. Its requirements apply to every spec in `openspec/specs/`.
+This is a shared spec for the whole solution.
+It defines how `claude-team` and `scripts/install-tool.cs` start other programs, such as `git`, `tmux`, `psmux`, `claude`, `dotnet`, and `ps`.
+Its requirements apply to every spec in `openspec/specs/`.
 
 ## Requirements
 

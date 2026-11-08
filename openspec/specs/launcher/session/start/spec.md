@@ -2,7 +2,8 @@
 
 ## Purpose
 
-Defines how `claude-team` starts a Claude team leader in a terminal multiplexer session: the backend it picks per platform, the `claude` command line, the agent-teams variable, the startup warnings, the dry run, and the handling of an existing session or a missing backend.
+This spec defines how `claude-team` starts a Claude team leader in a terminal multiplexer session.
+It covers these topics: the backend for each platform, the `claude` command line, the agent-teams variable, the startup warnings, the dry run, and an existing session or a missing backend.
 
 ## Requirements
 
@@ -66,7 +67,8 @@ Source: `src/ClaudeTeam/Program.cs` (lines 40-42).
 
 ### Requirement: Peer-rule warning
 
-The tool SHALL write a warning to standard error that names `claude-team --install-peer-rule <repo|global|both>` when `claude-team-peer-leaders.md` exists neither in `.claude/rules/` under the git top-level folder nor in `~/.claude/rules/`, and SHALL continue the launch.
+If `claude-team-peer-leaders.md` exists neither in `.claude/rules/` under the git top-level folder nor in `~/.claude/rules/`, the tool SHALL write a warning to standard error that names `claude-team --install-peer-rule <repo|global|both>`.
+The tool SHALL then continue the launch.
 Outside git, only `~/.claude/rules/` SHALL count.
 Source: `src/ClaudeTeam/Program.cs` (lines 43-45), `src/ClaudeTeam/PeerRule.cs` (`IsInstalled`), `tests/ClaudeTeam.Tests/PeerRuleTests.cs`.
 
@@ -142,7 +144,8 @@ Source: `src/ClaudeTeam/Program.cs` (lines 50-57).
 
 ### Requirement: Warnings before a dry run
 
-The tool SHALL write the missing-agent and missing-peer-rule warnings to standard error before the dry-run output, because it checks for both files before it handles `--dry-run`.
+The tool SHALL write the missing-agent warning and the missing-peer-rule warning to standard error before the dry-run output.
+The reason is that the tool checks for both files before it handles `--dry-run`.
 Source: `src/ClaudeTeam/Program.cs` (lines 38-45 for the warnings, lines 50-57 for the dry run).
 
 #### Scenario: Warnings before a dry run
@@ -153,7 +156,9 @@ Source: `src/ClaudeTeam/Program.cs` (lines 38-45 for the warnings, lines 50-57 f
 ### Requirement: Existing session
 
 The tool SHALL check for the session with `<backend> has-session -t =<session>` before it starts anything.
-When that command exits with code 0, the tool SHALL write a message to standard error that the session exists and that nothing was started, with commands to start under `<session>-2`, to attach, and to kill the session, and SHALL exit with code 1.
+If that command exits with code 0, the tool SHALL write a message to standard error.
+The message says that the session exists and that nothing started. It gives commands to start under `<session>-2`, to attach, and to kill the session.
+The tool SHALL then exit with code 1.
 Source: `src/ClaudeTeam/Multiplexer.cs` (`Check`, `ExistsMessage`), `src/ClaudeTeam/Program.cs` (lines 59-67).
 
 #### Scenario: Session already running
