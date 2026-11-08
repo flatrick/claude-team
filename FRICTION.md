@@ -1,27 +1,9 @@
 # Friction log
 
-## F-001 — Copied rules name files that this repository does not have
-
-- Date: 2026-11-07
-- Observation: The untracked `.claude/rules/` files came from another repository.
-  `testing-discipline.md`, `development.md`, and `dotnet/build-parallelism.md` require `scripts/run-tests.cs`, `test.runsettings`, `DotNetMcpServer.slnx`, Reqnroll E2E tests, and Stryker runs.
-- Evidence: `ls scripts/run-tests.cs test.runsettings DotNetMcpServer.slnx` in the main checkout returned "No such file or directory" for all three.
-- Effect: The work on `feat/claude-team-tool` could not follow these rules as written.
-  It used plain `dotnet build` and `dotnet test` with logs in `.scratch/`, per the user's global CLAUDE.md.
-- Cause: inferred. The files were copied from another repository without adaptation.
-- Status: open. The user decides later which copied files to keep.
-
-## F-002 — The copied `.claude/` cited scripts and paths that do not exist
-
-- Date: 2026-11-07
-- Observation: `.claude/` was copied from another repository.
-  The review cited about 26 scripts and paths that do not exist here.
-  Examples are `docs/`, `AGENTS.md`, `git.md`, `.claude/hooks/`, and the folders of a planning workflow.
-- Evidence: `/home/flatrick/src/github/flatrick/claude-team/.scratch/claude-dir-review/report.md`.
-- Effect: A reader or an agent could follow a rule that points to a missing file.
-- Cause: inferred. The directory was copied without adaptation.
-  This is the same cause as F-001.
-- Status: addressed on `chore/adapt-claude-dir`.
+The team-leader session owns this file.
+Other sessions report friction to the leader, and the leader records it here.
+Each entry gives the observation, the evidence, and the effect on coordination.
+The status of each entry is open until the operator makes a decision.
 
 ## F-003 — A teammate stopped reading its inbox after its helpers created separate teams
 
@@ -85,3 +67,32 @@
 - Cause: verified. `rg` skips git-ignored paths unless the command has `--no-ignore`.
 - Fix: A `ripgrep` skill now exists (agent-skills branch `feat/ripgrep`, copy in `~/.claude/skills/ripgrep`).
 - Status: addressed.
+
+## F-006 — A Read in a worktree delivered rule files from two checkouts
+
+- Date: 2026-11-08
+- Observation: A session started in the main checkout. It then read two files in a worktree.
+  The two Reads delivered the unscoped rules a second time, from the worktree copies.
+  They also delivered rule copies from the worktree and from the main checkout.
+  The main copies included a rule that the branch deleted (`dotnet/build-parallelism.md`).
+- Evidence: `/home/flatrick/src/github/flatrick/claude-team/.scratch/agent-ledgers/rules-load-review/20261108T111516Z-rules-load-reviewer.md`, key `dual-checkout-rule-delivery-in-worktree`.
+- Effect: A teammate sees the old main rule text next to the new worktree text.
+  Rule edits of a branch do not govern sessions that started in main until the branch merges and the session restarts.
+  The always-loaded rules cost double in a worktree.
+- Not isolated: the reviewer did not find out which Read caused which delivery. A probe must read one file at a time.
+- Cause: not verified.
+- Status: open.
+
+## F-007 — Nothing makes a subagent of a worker load the protocol skills
+
+- Date: 2026-11-08
+- Observation: The agent briefs allow short-lived subagents.
+  `team-protocol` applies to "every teammate and subagent that sends messages".
+  No text tells a worker to give `team-protocol`, the ledger path, or `dotnet-workflow` to a built-in subagent type.
+  It is not tested whether a subagent receives the project rules.
+- Evidence: `/home/flatrick/src/github/flatrick/claude-team/.scratch/agent-ledgers/rules-load-review/20261108T111516Z-rules-load-reviewer.md`, key `subagent-delivery-unspecified`.
+  Method: `rg --hidden --glob '!.git/**' -n 'subagent' .claude` and a read of `team-protocol/SKILL.md`, section "Subagents".
+- Effect: A subagent can run without the protocol, the ledger duty, or the build workflow.
+  A probe with a general-purpose subagent must show which rules it receives.
+- Cause: not verified.
+- Status: open.
