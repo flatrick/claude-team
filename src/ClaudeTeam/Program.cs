@@ -66,7 +66,7 @@ switch (Multiplexer.Check(backend, session))
         return 1;
 }
 
-// A running tmux server does not take the variable from the client, so new-session -e also passes it.
+// A running tmux server does not take the variable from the client, so new-session -e passes it too.
 var environment = new Dictionary<string, string> { [LaunchPlan.TeamsVariable] = "1" };
 foreach (var command in plan.Commands)
 {

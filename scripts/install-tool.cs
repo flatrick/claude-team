@@ -4,9 +4,9 @@
 
 // Build, install, and manage claude-team as a user-global .NET tool.
 // The NuGet tool package (PackAsTool=true in src/ClaudeTeam/ClaudeTeam.csproj) is the way
-// claude-team is built, installed, and launched.
+// to build, install, and launch claude-team.
 //
-// Run from any directory; the script finds the checkout from its own file path:
+// Run the script from any directory. The script finds the checkout from its own file path:
 //   dotnet run --file scripts/install-tool.cs                   # status + usage (default)
 //   dotnet run --file scripts/install-tool.cs -- install        # pack + install/update the user-global tool
 //   dotnet run --file scripts/install-tool.cs -- reinstall      # stop running instances, then install
@@ -18,12 +18,12 @@
 // user-global dotnet tool store, which is outside the workspace.
 //
 // `reinstall` exists because Windows holds an exclusive lock on the shim executable while the
-// tool runs, so `install` fails on the uninstall/install step. Unix replaces a running
-// executable's file, so there the stop step only retires a process that still runs the old build.
+// tool runs. The lock makes `install` fail on the uninstall/install step. Unix replaces the file
+// of a running executable, so on Unix the stop step only ends a process that runs the old build.
 //
-// Self-location: the checkout root is the parent of this script's own `scripts/` directory,
-// resolved through [CallerFilePath], never from the working directory. A worktree's copy of this
-// script always packs and installs that worktree's code.
+// Self-location: the checkout root is the parent of the `scripts/` directory of this script.
+// The script resolves it through [CallerFilePath], never from the working directory. The copy of
+// this script in a worktree always packs and installs the code of that worktree.
 
 using System.ComponentModel;
 using System.Diagnostics;
@@ -129,8 +129,8 @@ static bool IsToolsDirOnPath(string toolsDir)
         .Any(p => p is not null && string.Equals(p, target, comparison));
 }
 
-// PATH entries are compared after the same normalization a shell lookup effectively applies:
-// `/home/u/.dotnet/tools/`, `~/.dotnet/tools` and `/home/u//.dotnet/tools` all name the tools dir.
+// The code normalizes PATH entries the same way a shell lookup does, then compares them.
+// `/home/u/.dotnet/tools/`, `~/.dotnet/tools` and `/home/u//.dotnet/tools` all name the tools directory.
 static string? NormalizePathEntry(string entry)
 {
     var trimmed = entry.Trim();
@@ -370,7 +370,7 @@ static int StopRunningInstances()
         }
         catch (ArgumentException)
         {
-            // Exited between the scan and the kill, which is the outcome we wanted anyway.
+            // The process exited between the scan and the kill. This is the result that we want.
             Console.WriteLine("  already exited.");
         }
         catch (Exception ex) when (ex is InvalidOperationException or Win32Exception)
@@ -383,10 +383,10 @@ static int StopRunningInstances()
     return failed ? ReportStopFailure($"One or more {ToolCommandName} instances are still running.") : 0;
 }
 
-// Whether an unstoppable instance blocks the install is a platform question, not a policy choice:
-// Windows holds an exclusive lock on the shim while it runs, so continuing would only reach the
-// same failure later wearing an opaque file-lock message. Unix lets the install replace the file
-// underneath a running process, so there the same situation costs nothing but a stale process.
+// The platform decides if an instance that cannot stop blocks the install. This is not a policy choice.
+// Windows holds an exclusive lock on the shim while it runs. If the install continues, it fails
+// later with an unclear file-lock message. Unix lets the install replace the file of a running
+// process, so there the only cost is a stale process.
 static int ReportStopFailure(string message)
 {
     if (OperatingSystem.IsWindows())
@@ -402,8 +402,8 @@ static int ReportStopFailure(string message)
     return 0;
 }
 
-// Identifying another process's executable is where the three platforms diverge most, so each gets
-// the mechanism native to it rather than one mechanism wrapped in rescue paths.
+// The three platforms differ most in how they identify the executable of another process.
+// Each platform uses its own native mechanism. One mechanism with fallback paths would be worse.
 static List<(int Pid, string ExePath)> FindShimProcesses(string shimPath)
 {
     if (OperatingSystem.IsWindows())
@@ -429,8 +429,8 @@ static List<(int Pid, string ExePath)> FindShimProcessesViaMainModule(string shi
             }
             catch (Exception ex) when (ex is Win32Exception or InvalidOperationException)
             {
-                // Owned by another user, elevated, or gone since the enumeration. A process whose
-                // executable cannot be read is never assumed to be ours.
+                // Another user owns the process, it is elevated, or it ended after the enumeration.
+                // Never assume that a process with an unreadable executable is ours.
                 Console.WriteLine($"note: could not read the executable path of PID {process.Id}; skipping it.");
                 continue;
             }
@@ -443,9 +443,9 @@ static List<(int Pid, string ExePath)> FindShimProcessesViaMainModule(string shi
     return found;
 }
 
-// Deliberately not a name lookup: Linux truncates a process name to 15 characters, so a name
-// match can find nothing without an error. The `exe` link carries the full path and cannot be
-// truncated.
+// This is not a name lookup on purpose. Linux truncates a process name to 15 characters, so a
+// name match can find nothing and give no error. The `exe` link holds the full path and Linux
+// does not truncate it.
 static List<(int Pid, string ExePath)> FindShimProcessesViaProc(string shimPath)
 {
     var found = new List<(int, string)>();
@@ -462,7 +462,7 @@ static List<(int Pid, string ExePath)> FindShimProcessesViaProc(string shimPath)
         }
         catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
         {
-            // Another user's process, or one that exited mid-scan. Neither is ours.
+            // The process belongs to another user, or it exited during the scan. It is not ours.
             continue;
         }
 
@@ -473,9 +473,9 @@ static List<(int Pid, string ExePath)> FindShimProcessesViaProc(string shimPath)
     return found;
 }
 
-// macOS restricts reading another process's modules, so MainModule is not available here. `ps` is
-// started through ArgumentList with UseShellExecute = false, exactly as git and dotnet are above —
-// a process, not a shell.
+// macOS does not let a process read the modules of another process, so MainModule is not available
+// here. The code starts `ps` through ArgumentList with UseShellExecute = false, the same way as
+// git and dotnet above. It starts a process, not a shell.
 static List<(int Pid, string ExePath)> FindShimProcessesViaPs(string shimPath)
 {
     var found = new List<(int, string)>();
@@ -491,7 +491,7 @@ static List<(int Pid, string ExePath)> FindShimProcessesViaPs(string shimPath)
         if (separator < 0 || !int.TryParse(trimmed[..separator], out var pid))
             continue;
 
-        // An executable path may contain spaces, so everything after the first gap is the path.
+        // An executable path can contain spaces, so the path is all text after the first gap.
         var exePath = trimmed[(separator + 1)..].TrimStart();
         if (MatchesShim(exePath, shimPath))
             found.Add((pid, exePath));
@@ -500,10 +500,9 @@ static List<(int Pid, string ExePath)> FindShimProcessesViaPs(string shimPath)
     return found;
 }
 
-// The `comm` column carries the executable's path on macOS. Should it arrive as a bare command
-// name instead, match that rather than reporting nothing — a bare name has no directory to
-// disambiguate, so this is the weaker comparison and is only reached when the stronger one cannot
-// apply.
+// On macOS, the `comm` column holds the path of the executable. If it holds a bare command name,
+// match the name and do not report nothing. A bare name has no directory to tell programs apart.
+// This comparison is weaker, so the code uses it only when the stronger comparison cannot apply.
 static bool MatchesShim(string candidate, string shimPath) =>
     PathsEqual(candidate, shimPath)
     || (!candidate.Contains('/') && string.Equals(candidate, Path.GetFileName(shimPath), StringComparison.Ordinal));

@@ -26,8 +26,8 @@ public sealed record LaunchPlan(string Backend, IReadOnlyList<Command> Commands)
         claude.AddRange(["--teammate-mode", "tmux", "--name", inputs.Session,
             "--append-system-prompt", PeerRule.Marker, .. inputs.Forwarded]);
 
-        // psmux joins arguments without quoting, so a path with spaces would split. The session
-        // inherits the client's working directory there instead.
+        // psmux joins arguments without quotes, so a path with spaces would split. For psmux, the
+        // session inherits the working directory of the client.
         List<string> newSession = ["new-session"];
         if (inputs.InsidePane)
             newSession.Add("-d");
