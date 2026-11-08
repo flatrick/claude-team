@@ -2,14 +2,19 @@
 
 ## Purpose
 
-Defines the `install` command of `scripts/install-tool.cs`, which packs `claude-team` from the checkout and installs it as a user-global .NET tool.
+This spec defines the `install` command of `scripts/install-tool.cs`. The command packs `claude-team` from the checkout and installs it as a user-global .NET tool.
 
 ## Requirements
 
 ### Requirement: Install packs the checkout
 
-The `install` command SHALL warn when the checkout has uncommitted changes, delete any `.nupkg` file in `<checkout>/.scratch/nuget-local`, and pack `src/ClaudeTeam/ClaudeTeam.csproj` in the Release configuration into that folder.
-A failed step SHALL stop the command with that step's exit code.
+The `install` command SHALL do these steps:
+
+- warn if the checkout has uncommitted changes
+- delete any `.nupkg` file in `<checkout>/.scratch/nuget-local`
+- pack `src/ClaudeTeam/ClaudeTeam.csproj` in the Release configuration into that folder
+
+If a step fails, the command SHALL stop with the exit code of that step.
 Source: `scripts/install-tool.cs` (`RunInstall`, `GetVersionFromNupkg`).
 
 #### Scenario: Pack fails
@@ -29,9 +34,11 @@ Source: `scripts/install-tool.cs` (`RunInstall`, `ParseNugetLocalsOutput`).
 
 ### Requirement: Install replaces the global tool
 
-When another version or none is installed, the `install` command SHALL run `dotnet tool update`.
-When the same version is installed, it SHALL run `dotnet tool uninstall`, which takes no source, and then `dotnet tool install`.
-Each of these runs with `--global claude-team`. The update and the install add the pack folder as a source and the packed version. A failed step stops the command with its exit code.
+If another version or no version is installed, the `install` command SHALL run `dotnet tool update`.
+If the same version is installed, the command SHALL run `dotnet tool uninstall` and then `dotnet tool install`.
+Each command runs with `--global claude-team`. The uninstall takes no source.
+The update and the install add the pack folder as a source and the packed version.
+A failed step stops the command with its exit code.
 Source: `scripts/install-tool.cs` (`RunInstall`, `GetInstalledVersion`).
 
 #### Scenario: Unchanged version
@@ -41,8 +48,9 @@ Source: `scripts/install-tool.cs` (`RunInstall`, `GetInstalledVersion`).
 
 ### Requirement: Install verifies the shim
 
-After a successful install, the `install` command SHALL run the PATH check and SHALL exit with code 1 when the tool shim is missing from `~/.dotnet/tools`.
-Otherwise it SHALL print the installed version, commit, and branch, and exit with code 0.
+After a successful install, the `install` command SHALL run the PATH check.
+If the tool shim is missing from `~/.dotnet/tools`, the command SHALL exit with code 1.
+Otherwise, the command SHALL print the installed version, commit, and branch, and exit with code 0.
 Source: `scripts/install-tool.cs` (`RunInstall`, `GetShimPath`).
 
 #### Scenario: Shim missing

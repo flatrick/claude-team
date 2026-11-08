@@ -2,14 +2,15 @@
 
 ## Purpose
 
-Defines the `reinstall` command of `scripts/install-tool.cs`, which stops running `claude-team` instances and then runs `install`.
+This spec defines the `reinstall` command of `scripts/install-tool.cs`. The command stops running `claude-team` instances and then runs `install`.
 
 ## Requirements
 
 ### Requirement: Reinstall stops running instances first
 
 The `reinstall` command SHALL stop each running process whose executable is the tool shim and then run `install`.
-It SHALL identify processes by the main module path on Windows, by the `/proc/<pid>/exe` link on Linux, and by `ps -Ao pid=,comm=` on other platforms, and SHALL wait up to 10 seconds for each stopped process.
+It SHALL identify processes by the main module path on Windows, by the `/proc/<pid>/exe` link on Linux, and by `ps -Ao pid=,comm=` on other platforms.
+It SHALL wait up to 10 seconds for each stopped process.
 Source: `scripts/install-tool.cs` (`RunReinstall`, `StopRunningInstances`, `FindShimProcesses`, `StopTimeoutMilliseconds`).
 
 #### Scenario: No running instance
@@ -19,8 +20,8 @@ Source: `scripts/install-tool.cs` (`RunReinstall`, `StopRunningInstances`, `Find
 
 ### Requirement: Stop failure per platform
 
-When a shim process cannot be stopped or the process list cannot be read, the script SHALL exit with code 1 on Windows, because Windows locks the running shim.
-On other platforms, it SHALL print a warning and continue with `install`.
+If the script cannot stop a shim process or cannot read the process list, it SHALL exit with code 1 on Windows. Windows locks the running shim.
+On other platforms, the script SHALL print a warning and continue with `install`.
 Source: `scripts/install-tool.cs` (`ReportStopFailure`).
 
 #### Scenario: Unstoppable instance on Windows
