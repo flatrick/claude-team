@@ -8,12 +8,13 @@ public sealed record Options(
     bool Help,
     string[] Forwarded,
     InstallTarget? InstallPeerRule,
+    InstallTarget? InstallLeaderAgent,
     bool Force)
 {
     public static ParseResult Parse(string[] args)
     {
         string? session = null;
-        InstallTarget? install = null;
+        InstallTarget? install = null, installAgent = null;
         bool dryRun = false, help = false, force = false;
         string[] forwarded = [];
 
@@ -39,6 +40,12 @@ public sealed record Options(
                     install = target;
                     i++;
                     break;
+                case "--install-leader-agent":
+                    if (i + 1 >= args.Length || !Enum.TryParse<InstallTarget>(args[i + 1], ignoreCase: true, out var agentTarget))
+                        return ParseResult.Fail("Supply repo, global, or both after --install-leader-agent.");
+                    installAgent = agentTarget;
+                    i++;
+                    break;
                 case "--force":
                     force = true;
                     break;
@@ -53,10 +60,10 @@ public sealed record Options(
             }
         }
 
-        if (force && install is null)
-            return ParseResult.Fail("Use --force only with --install-peer-rule.");
+        if (force && install is null && installAgent is null)
+            return ParseResult.Fail("Use --force only with --install-peer-rule or --install-leader-agent.");
 
-        return new ParseResult(new Options(session, dryRun, help, forwarded, install, force), null);
+        return new ParseResult(new Options(session, dryRun, help, forwarded, install, installAgent, force), null);
     }
 }
 

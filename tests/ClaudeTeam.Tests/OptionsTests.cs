@@ -43,6 +43,28 @@ public class OptionsTests
     }
 
     [Theory]
+    [InlineData("repo", InstallTarget.Repo)]
+    [InlineData("GLOBAL", InstallTarget.Global)]
+    [InlineData("both", InstallTarget.Both)]
+    public void Parses_install_leader_agent(string value, InstallTarget expected)
+    {
+        var options = Options.Parse(["--install-leader-agent", value, "--force"]).Options!;
+        Assert.Equal(expected, options.InstallLeaderAgent);
+        Assert.Null(options.InstallPeerRule);
+        Assert.True(options.Force);
+    }
+
+    [Fact]
+    public void Accepts_both_install_options_in_one_run()
+    {
+        var options = Options.Parse(["--install-peer-rule", "repo", "--install-leader-agent", "global"]).Options!;
+        Assert.Equal(InstallTarget.Repo, options.InstallPeerRule);
+        Assert.Equal(InstallTarget.Global, options.InstallLeaderAgent);
+    }
+
+    [Theory]
+    [InlineData("--install-leader-agent")]
+    [InlineData("--install-leader-agent", "elsewhere")]
     [InlineData("--session")]
     [InlineData("--session", "--")]
     [InlineData("--session", "a.b")]

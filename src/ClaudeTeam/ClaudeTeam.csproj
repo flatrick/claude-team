@@ -16,6 +16,7 @@
 
   <ItemGroup>
     <EmbeddedResource Include="claude-team-peer-leaders.md" LogicalName="claude-team-peer-leaders.md" />
+    <EmbeddedResource Include="team-leader.md" LogicalName="team-leader.md" />
   </ItemGroup>
 
 </Project>
