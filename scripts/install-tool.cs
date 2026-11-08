@@ -261,7 +261,8 @@ static int RunInstall(string checkoutRoot)
 
     if (installedVersion is null || !installedVersion.Equals(targetVersion, StringComparison.OrdinalIgnoreCase))
     {
-        var updateArgs = new List<string> { "tool", "update", "--global", PackageId, "--add-source", packDir, "--version", targetVersion };
+        // --allow-downgrade lets a checkout with a lower version replace a newer installed build.
+        var updateArgs = new List<string> { "tool", "update", "--global", PackageId, "--add-source", packDir, "--version", targetVersion, "--allow-downgrade" };
         installExit = RunProcess("dotnet", updateArgs);
     }
     else
