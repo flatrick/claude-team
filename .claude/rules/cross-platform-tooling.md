@@ -11,7 +11,7 @@ paths:
 MUST be a single-file C# program** (`dotnet run --file scripts/foo.cs`). Do not add `.sh`, `.bash`, `.ps1`,
 `.psm1`, `.cmd`, `.bat`, or `.py` files, and do not add a shell shim over a `.cs` file.
 
-The point is one toolchain a contributor already has: the .NET SDK. Reach for C#.
+The goal is one toolchain that a contributor already has: the .NET SDK. Use C#.
 
 ```
 scripts/foo.cs          # Good — runs anywhere the SDK runs
@@ -19,9 +19,9 @@ scripts/foo.sh          # Bad  — needs a shell
 scripts/foo             # Bad  — a shim whose body is `exec dotnet foo.cs`
 ```
 
-Start a script with `#!/usr/bin/env dotnet` (inert on Windows, gives Unix users `./scripts/foo.cs`),
-then a `//` header whose usage block shows the **runnable** command.
-Launch children with `ProcessStartInfo` + `ArgumentList` and `UseShellExecute = false`; never shell out.
+Start a script with `#!/usr/bin/env dotnet` (it does nothing on Windows, and it gives Unix users `./scripts/foo.cs`).
+Then write a `//` header with a usage block that shows the **runnable** command.
+Start child processes with `ProcessStartInfo` + `ArgumentList` and `UseShellExecute = false`. Never start a child process through a shell.
 
 ### Pass arguments after `--`
 
@@ -31,17 +31,17 @@ dotnet run --file scripts/foo.cs -- --quiet       # arguments: `--` is required
 ```
 
 Always use `dotnet run --file`. The bare form `dotnet scripts/foo.cs` runs the project instead of
-the file when a project file sits in the directory.
+the file when a project file is in the directory.
 
-`dotnet run --file <file>.cs` forwards only the arguments it does not claim for itself. `--help` and `-h` are
-claimed — they print .NET's own help and your script's help never runs. Worse, `--verbosity quiet`
-is swallowed with **no error**, so the script runs with no arguments at all and prints a plausible,
-wrong result. A flag reaching your script without `--` is luck, and the set of claimed flags grows
-between SDK versions. Any usage string the script itself prints must name the `--` form too.
+`dotnet run --file <file>.cs` forwards only the arguments that it does not claim for itself. It claims `--help` and `-h`.
+They print the help of .NET, and the help of your script never runs. It also swallows `--verbosity quiet`
+with **no error**. The script then runs with no arguments and prints a plausible,
+wrong result. A flag that reaches your script without `--` is luck, and the set of claimed flags grows
+between SDK versions. Any usage string that the script prints must also name the `--` form.
 
 ## Why
 
-Nothing in this repository catches a platform break except a human on a Windows machine.
+Only a human on a Windows machine can catch a platform break in this repository.
 The tool targets both `tmux` and `psmux`, so a shell script would break the Windows path.
 A written rule is the backstop.
 
@@ -53,4 +53,4 @@ A written rule is the backstop.
 
 ## Enforcement
 
-Behavioral. Code review catches a new `.sh`, `.ps1`, or `.py` file.
+Behavioral. Code review finds a new `.sh`, `.ps1`, or `.py` file.

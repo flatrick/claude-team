@@ -4,7 +4,7 @@
 
 A document that states **current truth** contains only what is true now.
 Current-truth documents are rules, skills, agent briefs, and the README.
-Do not narrate the history of the document inside it.
+Do not write the history of the document inside it.
 
 Forbidden inside a current-truth document:
 
@@ -17,8 +17,8 @@ Put history in the git commit message, the PR text, or a separate dated file und
 
 ## Why
 
-A reader must sort current rules from historical text, and every stale aside becomes a future contradiction.
-An agent that reads a change note ingests it as current guidance.
+A reader must separate current rules from historical text. Every stale aside becomes a future contradiction.
+An agent that reads a change note takes it as current guidance.
 A correction that names the wrong value in a footer puts the wrong value back in the reader's context.
 
 ## The keep-or-cut test
@@ -41,4 +41,4 @@ It does not apply to commit messages, PR text, friction logs, or files under `.s
 
 Behavioral.
 No pattern can separate history from honest prose.
-Check each document you edit, and remove narration that you find.
+Check each document you edit, and remove change history that you find.

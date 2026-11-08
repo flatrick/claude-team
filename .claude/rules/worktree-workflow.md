@@ -3,18 +3,18 @@
 ## Rule
 
 - The **repo-root checkout is the `main` working copy**. It MUST stay on the `main` branch.
-  Never `git switch` / `git checkout` another branch in it, and never rename or relocate the
-  repo-root directory. Branch work happens in a worktree, never in the main checkout.
+  Never `git switch` / `git checkout` another branch in it. Never rename or relocate the
+  repo-root directory. Do branch work in a worktree, never in the main checkout.
 
 - All other branch work MUST use a linked worktree under **`.worktrees/<slug>/`**.
 
-- `<slug>` is the topic name. The branch is `<type>/<slug>`, and the worktree folder is
-  just the `<slug>` (the type prefix is dropped from the folder name). Example: branch
+- `<slug>` is the topic name. The branch is `<type>/<slug>`. The worktree folder is
+  just the `<slug>`, without the type prefix. Example: branch
   `feat/peer-rule-test` → folder `.worktrees/peer-rule-test/`.
 
-- **Escape hatch.** A worktree MAY be created somewhere other than `.worktrees/` only when
+- **Exception.** A worktree MAY be created somewhere other than `.worktrees/` only when
   a specific need requires it (for example, a tool that cannot operate on a nested path). State
-  the reason when you do — the default is always `.worktrees/<slug>/`.
+  the reason when you do this. The default is always `.worktrees/<slug>/`.
 
 ## Creating a worktree
 
@@ -22,9 +22,9 @@
 git worktree add -b <type>/<slug> .worktrees/<slug>
 ```
 
-When you dispatch an agent into a worktree prepared with this command, give it that worktree's
-path and do not also request automatic worktree isolation. Manual preparation and host-managed
-isolation are separate workflows; use only one for a dispatch.
+When you dispatch an agent into a worktree that you prepared with this command, give the agent
+the path of that worktree. Do not also request automatic worktree isolation.
+Manual preparation and host-managed isolation are separate workflows. Use only one for a dispatch.
 
 ### Confirm which build is installed
 
@@ -46,11 +46,11 @@ A running leader keeps its old build until you restart it.
 
 ### `core.hooksPath` must be relative, not an absolute path into one checkout
 
-`core.hooksPath` lives in the shared `.git/config` that every worktree of this repository reads.
+`core.hooksPath` is in the shared `.git/config` that every worktree of this repository reads.
 If the repository uses committed hooks, set it to the **relative** value `.githooks`, never to an
-absolute filesystem path. A relative path resolves against each worktree's own copy of
-`.githooks/`, so a hook fix committed on a branch governs that branch's own commits. An absolute
-path makes every worktree run one fixed checkout's hooks.
+absolute filesystem path. A relative path resolves against its own copy of
+`.githooks/` in each worktree. A hook fix that you commit on a branch then governs the commits of that branch.
+An absolute path makes every worktree run the hooks of one fixed checkout.
 
 Confirm the value directly:
 
@@ -64,14 +64,14 @@ Do not set this with `--global` or `--system`.
 ## Do not `cd` to the repo root for read-only surveys — the shell CWD repoints the next build
 
 The Bash shell's working directory **persists between calls**. A read-only survey command that does
-`cd <repo-root>` leaves the CWD at the main checkout, so the *next* `dotnet build` / `dotnet test`
-with no explicit `cd` runs against **main**, not the worktree. Because main is clean, it reports
+`cd <repo-root>` leaves the CWD at the main checkout. The *next* `dotnet build` / `dotnet test`
+with no explicit `cd` then runs against **main**, not the worktree. Main is clean, so the command reports
 "Build succeeded" while it tests none of your edits. Scope read-only surveys with
-`git -C <worktree>` or absolute paths instead of `cd`, or `cd` back to the worktree before any
+`git -C <worktree>` or absolute paths instead of `cd`. Or `cd` back to the worktree before any
 build or test. Confirm that a build saw your changes with `git -C <worktree> diff --stat`.
 
 The same risk applies to any throwaway `cd` away from the worktree.
-Use a subshell, for example `(cd /tmp/x && dotnet build)`, so the persistent shell's CWD never leaves the worktree.
+Use a subshell, for example `(cd /tmp/x && dotnet build)`, so that the CWD of the persistent shell never leaves the worktree.
 
 ## Verify an edit landed in the right checkout, not just that the tool call succeeded
 
@@ -82,9 +82,9 @@ After any batch of edits to files that matter, run a command scoped to the curre
 git -C <path-to-active-worktree> diff --stat -- <files-you-just-edited>
 ```
 
-An empty diff on a file just edited is a signal to stop and locate the write. If another checkout
-contains it, do not discard that copy. Compare any divergent content, preserve the intended result
-in the active worktree, and restore the other checkout to clean only after recovery is complete.
+An empty diff on a file that you just edited is a signal to stop and find the write. If another checkout
+contains the write, do not discard that copy. Compare any different content. Keep the intended result
+in the active worktree. Restore the other checkout to clean only after the recovery is complete.
 
 ## Cleanup
 
@@ -98,13 +98,13 @@ git worktree prune
 
 ## Notes
 
-- `.worktrees/` is git-ignored via the root `.gitignore`, so nested worktree contents never
-  show up in the main checkout's `git status`.
-- Keeping worktrees under `.worktrees/` (inside the repo root) satisfies
-  [workspace-boundary.md](./workspace-boundary.md) — every write stays a descendant of the repo
+- The root `.gitignore` ignores `.worktrees/`, so the contents of nested worktrees never
+  show in the `git status` of the main checkout.
+- Worktrees under `.worktrees/` (inside the repo root) satisfy
+  [workspace-boundary.md](./workspace-boundary.md): every write stays a descendant of the repo
   root.
-- Worktrees have isolated `bin/obj`, so building in a worktree never clashes with a build in the
+- Each worktree has its own `bin/obj`, so a build in a worktree never clashes with a build in the
   main checkout.
-- Commit from the worktree itself, not from the main checkout. Do not assume sibling worktrees are
-  disposable, and do not manually delete a worktree's `.git` file or lock files — use
+- Commit from the worktree itself, not from the main checkout. Do not assume that sibling worktrees are
+  disposable. Do not manually delete the `.git` file or the lock files of a worktree. Use
   `git worktree remove`.
