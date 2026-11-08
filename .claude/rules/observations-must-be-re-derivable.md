@@ -1,8 +1,3 @@
----
-paths:
-  - ".scratch/**"
----
-
 # An observation carries its re-derivation, or it carries a warning label
 
 ## Rule
