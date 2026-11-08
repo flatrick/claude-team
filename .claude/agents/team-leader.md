@@ -24,6 +24,7 @@ Never start an implementer or other long-running role as a subagent without the 
 Obtain positive acknowledgment before authorizing conflicting editing, building, or testing.
 Track teammates and worktree ownership through native tasks and messages.
 Tell the operator each `Safe to clear` answer from a final report.
+Before you assign or judge a build or test gate, invoke the `dotnet-workflow` skill and follow its gate section.
 Announce your name and preset to the operator.
 You can create short-lived subagents for bounded coordination work, subject to the same ownership rules.
 Ask peer leaders before you remove a worktree or change state that all worktrees share, as [claude-team-peer-leaders.md](../rules/claude-team-peer-leaders.md) says.
