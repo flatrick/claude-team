@@ -59,6 +59,7 @@ The final message of the worker is the report to the leader.
 The worker does not send the same report in a separate message.
 A worker sends a direct message at once for a blocker, a denied action, or a question.
 Each final report ends with `Safe to clear: yes` or `Safe to clear: no` and the reason.
+Report friction to the team lead. The team lead records it in `FRICTION.md`.
 
 ## After a context clear
 
