@@ -31,9 +31,6 @@ Run each step in order, and wait for each step to finish.
 5. Read the end of each log file with the Read tool. Do not pipe the output through `head` or `tail`.
 6. If a step fails, search the log with `rg`. Do not run the command again to see output that you already have.
 
-Use `--no-build` only when the build just succeeded.
-After you fix code, run `dotnet build` again before `dotnet test --no-build`.
-
 ## Commands that clash
 
 Two `dotnet` commands clash when they share a solution.
@@ -65,8 +62,38 @@ MSBUILDDISABLENODEREUSE=1 dotnet build ClaudeTeam.slnx
 
 For a process tree that is already stuck, run `dotnet build-server shutdown` first.
 
-## Reports
+## The gate
 
-State which projects ran with every pass or fail claim.
+The gate is a clean build and a full test run of `ClaudeTeam.slnx`.
+Run it before you mark a task complete.
+The sequence above is the gate. All steps must pass, in this order.
+
+1. **Clean rebuild.** Do not rely on a cached binary.
+2. **Full test run.** A run that executed zero tests is not a pass.
+3. **Read the log.** Read the log file that you wrote under `.scratch/logs/`.
+
+Follow these rules for each gate run:
+
+- **Use `--no-build` only when the build just succeeded.** Never run `dotnet test --no-build` immediately after you edit source files. Run `dotnet build` again first.
+  The test runs against the stale binary, and the fix is not active.
+  A revert is also a code fix. A `--no-build` run after a revert measures the old binary.
+- **Do not start the gate until the tree is final.** A full run measures the tree as it was when the run started.
+  An edit after the start makes the verdict describe a tree that no longer exists.
+  Finish the edits, then start the gate. If something must change during a run, stop the run and start it again.
+- **Do not run a green gate again without a reason.** Run it again only when a later commit changes compiled behavior.
+  A documentation edit does not qualify.
+  Do not repeat a run until it passes. A repeated run selects a favorable sample and tests nothing.
+- **Verify a fix of a flaky test.** Rebuild first.
+  Run the test several times against the rebuilt binary. Three passing runs is the minimum.
+  One green run is not evidence. You cannot tell it apart from a failure that did not recur.
+
+## Pass and fail claims
+
+"The suite is green" is a claim about a set of projects.
+State which projects ran with every pass or fail claim: the solution or the projects.
+`dotnet test <project>` and `dotnet test <solution>` are different measurements.
+A test that fails only in a solution-wide run is not automatically a flake.
+Confirm that it passes repeatedly in isolation against the same binary, and record both measurements.
+
 Do not write a bare count. Give the command that produces the number.
 See `.claude/rules/repo-conventions.md`.
