@@ -11,7 +11,7 @@ This skill applies to the leader and to every teammate and subagent that sends m
 
 Your first action is ToolSearch with the query `select:SendMessage`.
 Do it before you read anything else.
-Every message and every `shutdown_response` then uses the correct schema.
+Then every message and every `shutdown_response` uses the correct schema.
 
 ## Confirm that you loaded this skill
 
@@ -32,14 +32,14 @@ Each assignment names:
 - the permitted subagent model and the maximum subagent count.
 
 Begin the assignment you were given.
-Ask the team lead or the operator only when no assignment was supplied.
+Ask the team lead or the operator only when you received no assignment.
 Use native tasks and messages to coordinate.
 A message is not an acknowledgment. Wait for a reply before you assume that conflicting work has stopped.
-Preserve the configuration of your preset and escalate work beyond its scope to the leader or the operator.
+Keep the configuration of your preset. Escalate work beyond its scope to the leader or the operator.
 
 ## Subagents
 
-A worker uses Sonnet for subagents unless the assignment names Opus.
+A worker uses Sonnet for subagents, unless the assignment names Opus.
 A worker creates at most the number of subagents that the assignment names.
 If the assignment names no number, the worker creates none.
 Short-lived subagents follow the same ownership rules as the worker.

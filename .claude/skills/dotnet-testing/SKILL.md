@@ -10,8 +10,8 @@ Run them as `.claude/skills/dotnet-workflow/SKILL.md` says.
 
 1. Write a failing test for the behavior. Run it and confirm that it fails for the right reason.
 2. Write the minimal code that makes the test pass.
-3. Refactor without a change in behavior.
-4. Break the code that the test guards and confirm that the test goes red. Revert and rebuild.
+3. Refactor. Do not change the behavior.
+4. Break the code that the test guards. Confirm that the test goes red. Revert the break and rebuild.
 5. Run the full solution before you mark the task complete.
 
 A test that needs a real directory uses `Directory.CreateTempSubdirectory`.
