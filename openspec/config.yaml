@@ -11,6 +11,7 @@ context: |
   Operator decisions: the teammate asks the team lead, who asks the operator as .claude/rules/decisions.md says. An artifact states each decision and its reason in full.
   Specs state current behavior only, with no change history: .claude/rules/no-inlined-change-history.md.
   Never write a bare count: .claude/rules/repo-conventions.md.
+  Write text in ASD-STE100 Simplified Technical English: .claude/rules/writing-style.md.
   Preset choice and escalation: the agent descriptions in .claude/agents/ and the escalation policy in .claude/agents/team-leader.md.
   Launch and process code has a Windows (psmux) path and a non-Windows (tmux) path: .claude/rules/cross-platform-tooling.md.
 
