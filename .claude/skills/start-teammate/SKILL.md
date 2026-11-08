@@ -75,3 +75,12 @@ The first message of the teammate passes when it contains `team-protocol loaded`
 If it does not, send the teammate one message: "Invoke the `team-protocol` skill now and confirm with that line."
 If the next message of the teammate still lacks the line, tell the operator. Wait for the decision of the operator.
 A missing line is not a launch failure. The "If a check fails, stop" handling does not apply to it.
+
+## Confirm the dotnet-workflow load
+
+These presets build or test: `test-runner`, `implementer-standard`, `implementer-hard`, `troubleshooter-standard`, `troubleshooter-hard`, and `troubleshooter-extreme`.
+Their first message must also contain `dotnet-workflow loaded`, in any letter case and at any position.
+If it does not, send the teammate one message: "Invoke the `dotnet-workflow` skill now and confirm with that line."
+If the next message of the teammate still lacks the line, tell the operator. Wait for the decision of the operator.
+A missing line is not a launch failure. The "If a check fails, stop" handling does not apply to it.
+Do not check this line for the other presets.

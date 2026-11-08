@@ -17,7 +17,7 @@ All three steps must pass, in this order:
    Do not pipe the output through `head` or `tail`.
 
 A run that executed zero tests is not a pass.
-See [dotnet/build-parallelism.md](dotnet/build-parallelism.md) for the build and test sequence.
+See `.claude/skills/dotnet-workflow/SKILL.md` for the build and test sequence.
 
 ## Do not use `--no-build` after a code fix
 
