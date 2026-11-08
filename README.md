@@ -68,5 +68,5 @@ The peer-leader rule is [`.claude/rules/claude-team-peer-leaders.md`](.claude/ru
 
 - [`AGENTS.md`](AGENTS.md): repository rules for agents.
 - [`openspec/specs/`](openspec/specs/): current behavior of the tool.
-- [`FRICTION.md`](FRICTION.md): friction log.
+- [`friction/README.md`](friction/README.md): friction log, one file for each entry.
 - [`GIT-IT-RIGHT.md`](GIT-IT-RIGHT.md): commit message checking with gir.
