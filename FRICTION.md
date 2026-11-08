@@ -117,6 +117,10 @@ The status of each entry is open until the operator makes a decision.
   It answered by cross-session message (`from-name="death-angel-curried-peacock"`) that it is `friction-scribe`, a teammate.
   The bridge name is new for each teammate (`versioning-implementer` was `death-angel-parallel-prism`).
   The check costs one round trip each time.
+- Third case: `ListAgents` showed a new online peer, `death-angel-breezy-squid`.
+  The leader sent a hold and asked it. The peer was `release-v020` itself.
+  The cross-session reply came from `from-name="death-angel-breezy-squid"`.
+  NOT RE-DERIVED (second-hand — the leader saw the row and the reply; the scribe did not).
   NOT RE-DERIVED (second-hand — the leader saw the row; the scribe sent the reply, see the reply text in this session).
 - Cause: not verified.
 - Effect: The leader lost time and paused a global install. A teammate cannot be told from a peer leader by its name or by its route.
@@ -252,4 +256,23 @@ The status of each entry is open until the operator makes a decision.
   The log does not name `.vscode/`. The link to `.vscode/` is inferred: the status of main shows only that folder.
 - Cause: verified for the refusal (the log, the spec, and the status). The wording problem follows from the log text against the spec text.
 - Effect: One more operator decision after the merge.
+- Status: open.
+
+## F-015 — The leader sent the go before it read the peer check
+
+- Date: 2026-11-08
+- Claude Code version: 2.1.319.
+- Setup: v0.2.0 release. Leader process error. Teammate `release-v020`. Rule: `.claude/rules/claude-team-peer-leaders.md`.
+- Observation: The leader sent `ListAgents` and the go for the reinstall to `release-v020` in the same tool batch.
+  The go left before the leader read the `ListAgents` result.
+  The result showed a new online peer, `death-angel-breezy-squid`.
+  The leader sent a hold and asked the peer. The peer was `release-v020` itself (third case of F-008).
+  The install had already run at 2026-11-08T20:18:41Z, by the statement of `release-v020`.
+- Evidence: the ledger of `release-v020`: `/home/flatrick/src/github/flatrick/claude-team/.scratch/agent-ledgers/release-v0.2.0/20261108T201841Z-release-v020-round6.md` (the file stamp is 20:18:41Z), and its report `/home/flatrick/src/github/flatrick/claude-team/.scratch/release-v0.2.0/report.md`.
+  Re-derive the stamp: `ls /home/flatrick/src/github/flatrick/claude-team/.scratch/agent-ledgers/release-v0.2.0/`.
+  The order of the leader calls: NOT RE-DERIVED (second-hand — the leader reported it; the scribe did not see the batch).
+- Cause: verified by the leader's own account. A check and the action that depends on it were in one batch.
+- Effect: No harm, because no other leader was online.
+  The rule says to wait for each acknowledgment before the action.
+- Lesson candidate (not decided): never batch the peer check with the action that depends on it.
 - Status: open.
