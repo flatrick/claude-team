@@ -40,4 +40,4 @@
 - [x] 6.1 Describe the release workflow in `README.md` with the four steps from the design. Cite the script. Write no history.
 - [x] 6.2 Run `openspec validate versioning --strict`, `openspec validate --all --strict`, and `openspec validate --archived`. All must pass with no warnings.
 - [x] 6.3 Run `dotnet test ClaudeTeam.slnx`. Load the `dotnet-workflow` skill first.
-- [ ] 6.4 Run `/opsx:verify`, write the result to the ledger, and then `/opsx:archive` in the worktree before the branch merges.
+- [x] 6.4 Run `/opsx:verify`, write the result to the ledger, and then `/opsx:archive` in the worktree before the branch merges.
