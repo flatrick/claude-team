@@ -3,15 +3,15 @@
 ## Definition
 
 The **workspace** is the git repository root that was active when the user opened Claude.
-All file write operations MUST stay within this boundary unless the user explicitly approves
-otherwise.
+All file write operations MUST stay within this boundary, unless the user explicitly approves
+the write.
 
 This rule applies to ALL tools: Write, Edit, Bash, and all MCP tools.
 
 ## Absolute boundary — never cross without explicit permission
 
-You MUST ask the user before writing, modifying, or deleting any file outside the workspace
-root. This includes — but is not limited to:
+You MUST ask the user before you write, modify, or delete any file outside the workspace
+root. This includes the paths below. The list is not complete:
 
 **User profile directories**
 - `~`, `$HOME`, `$USERPROFILE` and any subdirectory
@@ -32,14 +32,14 @@ root. This includes — but is not limited to:
 ## Compiling executables
 
 `dotnet publish`, `go build`, `cargo build`, `gcc -o ...`, `make install`, and similar
-commands that emit binary output require explicit permission even when the output path is
-inside the workspace, because they produce non-source artefacts. Confirm the destination
-path with the user before running.
+commands emit binary output. They produce non-source artefacts, so they require explicit
+permission, also when the output path is inside the workspace. Confirm the destination
+path with the user before you run them.
 
 ## Package manager and tool config files
 
 Files that affect system-wide or user-wide behavior MUST NOT be created or modified without
-explicit permission. These persist across sessions and affect other projects. Examples:
+explicit permission. These files persist across sessions and affect other projects. Examples:
 
 - **npm**: `~/.npmrc`
 - **pip**: `~/.pip/pip.conf`, `~/.config/pip/pip.conf`
@@ -50,12 +50,12 @@ explicit permission. These persist across sessions and affect other projects. Ex
 
 ## Git internals
 
-Do not run `git config --global` or `git config --system`, edit `.git/hooks/`, or modify
-`.git/config` without explicit permission.
+Do not run `git config --global` or `git config --system`. Do not edit `.git/hooks/`.
+Do not modify `.git/config`. Each of these actions needs explicit permission.
 
 ## Allowed exceptions
 
-These repository commands may write outside the workspace without a prompt:
+These repository commands can write outside the workspace without a prompt:
 
 - `dotnet run --file scripts/install-tool.cs -- install`
 - `dotnet run --file scripts/install-tool.cs -- reinstall`
@@ -64,7 +64,7 @@ These repository commands may write outside the workspace without a prompt:
 They change the user-global dotnet tool store.
 Announce the command to the team lead before you run it.
 
-Test code may use the system temp directory through `Directory.CreateTempSubdirectory`.
+Test code can use the system temp directory through `Directory.CreateTempSubdirectory`.
 See [test-temp-paths.md](test-temp-paths.md).
 
 ## Enforcement
@@ -75,9 +75,9 @@ Apply every rule above yourself.
 
 ## The "two attempts" rule
 
-If an approach to solving a problem has not worked after **two total attempts** — counting
-all variations targeting the same underlying blocker — stop and report.
+If an approach to a problem has not worked after **two total attempts**, stop and report.
+Count all variations that target the same underlying blocker.
 
-"Two attempts" means two distinct strategies, not two identical commands. Rephrasing the
-same fix (e.g. trying five different env vars to solve the same root cause) counts as one
-strategy, not five. When in doubt, count conservatively and stop sooner.
+"Two attempts" means two distinct strategies, not two identical commands. A rephrase of the
+same fix counts as one strategy. For example, five different env vars for the same root cause
+are one strategy, not five. If you are not sure, count conservatively and stop sooner.

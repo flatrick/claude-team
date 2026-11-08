@@ -31,7 +31,7 @@ When you fix a flaky or intermittent test:
 
 - Rebuild first.
 - Run the test several times against the rebuilt binary. Three passing runs is the minimum.
-- One green run is not evidence. It cannot be told apart from a failure that did not recur.
+- One green run is not evidence. You cannot tell it apart from a failure that did not recur.
 
 ## State the scope with every pass or fail claim
 
@@ -44,8 +44,8 @@ Confirm that it passes repeatedly in isolation against the same binary, and reco
 
 ## Verify a guard by breaking what it guards
 
-A green test proves that it passed, not that it exercised the clause that it names.
-Before you trust a test that guards a branch, a predicate, or a fallback, break that code and confirm that the test goes red.
+A green test proves that it passed. It does not prove that the test exercised the clause that it names.
+Before you trust a test that guards a branch, a predicate, or a fallback, break that code. Confirm that the test goes red.
 Record the red result next to the green result.
 
 The loop is: mutate, build, run, revert, build, run.

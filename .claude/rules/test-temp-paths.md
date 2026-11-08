@@ -8,9 +8,9 @@ paths:
 ## Rule
 
 Test code that needs a real filesystem working directory or file MUST create it with
-**`Directory.CreateTempSubdirectory(prefix)`** and build any child paths under its
-`.FullName`. Do **not** use `Path.GetTempPath()` or `Path.GetTempFileName()` to mint a
-working directory/file, and never hardcode a fixed temp path (`"/tmp/diagnostics.jsonl"`,
+**`Directory.CreateTempSubdirectory(prefix)`**. Build any child paths under its
+`.FullName`. Do **not** use `Path.GetTempPath()` or `Path.GetTempFileName()` to make a
+working directory or file. Never hardcode a fixed temp path (`"/tmp/diagnostics.jsonl"`,
 `Path.Combine(Path.GetTempPath(), "fixed-name")`).
 
 ```csharp
@@ -40,11 +40,11 @@ Logs and other non-test run output stay under `.scratch/`.
 
 ## Why
 
-A fixed or shared temp path collides when tests run in parallel, and it fails under a
+A fixed or shared temp path collides when tests run in parallel. It also fails under a
 sandbox that restricts writes to a pre-existing `/tmp` entry.
-`Directory.CreateTempSubdirectory` makes a fresh, uniquely named directory on each call.
+`Directory.CreateTempSubdirectory` makes a fresh directory with a unique name on each call.
 
 ## Enforcement
 
-Behavioral. Code review catches a call to `Path.GetTempPath()` or `Path.GetTempFileName()` that makes a working directory.
+Behavioral. Code review finds a call to `Path.GetTempPath()` or `Path.GetTempFileName()` that makes a working directory.
 A fixed literal such as `"/tmp/x"` is also a review finding.
