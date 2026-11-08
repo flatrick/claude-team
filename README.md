@@ -14,7 +14,22 @@ dotnet run --file scripts/install-tool.cs
 ```
 
 The last command has no argument and runs `status`. It prints the installed version and the branch of the checkout. It also prints whether `~/.dotnet/tools` is on `PATH`.
-A running leader keeps its old build until you restart it. The commands are in [`openspec/specs/tooling/install-tool/`](openspec/specs/tooling/install-tool/).
+A running leader keeps its old build until you restart it. The `status` output also names the commit of the installed build. The commands are in [`openspec/specs/tooling/install-tool/`](openspec/specs/tooling/install-tool/).
+
+Run `claude-team --version` to print the version and the short commit of a build, for example `claude-team 0.1.1-alpha.0.3+bf37b92`. MinVer takes the version from the git tags with the prefix `v`. The behavior is in [`openspec/specs/tooling/release/build-version/`](openspec/specs/tooling/release/build-version/).
+
+## Release
+
+A release is a git tag `vX.Y.Z` on a commit of `origin/main`, and a `CHANGELOG.md` entry. The release commands run locally. Install `git-cliff` first. `scripts/release.cs` never pushes.
+
+1. Work on a branch in a worktree. Use Conventional Commits. Clean up the commits before the pull request.
+2. When the branch is ready, run `dotnet run --file scripts/release.cs -- prepare` on the branch. The script asks `git-cliff` for the next version and commits `CHANGELOG.md` as `chore(release): vX.Y.Z`. While the major version is 0, every release is a minor bump. To choose a version, add `--set-version X.Y.Z`.
+3. Open the pull request and use "Rebase and merge".
+4. In the main checkout, run `git pull --ff-only`. Then run `dotnet run --file scripts/release.cs -- tag`. Push the tag with the command that the script prints.
+
+The release flow needs the rule `chore(release)` in `cliff.toml`. `gir init --force` overwrites `cliff.toml` and removes the rule. After you run it, add the rule again.
+
+The behavior is in [`openspec/specs/tooling/release/`](openspec/specs/tooling/release/).
 
 ## Run and attach
 
