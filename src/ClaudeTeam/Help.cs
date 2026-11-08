@@ -25,6 +25,7 @@ public static class Help
                                         Both install options may be given in one run.
           --force                       Replace an existing rule or agent file.
           -h, --help                    Show this help.
+          --version                     Print the version and the short commit. Then exit.
           --                            Forward the remaining arguments to claude.
 
         If the session exists, claude-team stops and starts nothing.
