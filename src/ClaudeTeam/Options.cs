@@ -35,13 +35,13 @@ public sealed record Options(
                         return ParseResult.Fail("Use a nonempty session name without control characters, periods, or colons.");
                     break;
                 case "--install-peer-rule":
-                    if (i + 1 >= args.Length || !Enum.TryParse<InstallTarget>(args[i + 1], ignoreCase: true, out var target))
+                    if (i + 1 >= args.Length || !TryParseInstallTarget(args[i + 1], out var target))
                         return ParseResult.Fail("Supply repo, global, or both after --install-peer-rule.");
                     install = target;
                     i++;
                     break;
                 case "--install-leader-agent":
-                    if (i + 1 >= args.Length || !Enum.TryParse<InstallTarget>(args[i + 1], ignoreCase: true, out var agentTarget))
+                    if (i + 1 >= args.Length || !TryParseInstallTarget(args[i + 1], out var agentTarget))
                         return ParseResult.Fail("Supply repo, global, or both after --install-leader-agent.");
                     installAgent = agentTarget;
                     i++;
@@ -64,6 +64,21 @@ public sealed record Options(
             return ParseResult.Fail("Use --force only with --install-peer-rule or --install-leader-agent.");
 
         return new ParseResult(new Options(session, dryRun, help, forwarded, install, installAgent, force), null);
+    }
+
+    private static bool TryParseInstallTarget(string value, out InstallTarget target)
+    {
+        foreach (var name in Enum.GetNames<InstallTarget>())
+        {
+            if (string.Equals(name, value, StringComparison.OrdinalIgnoreCase))
+            {
+                target = Enum.Parse<InstallTarget>(name);
+                return true;
+            }
+        }
+
+        target = default;
+        return false;
     }
 }
 
