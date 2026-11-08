@@ -20,6 +20,16 @@ Remove the variable from the launcher when agent teams stop being experimental.
 
 Project `.claude/settings.json` sets `teammateMode` to `tmux`. Claude's [settings reference](https://code.claude.com/docs/en/settings-reference#teammatemode) permits this key in any settings file.
 
+## Install the starter leader and the peer rule
+
+The launcher passes `--agent team-leader` only when a `team-leader` agent exists in `.claude/agents/` or `~/.claude/agents/`. Otherwise it warns, starts Claude without `--agent`, and prints this hint:
+
+```
+claude-team --install-leader-agent <repo|global|both>
+```
+
+The command writes an embedded, repository-independent starter definition to `.claude/agents/team-leader.md` (repo), `~/.claude/agents/team-leader.md` (global), or both, then exits. It keeps an existing file unless `--force` is given. `--install-peer-rule <repo|global|both>` works the same way for the peer-leader rule in `.claude/rules/`. Give both install options in one run to install both files. `--force` applies to every install option in the run. With `--dry-run`, an install option prints `Would write <path>` or `Would keep the existing <path>` and writes nothing; the exit code matches the real run.
+
 ## Several leaders
 
 Run at most one leader per worktree. A worktree needs no leader. The launcher adds a peer rule to each leader. A leader finds its peers with `ListAgents` and contacts them with `SendMessage`. It asks every peer before it removes a worktree, or before it changes state shared by all worktrees. The launcher holds the rule as a constant. Nothing enforces the rule mechanically.

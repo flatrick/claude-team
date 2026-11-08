@@ -21,27 +21,25 @@ if (options.Help)
     return 0;
 }
 
-if (options.InstallPeerRule is { } target)
+if (options.InstallPeerRule is not null || options.InstallLeaderAgent is not null)
 {
-    var failed = false;
-    foreach (var result in PeerRule.Install(target, git?.Toplevel, home, options.Force))
-    {
-        Console.WriteLine(result.Outcome switch
-        {
-            InstallOutcome.Written => $"Wrote {result.Path}",
-            InstallOutcome.KeptExisting => $"Kept the existing {result.Path}. Use --force to replace it.",
-            _ => "Cannot install to the repository: the current folder is not in a git repository.",
-        });
-        failed |= result.Outcome == InstallOutcome.NoRepository;
-    }
-    return failed ? 1 : 0;
+    var run = Installer.Run(
+        peerRule: options.InstallPeerRule,
+        leaderAgent: options.InstallLeaderAgent,
+        repoRoot: git?.Toplevel,
+        home: home,
+        force: options.Force,
+        dryRun: options.DryRun);
+    foreach (var line in run.Lines)
+        Console.WriteLine(line);
+    return run.ExitCode;
 }
 
 var projectRoot = git?.Toplevel ?? workingDirectory;
-var hasAgent = File.Exists(Path.Combine(projectRoot, ".claude", "agents", "team-leader.md"))
-    || File.Exists(Path.Combine(home, ".claude", "agents", "team-leader.md"));
+var hasAgent = LeaderAgent.IsInstalled(projectRoot, home);
 if (!hasAgent)
-    Console.Error.WriteLine("Warning: no team-leader agent in .claude/agents/ or ~/.claude/agents/. Starting claude without --agent team-leader.");
+    Console.Error.WriteLine("Warning: no team-leader agent in .claude/agents/ or ~/.claude/agents/. Starting claude without --agent team-leader. " +
+        "Install a starter with: claude-team --install-leader-agent <repo|global|both>");
 if (!PeerRule.IsInstalled(git?.Toplevel, home))
     Console.Error.WriteLine($"Warning: the peer-leader rule {PeerRule.FileName} is not in .claude/rules/ or ~/.claude/rules/. " +
         "Install it with: claude-team --install-peer-rule <repo|global|both>");

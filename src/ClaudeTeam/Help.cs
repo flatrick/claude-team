@@ -8,6 +8,7 @@ public static class Help
         Usage:
           claude-team [--session <name>] [--dry-run] [-- <claude arguments>]
           claude-team --install-peer-rule <repo|global|both> [--force]
+          claude-team --install-leader-agent <repo|global|both> [--force]
 
         Options:
           --session <name>              Session name. Default: the origin repository name,
@@ -15,9 +16,14 @@ public static class Help
                                         the main checkout folder name without origin,
                                         and the current folder name outside git.
           --dry-run                     Print the session name, the variable, and the commands. Start nothing.
+                                        With an install option, print what would be written and write nothing.
           --install-peer-rule <target>  Write {PeerRule.FileName} to .claude/rules/ (repo),
                                         ~/.claude/rules/ (global), or both. Then exit.
-          --force                       Replace an existing rule file.
+          --install-leader-agent <target>
+                                        Write {LeaderAgent.FileName} to .claude/agents/ (repo),
+                                        ~/.claude/agents/ (global), or both. Then exit.
+                                        Both install options may be given in one run.
+          --force                       Replace an existing rule or agent file.
           -h, --help                    Show this help.
           --                            Forward the remaining arguments to claude.
 
