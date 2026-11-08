@@ -99,6 +99,16 @@ Without `--hidden`, `rg` omits paths with a leading dot, including `.claude/` an
 the letter n". Then `rg` prints the *replacement* in place of what you searched for, with exit code 0 and no
 warning. Write `-n -r` apart, or write only `-n`.
 
+## Commit quality
+
+- Follow the root `.gitattributes`. Do not commit changes that break line-ending or diff behavior.
+- Follow the committed hooks in `.githooks/`. [worktree-workflow.md](worktree-workflow.md) says how to set `core.hooksPath` once.
+
+## Secrets and configuration
+
+- **No secrets in the repository**: Do not store API keys, license keys, or authentication information.
+- **Samples only**: Commit sample configuration with placeholder values only. Make sure `.gitignore` excludes real local secret files.
+
 ## Enforcement
 
 Behavioral: caught in code review or a fresh-eyes pass.

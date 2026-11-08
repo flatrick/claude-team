@@ -82,3 +82,8 @@ If something must change mid-run, stop the run and start it again.
 After a full run is green, run it again only when a later commit changes compiled behavior.
 A documentation edit does not qualify.
 Do not repeat a run until it passes. A repeated run selects a favorable sample and tests nothing.
+
+## Never use `Environment.NewLine` to match a repository fixture file
+
+`Environment.NewLine` is `"\r\n"` on Windows. A checked-in fixture uses LF, because the repository is `eol=lf`.
+A comparison built with `Environment.NewLine` never matches on Windows and passes on Linux. Use `"\n"`.

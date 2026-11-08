@@ -48,8 +48,6 @@ A written rule is the backstop.
 ## Not covered by this rule
 
 - **Git hooks.** Git invokes hooks through a shell on every platform.
-- **Environment.NewLine in tests.** Compare against repo content with `"\n"`, not `Environment.NewLine`.
-  The repository is `eol=lf`, so `Environment.NewLine` is `"\r\n"` on Windows and never matches.
 
 ## Enforcement
 

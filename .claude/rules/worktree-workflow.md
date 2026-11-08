@@ -44,6 +44,20 @@ dotnet run --file scripts/install-tool.cs -- status
 The output names the installed version and the branch of this checkout.
 A running leader keeps its old build until you restart it.
 
+### Install, reinstall, and remove the tool
+
+The tool is `src/ClaudeTeam/ClaudeTeam.csproj`.
+It is a .NET tool: `PackAsTool` is on, and the `PackageId` and the command are both `claude-team`.
+The install writes outside the workspace.
+Read [workspace-boundary.md](workspace-boundary.md) before you run a command in this list.
+
+1. Pack and install or update the user-global tool: `dotnet run --file scripts/install-tool.cs -- install`.
+2. If a running `claude-team` process blocks the install, run `dotnet run --file scripts/install-tool.cs -- reinstall`.
+3. Remove the tool: `dotnet run --file scripts/install-tool.cs -- uninstall`.
+
+Make sure `~/.dotnet/tools` is on `PATH`. The `status` mode warns when it is not.
+The script writes the package to `.scratch/nuget-local/` in the checkout.
+
 ### `core.hooksPath` must be relative, not an absolute path into one checkout
 
 `core.hooksPath` is in the shared `.git/config` that every worktree of this repository reads.
