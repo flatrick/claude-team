@@ -1,0 +1,41 @@
+schema: spec-driven
+
+# Constraints an agent cannot infer from the code. Each line points to the rule that owns it;
+# the rule is the source, so do not restate its details here.
+context: |
+  Workflow, change naming, presets, and spec layout: .claude/rules/openspec-workflow.md.
+  Validation must show no warnings: .claude/rules/openspec-validation-warnings.md.
+  Branch work happens in a worktree under .worktrees/: .claude/rules/worktree-workflow.md.
+  Logs, reports, and test output go to .scratch/, never into openspec/: .claude/rules/artifacts-location-policy.md.
+  Findings go to the ledger before an agent replies: .claude/rules/agent-findings-ledger.md.
+  Operator decisions: the teammate asks the team lead, who asks the operator as .claude/rules/decisions.md says. An artifact states each decision and its reason in full.
+  Specs state current behavior only, with no change history: .claude/rules/no-inlined-change-history.md.
+  Never write a bare count: .claude/rules/repo-conventions.md.
+  Preset cost ladder: .claude/session-coordination.md ("Choose a preset").
+  Launch and process code has a Windows (psmux) path and a non-Windows (tmux) path: .claude/rules/cross-platform-tooling.md.
+
+rules:
+  proposal:
+    - State what is out of scope.
+    - Name each spec path in openspec/specs/ that the change touches or adds.
+  specs:
+    - Use the layout <name>/spec.md (solution-wide), <AREA>/<name>/spec.md (area-shared), and <AREA>/<SUB-AREA>/<name>/spec.md (leaf), as .claude/rules/openspec-workflow.md defines.
+    - Each requirement cites the source file, and the test where one exists, that implements it. An ADDED requirement with no code yet says so.
+  design:
+    - Cover the Windows and non-Windows paths when the change touches launch, process, or install code.
+    - Name every write outside the repository (.claude/rules/workspace-boundary.md).
+  tasks:
+    - Put a failing-test task before each behavior task (.claude/rules/development.md).
+    - Mark a task that needs approval, for example a global tool install or dotnet publish.
+    - End with openspec validate --strict for the change and dotnet test.
+
+operations:
+  apply:
+    guidance:
+      - Work only in the change's worktree.
+      - The teammate asks the team lead when a task needs an operator decision.
+      - Report a needed proposal, spec, or design change to the team lead instead of rewriting it during apply.
+      - During /opsx:verify, also do the code review required before a PR into main (.claude/rules/openspec-workflow.md). Write the findings to the ledger.
+  archive:
+    guidance:
+      - Archive in the change's worktree before the branch merges.
