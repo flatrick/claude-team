@@ -1,10 +1,10 @@
 # claude-team
 
-`claude-team` is a launcher. It starts a native Claude agent-team leader in a tmux session. On Windows it uses [psmux](https://github.com/psmux/psmux) with PowerShell 7 and its `tmux` compatibility executable on `PATH`.
+`claude-team` is a launcher. It starts a native Claude agent-team leader in a tmux session. On Windows, it uses [psmux](https://github.com/psmux/psmux) with PowerShell 7. It uses the `tmux` compatibility executable of psmux on `PATH`.
 
 ## Install
 
-Install from a checkout with `scripts/install-tool.cs`. The script packs the code of the checkout it lives in and installs it as a user-global .NET tool.
+Install from a checkout with `scripts/install-tool.cs`. The script packs the code of its own checkout. It installs the code as a user-global .NET tool.
 
 ```bash
 dotnet run --file scripts/install-tool.cs -- install
@@ -13,7 +13,7 @@ dotnet run --file scripts/install-tool.cs -- uninstall
 dotnet run --file scripts/install-tool.cs
 ```
 
-The last command, with no argument, runs `status`. It prints the installed version, the branch of the checkout, and whether `~/.dotnet/tools` is on `PATH`.
+The last command has no argument and runs `status`. It prints the installed version and the branch of the checkout. It also prints whether `~/.dotnet/tools` is on `PATH`.
 A running leader keeps its old build until you restart it. The commands are in [`openspec/specs/tooling/install-tool/`](openspec/specs/tooling/install-tool/).
 
 ## Run and attach
@@ -24,26 +24,26 @@ Run the command in the folder where you want to work: the main checkout or a lin
 claude-team
 ```
 
-The launcher runs `claude --teammate-mode tmux --name <name>` in a multiplexer session with the same name. It adds `--agent team-leader` when a `team-leader` agent exists in `.claude/agents/` or `~/.claude/agents/`. Everything after `--` goes to `claude`.
+The launcher runs `claude --teammate-mode tmux --name <name>` in a multiplexer session with the same name. It adds `--agent team-leader` when a `team-leader` agent exists in `.claude/agents/` or `~/.claude/agents/`. The launcher passes everything after `--` to `claude`.
 
-The default name comes from the origin repository name, and is `<repo>+<worktree>` in a linked worktree. Without an origin it is the folder name of the main checkout. Outside a git repository it is the current folder name. Use `--session <name>` to choose another name. `claude-team --help` shows the rules and the options.
+The default name comes from the origin repository name. In a linked worktree, the default name is `<repo>+<worktree>`. Without an origin, the default name is the folder name of the main checkout. Outside a git repository, the default name is the current folder name. Use `--session <name>` to choose another name. `claude-team --help` shows the rules and the options.
 
-If a session with that name exists, the launcher starts nothing and prints how to start under another name, attach, or close the session. To attach, run `tmux attach -t <name>`. On Windows, use `psmux attach -t <name>`.
-Inside a multiplexer pane, the launcher creates the session detached and switches to it.
+If a session with that name exists, the launcher starts nothing. It prints how to start under another name, how to attach, and how to close the session. To attach, run `tmux attach -t <name>`. On Windows, use `psmux attach -t <name>`.
+Inside a multiplexer pane, the launcher creates the session detached. Then it switches to the session.
 
 Use `claude-team --dry-run` to print the session name, the variable, and the commands without starting anything.
 
-The launcher sets `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1` for Claude. Claude starts no teammate without it. NOT RE-DERIVED (second-hand — Claude Code agent-teams docs, relayed by a docs agent, not us)
-For a new session the launcher also passes the variable with `new-session -e`, because a running tmux server does not take it from the client (`src/ClaudeTeam/Program.cs`, comment before `Processes.Run`). The psmux `new-session -e` flag is NOT RE-DERIVED (psmux docs only; not run on Windows; needs a human).
-An existing session keeps its old environment. Run `tmux kill-session -t <name>` (on Windows, `psmux kill-session -t <name>`) before you run the launcher again to apply the variable.
+The launcher sets `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1` for Claude. Without it, Claude starts no teammate. NOT RE-DERIVED (second-hand — Claude Code agent-teams docs, relayed by a docs agent, not us)
+For a new session, the launcher also passes the variable with `new-session -e`. A running tmux server does not take the variable from the client (`src/ClaudeTeam/Program.cs`, comment before `Processes.Run`). The psmux `new-session -e` flag is NOT RE-DERIVED (psmux docs only; not run on Windows; needs a human).
+An existing session keeps its old environment. To apply the variable, run `tmux kill-session -t <name>` (on Windows, `psmux kill-session -t <name>`). Then run the launcher again.
 
-Project `.claude/settings.json` sets `teammateMode` to `tmux`. Claude's [settings reference](https://code.claude.com/docs/en/settings-reference#teammatemode) permits this key in any settings file.
+Project `.claude/settings.json` sets `teammateMode` to `tmux`. The [settings reference](https://code.claude.com/docs/en/settings-reference#teammatemode) of Claude permits this key in any settings file.
 
 The launcher behavior is in [`openspec/specs/launcher/`](openspec/specs/launcher/).
 
 ## Starter files
 
-The launcher can install a starter `team-leader` agent and the peer-leader rule, into the repository, the user profile, or both. It warns at launch when either is missing. Run `claude-team --help` for the options. The behavior is in [`openspec/specs/launcher/starter-files/install/spec.md`](openspec/specs/launcher/starter-files/install/spec.md).
+The launcher can install a starter `team-leader` agent and the peer-leader rule. It installs them into the repository, the user profile, or both. At launch, it warns when one of them is missing. Run `claude-team --help` for the options. The behavior is in [`openspec/specs/launcher/starter-files/install/spec.md`](openspec/specs/launcher/starter-files/install/spec.md).
 
 ## Several leaders and teammates
 
