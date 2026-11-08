@@ -21,3 +21,8 @@ Do not add behavior without a failing test first.
 
 Do **not** add interfaces or abstract classes "for flexibility" until a concrete need exists
 (for example two implementations, test doubles, or a clear extension point). Prefer simple, direct code.
+
+## Tests
+
+The tests use xUnit. They are in `tests/ClaudeTeam.Tests`.
+Every project under `tests/` runs from `ClaudeTeam.slnx`.
