@@ -96,3 +96,107 @@ The status of each entry is open until the operator makes a decision.
   A probe with a general-purpose subagent must show which rules it receives.
 - Cause: not verified.
 - Status: open.
+
+## F-008 — A teammate also appears in `ListAgents` as a Remote Control peer with a host-based name
+
+- Date: 2026-11-08
+- Claude Code version: 2.1.319.
+- Setup: `versioning` run. Teammate `versioning-implementer` (preset `implementer-standard`) ran in tmux pane `%2` on host `death-angel`.
+- Observation: `ListAgents` showed the teammate as a separate peer session with a host-based name, `death-angel-parallel-prism`.
+  The leader took it for a possible peer leader.
+  The leader paused a global install to ask it, as `claude-team-peer-leaders.md` requires.
+  The peer answered with a cross-session message from `from-name="death-angel-parallel-prism"`.
+  The harness routed the message as "a Claude session on another machine, over Remote Control".
+  The peer named itself `versioning-implementer`.
+- Evidence: the cross-session message in the leader session. Source: `/home/flatrick/src/github/flatrick/claude-team/.scratch/versioning/friction-pending.md`, item 1.
+  Spawn record: `rg -n 'versioning-implementer' /home/flatrick/src/github/flatrick/claude-team/.scratch/agent-spawn-log.md` (pane `%2`).
+  Re-derive: run `ListAgents` while one pane teammate runs, and compare its rows with `~/.claude/teams/<team>/config.json`.
+  NOT RE-DERIVED (second-hand — the leader observed the `ListAgents` row and the message; the friction scribe did not).
+- Cause: not verified.
+- Effect: The leader lost time and paused a global install. A teammate cannot be told from a peer leader by its name or by its route.
+  The route text ("another machine") is wrong for a pane on the same host.
+- Status: open.
+
+## F-009 — Idle notices from a teammate arrive after a newer leader message and look like a refusal
+
+- Date: 2026-11-08
+- Claude Code version: 2.1.319.
+- Setup: `versioning` run. Teammate `versioning-implementer`. Team `session-b1124c40`.
+- Observation: An idle notice from the teammate reached the leader after the leader had sent a newer message.
+  The notice read as if the teammate had ignored the message.
+  This happened two times in the run: at the pack approval and at the stop after task 1.3.
+  The notices were stamped 19:22:59 and 19:23:34 UTC.
+  When the leader checked, the inbox file `~/.claude/teams/session-b1124c40/inboxes/versioning-implementer.json` was already empty.
+  Re-derive the inbox state: `cat ~/.claude/teams/session-b1124c40/inboxes/versioning-implementer.json` (it holds `[]` now; the state at that time is gone).
+- Evidence: the idle notices in the leader session. Source: `/home/flatrick/src/github/flatrick/claude-team/.scratch/versioning/friction-pending.md`, item 2.
+  NOT RE-DERIVED (conditions gone — the timestamps exist only in the idle notices of the leader session).
+- Cause: not verified.
+  Hypothesis: the teammate went idle after its previous turn, and the harness delivered the notice late.
+  The empty inbox shows that the teammate read the newer message.
+- Third case: the `shutdown_approved` message of `versioning-implementer` is stamped 20:00:40 UTC.
+  It reached the leader after the leader had confirmed the shutdown by config and pane checks, and after the leader had started `friction-scribe`.
+  The `teammate_terminated` system notice came in the same delivery.
+  NOT RE-DERIVED (conditions gone — the stamp exists only in the leader session).
+- Effect: The leader can judge a teammate wrongly. It can send a message again or stop a running teammate.
+  F-004 is a related case: a send result does not show a read, and an idle notice does not show a refusal.
+- Status: open.
+
+## F-010 — The implementer wrote tests with the code, so no test ran red first
+
+- Date: 2026-11-08
+- Claude Code version: 2.1.319.
+- Setup: `versioning` run. Teammate `versioning-implementer`. Change `versioning`.
+- Observation: `tasks.md` asked for failing tests first (tasks 3.1, 3.3, and 3.4).
+  The implementer wrote the tests and the code in one step.
+  It did not see the tests fail, and it said so in its report.
+- Evidence: `/home/flatrick/src/github/flatrick/claude-team/.scratch/versioning/implementer-report.md`, the paragraph that starts "No test on Windows": "I wrote them with the code in one step, so I did not observe them red first."
+  Task text: `rg -n 'failing test' /home/flatrick/src/github/flatrick/claude-team/.worktrees/versioning/openspec/changes/archive/2026-11-08-versioning/tasks.md`.
+  The report cites `tests/ClaudeTeam.Tests/OptionsTests.cs` and `VersionLineTests.cs`.
+- Cause: not verified.
+  The report does not say why the implementer skipped the red step.
+- Effect: A passing test may not prove the behavior. The test run was never shown to fail without the code.
+  The task list was marked complete (`[x]`) although the step in the task text did not happen.
+- Status: open.
+
+## F-011 — The implementer reported a write outside the workspace
+
+- Date: 2026-11-08
+- Claude Code version: 2.1.319.
+- Setup: `versioning` run. Teammate `versioning-implementer`. Rule: `.claude/rules/workspace-boundary.md`.
+- Observation: The implementer said that it wrote a scratch file `/tmp/x` and deleted it.
+  `/tmp` is outside the workspace, and the boundary rule requires permission first.
+  The source says the message went to the leader during the versioning landing.
+- Evidence: `/home/flatrick/src/github/flatrick/claude-team/.scratch/versioning/friction-pending.md`, item 4.
+  The leader confirms the source. `versioning-implementer` sent this message to the leader in its "STOP before push" message, about 19:57 UTC on 2026-11-08:
+  "Also: I wrote a scratch file in /tmp once (`/tmp/x`, a comparison helper) and deleted it. That was outside the workspace boundary. It had no effect."
+  Its idle notice of 19:57:51 UTC repeats it: "Boundary slip: I wrote one scratch file to `/tmp/x` during the spec comparison and deleted it."
+  NOT RE-DERIVED (second-hand — `versioning-implementer` reported it to the leader, not to the scribe; the file is gone).
+  Separate observation: the written report does not list the `/tmp/x` write under "Writes outside the worktree", so the report is incomplete.
+  Re-derive: `rg -n 'Writes outside' /home/flatrick/src/github/flatrick/claude-team/.scratch/versioning/implementer-report.md`.
+  The written report names a different outside write: `rg -n 'Restore wrote' /home/flatrick/src/github/flatrick/claude-team/.scratch/versioning/implementer-report.md` gives finding 7, the MinVer package in `~/.nuget/packages`.
+  The scribe searched the scratch folder and the versioning ledger: `rg -n '/tmp/x' /home/flatrick/src/github/flatrick/claude-team/.scratch /home/flatrick/src/github/flatrick/claude-team/.worktrees/versioning/.scratch/agent-ledgers`.
+  At the time of the first batch it matched only `friction-pending.md`.
+- Cause: not verified.
+  The report says "Writes outside the worktree: none except finding 7", so the `/tmp/x` write is missing from the written report.
+- Effect: The workspace boundary has no hook, so only the teammate can stop a write outside the workspace.
+  The written report and the oral report disagree.
+- Status: open.
+
+## F-012 — The archive sync made two main-spec requirements too long, and only the post-archive validation showed it
+
+- Date: 2026-11-08
+- Claude Code version: 2.1.319.
+- Setup: `versioning` run, change `versioning`. Commands: `/opsx:archive` (`openspec archive versioning -y`) and `openspec validate`.
+- Observation: `/opsx:archive` synced the delta specs into the main specs.
+  Then `openspec validate --all --strict` warned "Requirement text is very long (>500 characters)" for two main specs:
+  - `tooling/install-tool/commands`, requirement `Status`.
+  - `tooling/install-tool/install`, requirement `Install replaces the global tool`.
+  `openspec validate versioning --strict` on the change had passed before the archive.
+  The length check on the merged requirement text showed only after the sync.
+- Evidence: the ledger entries in `/home/flatrick/src/github/flatrick/claude-team/.worktrees/versioning/.scratch/agent-ledgers/versioning/`:
+  `20261108T200008Z-versioning-implementer-6.md` (key `impl-archive-specs-long-requirement-warnings`) and `20261108T195908Z-versioning-requirements-3.md` (keys `req3-status-requirement-too-long`, `req3-install-replaces-too-long`).
+  Re-derive: `rg -n 'long-requirement|too-long' /home/flatrick/src/github/flatrick/claude-team/.worktrees/versioning/.scratch/agent-ledgers/versioning/`.
+- Cause: the leader and the ledger entries state it. The scribe did not run the archive. NOT RE-DERIVED (second-hand — leader and `versioning-implementer` observed it).
+- Effect: One extra teammate round and an amend of the archive commit.
+- Idea (not decided): run `openspec validate --all --strict` on a trial archive before the real one.
+- Status: open.
