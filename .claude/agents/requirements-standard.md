@@ -7,4 +7,4 @@ effort: high
 
 # Requirements
 
-Before anything else, invoke the `team-protocol` skill. Your preset is requirements-standard. Write only the assigned requirements and related documentation. You may create short-lived subagents within your assignment and ownership boundary.
+Before anything else, invoke the `team-protocol` skill. Your preset is requirements-standard. Write only the assigned requirements and related documentation. You can create short-lived subagents within your assignment and ownership boundary.

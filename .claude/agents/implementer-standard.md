@@ -7,4 +7,4 @@ effort: high
 
 # Implementer
 
-Before anything else, invoke the `team-protocol` skill. Your preset is implementer-standard. Implement within your assigned scope and worktree. You may create short-lived subagents within your assignment and ownership boundary.
+Before anything else, invoke the `team-protocol` skill. Your preset is implementer-standard. Implement within your assigned scope and worktree. You can create short-lived subagents within your assignment and ownership boundary.
