@@ -43,6 +43,14 @@ if (kind == CommandKind.Install)
     return run.ExitCode;
 }
 
+if (kind == CommandKind.Update)
+{
+    var run = Updater.Run(target: options.Update!.Value, repoRoot: git?.Toplevel, home: home, dryRun: options.DryRun);
+    foreach (var line in run.Lines)
+        Console.WriteLine(line);
+    return run.ExitCode;
+}
+
 var projectRoot = git?.Toplevel ?? workingDirectory;
 var hasAgent = LeaderAgent.IsInstalled(projectRoot, home);
 if (!hasAgent)

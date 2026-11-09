@@ -9,6 +9,7 @@ public static class Help
           claude-team [--session <name>] [--dry-run] [-- <claude arguments>]
           claude-team --install-peer-rule <repo|global|both> [--force]
           claude-team --install-leader-agent <repo|global|both> [--force]
+          claude-team --update <repo|global|both> [--dry-run]
 
         Options:
           --session <name>              Session name. Default: the origin repository name,
@@ -25,6 +26,10 @@ public static class Help
                                         {string.Join(", ", TeamSkills.Names)} to
                                         .claude/skills/ or ~/.claude/skills/. Then exit.
                                         Both install options may be given in one run.
+          --update <target>             Add each missing shipped file (the rule, the agent, and the skills)
+                                        and replace each one that differs, at repo, global, or both.
+                                        With --dry-run, show the changes as a diff and write nothing.
+                                        Then exit. Run --dry-run first: an update replaces edited files.
           --force                       Replace an existing rule or agent file.
           -h, --help                    Show this help.
           --version                     Print the version and the short commit. Then exit.
