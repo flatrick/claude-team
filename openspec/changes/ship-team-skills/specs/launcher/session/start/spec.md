@@ -18,28 +18,11 @@ Source: no code yet.
 - **WHEN** each team skill is in at least one location
 - **THEN** no missing-skill warning is written
 
-### Requirement: Shadowed-skill warning
-
-If a team skill has a `SKILL.md` both under the project root and in `~/.claude/skills/`, and the two files differ, the tool SHALL write a warning to standard error for that skill.
-The warning SHALL name the user profile file and say that Claude Code uses it in place of the repository file. The tool SHALL then continue the launch.
-Source: no code yet.
-
-#### Scenario: Stale user profile copy
-
-- **WHEN** `<repo>/.claude/skills/team-protocol/SKILL.md` and `~/.claude/skills/team-protocol/SKILL.md` both exist and differ
-- **THEN** standard error shows a warning that names `~/.claude/skills/team-protocol/SKILL.md`
-- **AND** the launch continues
-
-#### Scenario: Identical copies
-
-- **WHEN** both copies of a team skill exist and are identical
-- **THEN** no shadowed-skill warning is written for that skill
-
 ## MODIFIED Requirements
 
 ### Requirement: Warnings before a dry run
 
-The tool SHALL write the missing-agent warning, the missing-peer-rule warning, the missing-skill warning, and each shadowed-skill warning to standard error before the dry-run output.
+The tool SHALL write the missing-agent warning, the missing-peer-rule warning, and the missing-skill warning to standard error before the dry-run output.
 The reason is that the tool checks for these files before it handles `--dry-run`.
 Source: `src/ClaudeTeam/Program.cs` (lines 38-45 for the warnings, lines 50-57 for the dry run). The skill warnings have no code yet.
 

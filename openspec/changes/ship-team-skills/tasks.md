@@ -21,29 +21,38 @@ Load the `dotnet-workflow` skill before the first dotnet command. Write each fai
 - [ ] 3.2 Extend `LeaderAgent.Install` or `Installer.Run` to install the skills, and add the `Note:` line (design decision 3). Verify that the tests from 3.1 and every earlier install test pass.
 - [ ] 3.3 Write a failing test in `HelpTests.cs` that the text for `--install-leader-agent` names the three skills. Then update `Help.cs`. Verify that the test passes.
 
-## 4. Launch warnings
+## 4. Update option
 
-- [ ] 4.1 Write failing tests for a testable warning function (for example `TeamSkills.LaunchWarnings(projectRoot, home)`): one missing-skill warning that names each missing skill and `--install-leader-agent`; no warning when each skill is in one location; a shadowed-skill warning that names the user profile path when both copies exist and differ; no shadowed-skill warning when the copies differ only in line endings. Verify that they fail.
-- [ ] 4.2 Implement the function and call it from `Program.cs` after the peer-rule check, before the dry run (design decision 3). Verify that the tests from 4.1 pass, and that `claude-team --dry-run` in a temporary folder with no skills prints the missing-skill warning before the dry-run output.
+- [ ] 4.1 Write failing tests in `OptionsTests.cs` and `CommandResolverTests.cs`: `--update <target>` parses with any letter case; a missing or unknown value gives `Supply repo, global, or both after --update.`; `--update` with an install option gives `Use --update without --install-peer-rule or --install-leader-agent.`; `--force` with only `--update` stays rejected; help and version win over update. Verify that they fail. Then implement them in `Options.cs` and `CommandResolver.cs` and verify that they pass.
+- [ ] 4.2 Write failing tests for the line diff: identical texts give no hunk; one changed line gives one hunk with a `-` line, a `+` line, and up to three context lines; the header is `--- <installed path>` and `+++ <file name> (shipped)`. Verify that they fail. Then implement the diff (design decision 3) and verify that the tests pass.
+- [ ] 4.3 Write a failing hash test: each shipped file has the hash of its current embedded text in the embedded hash list. Verify that it fails. Then add `src/ClaudeTeam/shipped-hashes.txt`, embed it, and seed it with the earlier shipped texts of the rule and the agent and the current texts of every shipped file (design decision 3a). Verify that the test passes, and record the seed commands and hashes in the ledger.
+- [ ] 4.4 Write failing update tests with temporary folders: a missing file gives `Added <path>`; a changed file gives `Replaced <path>` and holds the embedded text after the run; a same file gives `Up to date <path>` and keeps its write time; a file that differs only in line endings counts as the same; a dry run writes nothing and prints `Would add`, `Would replace <path> (older shipped version)` or `(edited)` with the diff, and `Up to date`; `both` handles the repository file before the user profile file and ends with the `Note:` line; outside git, each repository file gives the outside-git line, the user profile files are updated, and the exit code is 1; the run writes no other file. Verify that they fail.
+- [ ] 4.5 Implement the update mode and call it from `Program.cs` (design decision 3). Verify that the tests from 4.4 pass.
+- [ ] 4.6 Write a failing test in `HelpTests.cs` that the options section names `--update`. Then update `Help.cs` and verify that the test passes.
 
-## 5. Repository copies and local skills
+## 5. Missing-skill warning
 
-- [ ] 5.1 Generalize `PeerRuleCopyTests.cs` into one copy test with a case for the peer rule, the agent, and each team skill. Verify that the agent and skill cases fail.
-- [ ] 5.2 In one commit, copy the shipped agent and skills to `.claude/agents/team-leader.md` and `.claude/skills/<skill name>/SKILL.md`, and create `.claude/skills/team-leader-local/SKILL.md`, `.claude/skills/team-protocol-local/SKILL.md`, and `.claude/skills/start-teammate-local/SKILL.md` with the moved text from design decision 7. Verify that the copy test passes, and that each row of the design table has its text in the named destination (`rg --hidden -n` for a distinctive phrase of each row).
-- [ ] 5.3 Search for other files that quote the moved text or the old leader front matter (`rg --hidden --glob '!.git/**' -n 'model: opus|agent-spawn-log|dotnet-workflow loaded' .claude/ README.md AGENTS.md`). Update or confirm each hit, and record the command and its result in the ledger.
+- [ ] 5.1 Write failing tests for a testable warning function (for example `TeamSkills.MissingWarning(projectRoot, home)`): one warning that names each missing skill and `--install-leader-agent`; no warning when each skill is in at least one location; no warning when two copies differ. Verify that they fail.
+- [ ] 5.2 Implement the function and call it from `Program.cs` after the peer-rule check, before the dry run. Verify that the tests from 5.1 pass, and that `dotnet run --project src/ClaudeTeam -- --dry-run` in a temporary folder with no skills prints the warning before the dry-run output.
 
-## 6. Documentation
+## 6. Repository copies and local skills
 
-- [ ] 6.1 Update `README.md`: the install section names the skills, the `Note:` line, and the launch warnings; a short section describes the `-local` extension point and says that a `-local` skill lives in the repository. Verify that each command in the new text matches the help output of `claude-team --help` from `dotnet run --project src/ClaudeTeam -- --help`.
+- [ ] 6.1 Generalize `PeerRuleCopyTests.cs` into one copy test with a case for the peer rule, the agent, and each team skill. Verify that the agent and skill cases fail.
+- [ ] 6.2 In one commit, copy the shipped agent and skills to `.claude/agents/team-leader.md` and `.claude/skills/<skill name>/SKILL.md`, and create `.claude/skills/team-leader-local/SKILL.md`, `.claude/skills/team-protocol-local/SKILL.md`, and `.claude/skills/start-teammate-local/SKILL.md` with the moved text from design decision 7. Verify that the copy test passes, and that each row of the design table has its text in the named destination (`rg --hidden -n` for a distinctive phrase of each row).
+- [ ] 6.3 Search for other files that quote the moved text or the old leader front matter (`rg --hidden --glob '!.git/**' -n 'model: opus|agent-spawn-log|dotnet-workflow loaded' .claude/ README.md AGENTS.md`). Update or confirm each hit, and record the command and its result in the ledger.
 
-## 7. Windows check (needs a human)
+## 7. Documentation
 
-- [ ] 7.1 NEEDS A HUMAN ON WINDOWS. Run the psmux pane checks of `start-teammate`, the psmux check and the PowerShell wait loop of `end-teammate`, and the PowerShell variable check under psmux with PowerShell 7. Record the commands and the output in the ledger. For each form that works, remove the words `not tested on Windows` in the shipped source and the repository copy, in an OpenSpec change if the shipped text is behavior. Report each form that does not work to the team lead.
+- [ ] 7.1 Update `README.md`: the install section names the skills, the `Note:` line, `--update` with the advice to run `--dry-run` first, and the missing-skill warning; a short section describes the `-local` extension point and says that a `-local` skill lives in the repository. Verify that each command in the new text matches the help output of `claude-team --help` from `dotnet run --project src/ClaudeTeam -- --help`.
 
-## 8. Final checks
+## 8. Windows check (needs a human)
 
-- [ ] 8.1 Run `openspec validate ship-team-skills --strict`, `openspec validate --all --strict`, and `openspec validate --archived`. Verify that all three pass with no warnings.
-- [ ] 8.2 Run `dotnet test ClaudeTeam.slnx` as the `dotnet-workflow` skill says. Verify that every test passes.
+- [ ] 8.1 NEEDS A HUMAN ON WINDOWS. Run the psmux pane checks of `start-teammate`, the psmux check and the PowerShell wait loop of `end-teammate`, and the PowerShell variable check under psmux with PowerShell 7. Record the commands and the output in the ledger. For each form that works, remove the words `not tested on Windows` in the shipped source and the repository copy, in an OpenSpec change if the shipped text is behavior. Report each form that does not work to the team lead.
+
+## 9. Final checks
+
+- [ ] 9.1 Run `openspec validate ship-team-skills --strict`, `openspec validate --all --strict`, and `openspec validate --archived`. Verify that all three pass with no warnings.
+- [ ] 9.2 Run `dotnet test ClaudeTeam.slnx` as the `dotnet-workflow` skill says. Verify that every test passes.
 
 ## Workflow follow-up
 
