@@ -30,8 +30,8 @@ Name precedence in Claude Code, from the probes in the ledger of this change. NO
 
 **Non-Goals:**
 
-- Detecting a stale user profile copy of the agent or the rule. A repository agent wins over a user profile agent, and rules are additive, so a stale copy cannot hide the repository copy.
-- A command that lists or repairs installed copies. The operator chose launch warnings and no extra option.
+- A launch warning for an installed file that differs from the shipped text, or for two copies that differ. Users can adapt their copies, so a difference is not an error.
+- An install record at the target.
 - A template or a generator for `-local` skills.
 
 ## Decisions
@@ -65,18 +65,34 @@ Alternatives considered (in the earlier review of this change):
 - One local skill for the leader and one for teammates. Rejected: the start and end text loads long before its trigger.
 - A rule file such as `.claude/rules/team-local.md`. Rejected as the main mechanism: every role gets all text. It stays the fallback if agents skip the first line. A rule file never hides another rule file.
 
-### 3. Install surface
+### 3. Install surface, update, and launch warning
 
-The operator chose this. Reason: the agent calls the skills in its first lines, so the agent and the skills are one unit. The shadow warning comes at launch, when it matters, and needs no extra option.
+The operator chose these points:
 
-- `--install-leader-agent <target>` installs the agent and then the three skills, to the same target. Each skill is one more `Installer.Install` call with the subfolder `skills/<skill name>` and the file `SKILL.md`. Each file follows the current rules for the result line, `--force`, `--dry-run`, and the outside-git error.
-- With the target `both`, `Installer.Run` adds one line after the result lines. Proposed text: `Note: for a name in both places, Claude Code uses the skill in the user profile and the agent in the repository. Keep both copies the same.` The exit code does not change.
-- At launch, `Program.cs` adds two checks after the peer-rule check. The project root is the same as for the agent (`git?.Toplevel ?? workingDirectory`).
-  - Missing skill. Proposed text: `Warning: the team skills <names> are not in .claude/skills/ or ~/.claude/skills/. Install them with: claude-team --install-leader-agent <repo|global|both>`. `<names>` is a comma-separated list in install order.
-  - Shadowed skill, for each skill with both copies where the texts differ after line-ending normalization. Proposed text: `Warning: <user profile path> differs from <repository path>. Claude Code uses <user profile path>.`
-- `Options.cs` does not change. `Help.cs` names the skills in the text for `--install-leader-agent`.
+- `--install-leader-agent <target>` installs the agent and then the three skills, to the same target. Reason: the agent calls the skills in its first lines, so the agent and the skills are one unit.
+- A new option `--update <target>` adds each missing shipped file and replaces each shipped file that differs from the text in the tool. With `--dry-run`, it shows the changes and writes nothing. Reason, in the words of the operator: "I don't want it to warn, as the user's may want to adjust these files to their own needs. I am far more inclined to have --update with a --dry-run to see what would change".
+- The update also adds missing files. Reason: a file that a later tool version adds, for example a new skill, must arrive with the next update. The shipped files are one unit, because the leader invokes the skills. Accepted costs: a file that the user deleted on purpose comes back, and the dry run shows this. An update overwrites edits in the files that it replaces, as `--force` does.
+- The only launch warning for the skills is for a skill that is in neither location. Reason: the leader then fails at its first step. A copy that differs is not an error, because users can adapt their copies.
+- The dry run labels each changed file `older shipped version` or `edited` from an embedded hash list (decision 3a). The tool writes no extra file at the target. Reasons: no new state at the target, and the labels work at once for installs made before this change.
 
-Alternatives: a separate `--install-team-skills` option, and one `--install` option for all files. The operator rejected both. The first lets a user install an agent with no skills. The second breaks current command lines.
+Implementation:
+
+- Each skill is one more `Installer.Install` call with the subfolder `skills/<skill name>` and the file `SKILL.md`. Each file follows the current rules for the result line, `--force`, `--dry-run`, and the outside-git error.
+- With the target `both`, for `--install-leader-agent` and `--update`, the output ends with one note. Proposed text: `Note: for a name in both places, Claude Code uses the skill in the user profile and the agent in the repository. Keep both copies the same.` The exit code does not change.
+- `Options.cs` parses `--update <target>` with `TryParseInstallTarget`. It rejects `--update` together with an install option. `--force` alone with `--update` stays rejected by the current check, because an update replaces changed files without it. `CommandResolver` gets a new kind `Update` after `Install`. Help and version still win.
+- A new `Updater` (or a method on `Installer`) handles each updated file in install order (the rule, the agent, then the skills), for each root of the target. It compares texts after `ReplaceLineEndings("\n")`.
+- The line diff is a small longest-common-subsequence diff over lines, in the unified format with three lines of context. The installed files are small (a few hundred lines at most), so the quadratic table is cheap. The tool does not call `git diff`, because git can be absent outside a repository.
+- The missing-skill warning is computed by a testable function and printed from `Program.cs` after the peer-rule check, before the dry run. The project root is the same as for the agent (`git?.Toplevel ?? workingDirectory`). Proposed text: `Warning: the team skills <names> are not in .claude/skills/ or ~/.claude/skills/. Install them with: claude-team --install-leader-agent <repo|global|both>`. `<names>` is a comma-separated list in install order.
+- `Help.cs` names the skills in the text for `--install-leader-agent`, and adds `--update <target>`.
+
+Alternatives that the operator rejected: a separate `--install-team-skills` option (a user can install an agent with no skills); one `--install` option for all files (breaks current command lines); launch warnings for a copy that differs from the shipped text or from the other copy (users can adapt their copies); an interactive `update` mode (first prompt in the tool); an install record at the target (new state, and no help for older installs).
+
+### 3a. Shipped-version hashes
+
+- Keep the list in `src/ClaudeTeam/shipped-hashes.txt` and embed it. Each line is `<published path> <sha256 hex>`, for example `skills/team-protocol/SKILL.md 3f…`. The path is the path under `.claude/`. The hash is SHA-256 over the UTF-8 text with LF line endings.
+- The list holds every shipped version, the current one included. A test fails when the hash of the current embedded text of a file is missing. Because of this, a change to a shipped file adds the new hash in the same change. Each released text is then in the list without a release step, so this change needs no delta to the release specs.
+- Seed the list with the hashes of the texts that earlier releases shipped. The update covers the peer-leader rule too. The operator decided this. Reason: one command brings every shipped file up to date, and a user who edited the rule checks the dry run first. Before this change, releases shipped only the rule and `team-leader.md`. Get each earlier text from git with `git show <tag>:src/ClaudeTeam/<file>` for each release tag (`git tag --list 'v*'`). On 2026-11-09 every release tag held one leader text and one rule text. Re-derive with `git log --oneline --follow -- src/ClaudeTeam/<file>` and `for t in $(git tag --list 'v*'); do git show $t:src/ClaudeTeam/<file> | sha256sum; done`. Commits between tags that a user installed from a checkout are not in the list; such a file shows as `edited`.
+- Accepted costs, from the operator: the list grows with each change to a shipped file. The tool cannot tell a new file from a deleted file, so it adds each missing file.
 
 ### 4. Front matter of the shipped leader
 
@@ -130,9 +146,11 @@ The operator decided: the assignment is the only source for the report path, the
 ## Risks / Trade-offs
 
 - [An agent skips the first line and does not load its `-local` skill] → The leader requires `+local` from teammates. The operator reads `team-leader loaded +local`. A rule file stays the fallback.
-- [A stale user profile skill hides the repository skill, also in this repository] → The launch warns when the two copies differ. No test can read `~/.claude`, so the copy test does not cover this case.
-- [The precedence facts are second-hand] → The design depends on them only for the warnings and the note. A wrong fact gives a wrong warning text, not a failed install.
-- [A user with an old installed `team-leader.md` runs `--install-leader-agent` without `--force`] → The tool keeps the old agent and writes the new skills. The old agent does not call the skills, so nothing breaks. The user runs with `--force` to get the new agent.
+- [A stale user profile skill hides the repository skill, also in this repository] → No warning, by the choice of the operator. `claude-team --update global --dry-run` shows it, with the label `older shipped version` or `edited`. No test can read `~/.claude`, so the copy test does not cover this case.
+- [The precedence facts are second-hand] → The design depends on them only for the `Note:` line and for the rule that a `-local` skill lives in the repository. A wrong fact gives a wrong note, not a failed install.
+- [A user with an old installed `team-leader.md` runs `--install-leader-agent` without `--force`] → The tool keeps the old agent and writes the new skills. The old agent does not call the skills, so nothing breaks. `--update` replaces the old agent.
+- [An update overwrites an edit that the user wanted] → The dry run shows the diff and the label `edited` first. The README tells users to run the dry run before the update.
+- [A developer edits a shipped file and forgets the hash] → The hash test fails.
 - [psmux behavior is untested] → Each psmux form says `not tested on Windows`. The checks decide a start or a shutdown. A human task runs the checks on Windows.
 - [This repository's leader loses `model: opus` and `memory: local`] → The operator passes `-- --model opus` when needed.
 - [The help text and the warnings are CLI strings] → They are new behavior in this change, so the specs of this change cover them.
@@ -141,5 +159,5 @@ The operator decided: the assignment is the only source for the report path, the
 
 1. Write the shipped sources and the tests first. The copy tests fail until the repository copies match.
 2. In one commit, replace the repository agent and skills with the shipped text and add the three `-local` skills with the moved text. Then no state on the branch loses a rule of this repository.
-3. Users get the skills with `claude-team --install-leader-agent <target>`, and with `--force` to replace an old agent.
+3. Users get the skills with `claude-team --install-leader-agent <target>`, or with `claude-team --update <target>`, which also replaces an old agent.
 4. Rollback: revert the branch. Installed files stay on the machine of the user until the user removes them.
