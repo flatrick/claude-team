@@ -9,11 +9,11 @@ Load the `dotnet-workflow` skill before the first dotnet command. Write each fai
 
 ## 2. Shipped text content
 
-- [ ] 2.1 Write failing content tests for the embedded agent and skills. They cover the spec `launcher/starter-files/content`: the local extension line as the first non-empty line after the front matter, the forbidden strings, the leader front matter (`effort: low`, an `initialPrompt` that names `team-protocol`, `memory: local`, no `model:`), the `+local` confirmations, the leader's use of `start-teammate` and `end-teammate` with no `tmux list-panes` in the agent, the neutral subagent and report text, the psmux forms with `not tested on Windows`, the PowerShell forms, and the statement that the checks decide a start or a shutdown. Replace the agent assertions in `LeaderAgentTests.cs` that the new tests cover. Verify that the new tests fail.
-- [ ] 2.2 Rewrite `src/ClaudeTeam/team-leader.md` as design decisions 2, 4, and 7 say. Verify that the agent content tests pass.
-- [ ] 2.3 Rewrite `src/ClaudeTeam/skills/team-protocol/SKILL.md` as design decisions 2, 6, and 7 say. Verify that its content tests pass.
-- [ ] 2.4 Rewrite `src/ClaudeTeam/skills/start-teammate/SKILL.md` and `src/ClaudeTeam/skills/end-teammate/SKILL.md` as design decisions 2, 5, and 7 say. Verify that their content tests pass.
-- [ ] 2.5 Check the shipped text against `.claude/rules/writing-style.md` and record the check in the ledger. Verify that every content test still passes.
+- [x] 2.1 Write failing content tests for the embedded agent and skills. They cover the spec `launcher/starter-files/content`: the local extension line as the first non-empty line after the front matter, the forbidden strings, the leader front matter (`effort: low`, an `initialPrompt` that names `team-protocol`, `memory: local`, no `model:`), the `+local` confirmations, the leader's use of `start-teammate` and `end-teammate` with no `tmux list-panes` in the agent, the neutral subagent and report text, the psmux forms with `not tested on Windows`, the PowerShell forms, and the statement that the checks decide a start or a shutdown. Replace the agent assertions in `LeaderAgentTests.cs` that the new tests cover. Verify that the new tests fail.
+- [x] 2.2 Rewrite `src/ClaudeTeam/team-leader.md` as design decisions 2, 4, and 7 say. Verify that the agent content tests pass.
+- [x] 2.3 Rewrite `src/ClaudeTeam/skills/team-protocol/SKILL.md` as design decisions 2, 6, and 7 say. Verify that its content tests pass.
+- [x] 2.4 Rewrite `src/ClaudeTeam/skills/start-teammate/SKILL.md` and `src/ClaudeTeam/skills/end-teammate/SKILL.md` as design decisions 2, 5, and 7 say. Verify that their content tests pass.
+- [x] 2.5 Check the shipped text against `.claude/rules/writing-style.md` and record the check in the ledger. Verify that every content test still passes.
 
 ## 3. Install of the skills with the agent
 
