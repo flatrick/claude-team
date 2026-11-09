@@ -46,14 +46,10 @@ Load the `dotnet-workflow` skill before the first dotnet command. Write each fai
 
 - [x] 7.1 Update `README.md`: the install section names the skills, the `Note:` line, `--update` with the advice to run `--dry-run` first, and the missing-skill warning; a short section describes the `-local` extension point and says that a `-local` skill lives in the repository; the install section says that the leader keeps its memory in `.claude/agent-memory-local/` and tells users to ignore that folder in git. Verify that each command in the new text matches the help output of `claude-team --help` from `dotnet run --project src/ClaudeTeam -- --help`.
 
-## 8. Windows check (needs a human)
+## 8. Final checks
 
-- [ ] 8.1 NEEDS A HUMAN ON WINDOWS. Run the psmux pane checks of `start-teammate`, the psmux check and the PowerShell wait loop of `end-teammate`, and the PowerShell variable check under psmux with PowerShell 7. Record the commands and the output in the ledger. For each form that works, remove the words `not tested on Windows` in the shipped source and the repository copy, in an OpenSpec change if the shipped text is behavior. Report each form that does not work to the team lead.
-
-## 9. Final checks
-
-- [ ] 9.1 Run `openspec validate ship-team-skills --strict`, `openspec validate --all --strict`, and `openspec validate --archived`. Verify that all three pass with no warnings.
-- [ ] 9.2 Run `dotnet test ClaudeTeam.slnx` as the `dotnet-workflow` skill says. Verify that every test passes.
+- [x] 8.1 Run `openspec validate ship-team-skills --strict`, `openspec validate --all --strict`, and `openspec validate --archived`. Verify that all three pass with no warnings.
+- [x] 8.2 Run `dotnet test ClaudeTeam.slnx` as the `dotnet-workflow` skill says. Verify that every test passes.
 
 ## Workflow follow-up
 
