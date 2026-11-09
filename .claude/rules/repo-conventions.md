@@ -103,6 +103,19 @@ warning. Write `-n -r` apart, or write only `-n`.
 
 - Follow the root `.gitattributes`. Do not commit changes that break line-ending or diff behavior.
 - Follow the committed hooks in `.githooks/`. [worktree-workflow.md](worktree-workflow.md) says how to set `core.hooksPath` once.
+- Keep the commit subject at or below the `subjectMax` value in `.girconfig`. The `gir` commit-msg hook rejects a longer subject. Read the value with `git config -f .girconfig --get gir.subjectMax`.
+
+### Fix an earlier commit with a fixup commit
+
+1. Make the fix as a `fixup!` commit for the commit that it corrects: `git commit --fixup=<commit>`.
+2. If later commits changed the same lines, aim the fixup at the last commit that touched those lines. Do not aim it at the commit that first wrote them. Find the last commit with `git log -L <start>,<end>:<file>` or `git blame`. A fixup aimed at an older commit conflicts during the autosquash.
+3. Before the autosquash, record the tree: `git rev-parse HEAD^{tree}`.
+4. Before you push, fold the fixups: `GIT_SEQUENCE_EDITOR=: git rebase -i --autosquash <base>`.
+5. After the autosquash, run `git rev-parse HEAD^{tree}` again. If the tree is not the same, stop and report to the team lead.
+
+The history then reads as if each commit was right from the start.
+
+Why: teammates do not see these conventions unless a rule delivers them. A wrong fixup target or a long subject costs a retry.
 
 ## Secrets and configuration
 
