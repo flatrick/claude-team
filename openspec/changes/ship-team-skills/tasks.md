@@ -4,8 +4,8 @@ Load the `dotnet-workflow` skill before the first dotnet command. Write each fai
 
 ## 1. Shipped skill sources and embedding
 
-- [ ] 1.1 Write a failing test that reads each team skill from the embedded resources (`skills/<skill name>/SKILL.md`) in the order `team-protocol`, `start-teammate`, `end-teammate`, and checks that the text has LF line endings only. Verify that it fails because the resources do not exist.
-- [ ] 1.2 Add `src/ClaudeTeam/skills/<skill name>/SKILL.md` for each team skill (start from the current repository text), embed them in `ClaudeTeam.csproj`, and add the `TeamSkills` type (design decision 1). Verify that the test from 1.1 passes.
+- [x] 1.1 Write a failing test that reads each team skill from the embedded resources (`skills/<skill name>/SKILL.md`) in the order `team-protocol`, `start-teammate`, `end-teammate`, and checks that the text has LF line endings only. Verify that it fails because the resources do not exist.
+- [x] 1.2 Add `src/ClaudeTeam/skills/<skill name>/SKILL.md` for each team skill (start from the current repository text), embed them in `ClaudeTeam.csproj`, and add the `TeamSkills` type (design decision 1). Verify that the test from 1.1 passes.
 
 ## 2. Shipped text content
 
