@@ -26,4 +26,20 @@ public class CommandResolverTests
 
     [Fact]
     public void An_install_option_gives_install() => Assert.Equal(CommandKind.Install, Resolve("--install-peer-rule", "repo"));
+
+    [Fact]
+    public void An_update_option_gives_update() => Assert.Equal(CommandKind.Update, Resolve("--update", "repo"));
+
+    [Fact]
+    public void Update_with_dry_run_still_gives_update() => Assert.Equal(CommandKind.Update, Resolve("--update", "both", "--dry-run"));
+
+    [Theory]
+    [InlineData("--update", "repo", "--help")]
+    [InlineData("--help", "--update", "repo")]
+    public void Help_wins_over_update(params string[] args) => Assert.Equal(CommandKind.Help, Resolve(args));
+
+    [Theory]
+    [InlineData("--update", "repo", "--version")]
+    [InlineData("--version", "--update", "global")]
+    public void Version_wins_over_update(params string[] args) => Assert.Equal(CommandKind.Version, Resolve(args));
 }

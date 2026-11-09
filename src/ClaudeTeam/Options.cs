@@ -10,12 +10,13 @@ public sealed record Options(
     string[] Forwarded,
     InstallTarget? InstallPeerRule,
     InstallTarget? InstallLeaderAgent,
-    bool Force)
+    bool Force,
+    InstallTarget? Update = null)
 {
     public static ParseResult Parse(string[] args)
     {
         string? session = null;
-        InstallTarget? install = null, installAgent = null;
+        InstallTarget? install = null, installAgent = null, update = null;
         bool dryRun = false, help = false, version = false, force = false;
         string[] forwarded = [];
 
@@ -47,6 +48,12 @@ public sealed record Options(
                     installAgent = agentTarget;
                     i++;
                     break;
+                case "--update":
+                    if (i + 1 >= args.Length || !TryParseInstallTarget(args[i + 1], out var updateTarget))
+                        return ParseResult.Fail("Supply repo, global, or both after --update.");
+                    update = updateTarget;
+                    i++;
+                    break;
                 case "--force":
                     force = true;
                     break;
@@ -64,10 +71,13 @@ public sealed record Options(
             }
         }
 
+        if (update is not null && (install is not null || installAgent is not null))
+            return ParseResult.Fail("Use --update without --install-peer-rule or --install-leader-agent.");
+
         if (force && install is null && installAgent is null)
             return ParseResult.Fail("Use --force only with --install-peer-rule or --install-leader-agent.");
 
-        return new ParseResult(new Options(session, dryRun, help, version, forwarded, install, installAgent, force), null);
+        return new ParseResult(new Options(session, dryRun, help, version, forwarded, install, installAgent, force, update), null);
     }
 
     private static bool TryParseInstallTarget(string value, out InstallTarget target)
