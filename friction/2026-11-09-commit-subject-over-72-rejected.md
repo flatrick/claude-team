@@ -13,4 +13,13 @@
   The brief does not state the limit: `rg -n -i '72|subject' /home/flatrick/src/github/flatrick/claude-team/.claude/agents/requirements-hard.md` finds nothing.
 - Cause: inferred, not verified. The brief of the requirements preset does not state the subject limit, so the agent learns it from the hook.
 - Effect: One extra commit attempt. No work was lost.
+- Case 2: Teammate `impl-ship-team-skills`, preset `implementer-standard`, pane `%9`. Same worktree.
+  The `gir` commit hook rejected a commit header over 72 characters. The teammate retried one commit.
+  The brief of this teammate stated "subject at most 72 characters; `.girconfig` sets `subjectMax = 72`". The limit in the brief did not prevent the first long subject.
+  Evidence: `rg -n -A1 'Friction for the scribe' /home/flatrick/src/github/flatrick/claude-team/.scratch/ship-team-skills/apply-report.md` gives line 49.
+  NOT RE-DERIVED (second-hand — `impl-ship-team-skills` observed the rejection, not the scribe; the rejected header is not recorded).
+  The brief text is also second-hand, from the team lead: NOT RE-DERIVED (second-hand — the team lead quoted the brief; the scribe did not read it).
+  The accepted subjects: `git -C /home/flatrick/src/github/flatrick/claude-team/.worktrees/ship-team-skills log --format=%s d3d8d1f..HEAD | awk '{print length($0)}'` printed 57 70 59 47 51 68 69 69 60 on 2026-11-09. All are 72 or less.
+  Cause: inferred, not verified. A statement of the limit in the brief did not prevent the first long attempt.
+  Effect: one extra commit attempt. No work was lost.
 - Status: open
