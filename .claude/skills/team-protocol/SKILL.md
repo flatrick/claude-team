@@ -3,9 +3,17 @@ name: team-protocol
 description: Team protocol for the leader and every teammate. Invoke before anything else at startup, before you read the assignment, send a message, or answer a shutdown request.
 ---
 
+Invoke the skill `team-protocol-local`. If the tool says `Unknown skill`, continue.
+
 # Team protocol
 
 This skill applies to the leader and to every teammate and subagent that sends messages.
+
+## Local skills
+
+A `-local` skill extends a shipped team file, for example `team-protocol-local` extends this skill.
+A repository creates a `-local` skill in the `.claude/skills/` folder of the repository.
+Do not put a `-local` skill in the user profile. A user profile skill hides a repository skill of the same name.
 
 ## Load the message schema first
 
@@ -16,7 +24,8 @@ Then every message and every `shutdown_response` uses the correct schema.
 ## Confirm that you loaded this skill
 
 A teammate starts its first message to the team lead with the exact line `team-protocol loaded`.
-Then it announces its native teammate name and preset.
+If the teammate loaded `team-protocol-local`, the line is `team-protocol loaded +local`.
+Then it announces its native teammate name and agent type.
 
 ## The assignment
 
@@ -29,19 +38,20 @@ Each assignment names:
 - the done criteria,
 - the approved scope,
 - the absolute path of the report,
-- the permitted subagent model and the maximum subagent count.
+- the model of each subagent and the maximum subagent count.
 
 Begin the assignment you were given.
 Ask the team lead or the operator only when you received no assignment.
 Use native tasks and messages to coordinate.
 A message is not an acknowledgment. Wait for a reply before you assume that conflicting work has stopped.
-Keep the configuration of your preset. Escalate work beyond its scope to the leader or the operator.
+Keep the configuration of your agent type. Escalate work beyond its scope to the leader or the operator.
 
 ## Subagents
 
-A worker uses Sonnet for subagents, unless the assignment names Opus.
+A worker takes the subagent model and the maximum subagent count from its assignment.
+If the assignment names no model, a subagent uses the default model of the session.
 A worker creates at most the number of subagents that the assignment names.
-If the assignment names no number, the worker creates none.
+If the assignment names no count, the worker creates no subagent.
 Short-lived subagents follow the same ownership rules as the worker.
 
 ## Conflicting activity
@@ -54,12 +64,12 @@ If the leader exits, finish the current assignment and ask the operator what to 
 ## Report
 
 A worker does not rely on memory of an earlier task.
-Write the final report to the main checkout's `.scratch/<task>/` folder. The assignment names that path.
+Write the final report to the path that the assignment names.
 The final message of the worker is the report to the leader.
 The worker does not send the same report in a separate message.
 A worker sends a direct message at once for a blocker, a denied action, or a question.
 Each final report ends with `Safe to clear: yes` or `Safe to clear: no` and the reason.
-Report friction to the team lead. The team lead forwards it to the `friction-scribe` teammate.
+Report friction to the team lead.
 
 ## After a context clear
 
