@@ -44,7 +44,7 @@ Load the `dotnet-workflow` skill before the first dotnet command. Write each fai
 
 ## 7. Documentation
 
-- [ ] 7.1 Update `README.md`: the install section names the skills, the `Note:` line, `--update` with the advice to run `--dry-run` first, and the missing-skill warning; a short section describes the `-local` extension point and says that a `-local` skill lives in the repository; the install section says that the leader keeps its memory in `.claude/agent-memory-local/` and tells users to ignore that folder in git. Verify that each command in the new text matches the help output of `claude-team --help` from `dotnet run --project src/ClaudeTeam -- --help`.
+- [x] 7.1 Update `README.md`: the install section names the skills, the `Note:` line, `--update` with the advice to run `--dry-run` first, and the missing-skill warning; a short section describes the `-local` extension point and says that a `-local` skill lives in the repository; the install section says that the leader keeps its memory in `.claude/agent-memory-local/` and tells users to ignore that folder in git. Verify that each command in the new text matches the help output of `claude-team --help` from `dotnet run --project src/ClaudeTeam -- --help`.
 
 ## 8. Windows check (needs a human)
 
