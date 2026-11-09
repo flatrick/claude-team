@@ -16,4 +16,16 @@
 - Cause: not verified.
   A possible lead (not tested): GitHub deleted the merged remote branches, and VS Code added `vscode-merge-base` keys for `main` and both docs branches.
 - Effect: One failed command and one workaround. The pull step of the after-merge flow can fail even when the fetch works.
+- Case 2 (2026-11-09): same checkout, branch `main`. PR #22 (`feat/ship-team-skills`) had just merged on GitHub with rebase-and-merge.
+  The leader ran `git fetch -q origin && git pull --ff-only -q`. Git printed "fatal: Cannot fast-forward to multiple branches."
+  `git config --get-all branch.main.merge` printed only `refs/heads/main`. `git merge --ff-only origin/main` then worked. `main` moved to `4d786ae`.
+  The leader saw the error and the config output: first-hand for the leader, second-hand for the scribe.
+  The error: NOT RE-DERIVED (conditions gone — `main` is now up to date, so a pull has nothing to fast-forward).
+  Config re-derivation: `git -C /home/flatrick/src/github/flatrick/claude-team config --get-all branch.main.merge` printed `refs/heads/main` when the scribe ran it on 2026-11-09.
+  `git -C /home/flatrick/src/github/flatrick/claude-team config --get-regexp '^branch\.'` on 2026-11-09 shows `branch.main.remote origin`, `branch.main.merge refs/heads/main`, and `branch.main.vscode-merge-base origin/main`.
+  It also shows `vscode-merge-base` keys for `docs/friction-log` and `feat/ship-team-skills`. The branches `docs/decision-option-letters` and `docs/commit-conventions` have `remote` and `merge` keys only.
+  `git config --get-regexp '^(pull|fetch)\.'` shows `pull.ff only` and `fetch.prune true`.
+  Result for the lead of case 1: the `vscode-merge-base` key for `main` still exists after the failure, and `branch.main.merge` has one value. The config alone does not explain the error. The lead is not confirmed and not excluded.
+  This is the second failure in two days, each after a rebase-and-merge of a PR.
+  Effect: one failed command and the same workaround.
 - Status: open.
