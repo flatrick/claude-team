@@ -21,6 +21,9 @@
   <ItemGroup>
     <EmbeddedResource Include="claude-team-peer-leaders.md" LogicalName="claude-team-peer-leaders.md" />
     <EmbeddedResource Include="team-leader.md" LogicalName="team-leader.md" />
+    <EmbeddedResource Include="skills/team-protocol/SKILL.md" LogicalName="skills/team-protocol/SKILL.md" />
+    <EmbeddedResource Include="skills/start-teammate/SKILL.md" LogicalName="skills/start-teammate/SKILL.md" />
+    <EmbeddedResource Include="skills/end-teammate/SKILL.md" LogicalName="skills/end-teammate/SKILL.md" />
   </ItemGroup>
 
 </Project>
