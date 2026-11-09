@@ -119,7 +119,7 @@ The operator decided: name the psmux form next to each `tmux` command, and a Pow
 
 - Commands that get a psmux form: `tmux list-panes -a -F '#{pane_id} #{pane_title}'` and `tmux capture-pane -p -t <pane id>` in `start-teammate`, and the `tmux list-panes` check in `end-teammate`.
 - Commands that get a PowerShell form: `printenv CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS` (PowerShell: `$env:CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS`), and the wait loop in `end-teammate`. Proposed PowerShell loop: `$end = (Get-Date).AddSeconds(40); while ((Get-Content "$HOME/.claude/teams/<team>/config.json" -Raw) -match '<name>' -and (Get-Date) -lt $end) { Start-Sleep -Seconds 1 }`.
-- Each psmux form carries the words `not tested on Windows`. The shipped text cannot use the `NOT RE-DERIVED` label, because that label is a convention of this repository. A task asks a human to run the checks on Windows. After that run, the words go away for each form that worked.
+- Each psmux form carries the words `not tested on Windows`. The shipped text cannot use the `NOT RE-DERIVED` label, because that label is a convention of this repository. No task in this change runs the checks on Windows. The forms stay untested and keep the words `not tested on Windows` in the shipped text.
 - Both skills say that psmux can differ from tmux and give no error. The leader judges a start or a shutdown only by the verification checks, never by the exit code of a multiplexer command.
 - Support for `list-panes -a -F` and `capture-pane -p` in psmux: NOT RE-DERIVED (not run on Windows; needs a human).
 
@@ -163,7 +163,7 @@ The operator decided: the assignment is the only source for the report path, the
 - [A user commits the leader memory by mistake in a repository that does not ignore `.claude/agent-memory-local/`] → The install output and the README tell users to ignore the folder. The tool edits no `.gitignore`. The operator accepted this cost.
 - [An update overwrites an edit that the user wanted] → The dry run shows the diff and the label `edited` first. The README tells users to run the dry run before the update.
 - [A developer edits a shipped file and forgets the hash] → The hash test fails.
-- [psmux behavior is untested] → Each psmux form says `not tested on Windows`. The checks decide a start or a shutdown. A human task runs the checks on Windows.
+- [psmux behavior is untested] → Each psmux form says `not tested on Windows`. The checks decide a start or a shutdown. No task in this change tests the forms on Windows.
 - [This repository's leader loses `model: opus`] → The operator passes `-- --model opus` when needed.
 - [The help text and the warnings are CLI strings] → They are new behavior in this change, so the specs of this change cover them.
 
