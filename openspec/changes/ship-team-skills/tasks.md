@@ -9,7 +9,7 @@ Load the `dotnet-workflow` skill before the first dotnet command. Write each fai
 
 ## 2. Shipped text content
 
-- [ ] 2.1 Write failing content tests for the embedded agent and skills. They cover the spec `launcher/starter-files/content`: the local extension line as the first non-empty line after the front matter, the forbidden strings, the leader front matter (`effort: low`, an `initialPrompt` that names `team-protocol`, no `model:`, no `memory:`), the `+local` confirmations, the leader's use of `start-teammate` and `end-teammate` with no `tmux list-panes` in the agent, the neutral subagent and report text, the psmux forms with `not tested on Windows`, the PowerShell forms, and the statement that the checks decide a start or a shutdown. Replace the agent assertions in `LeaderAgentTests.cs` that the new tests cover. Verify that the new tests fail.
+- [ ] 2.1 Write failing content tests for the embedded agent and skills. They cover the spec `launcher/starter-files/content`: the local extension line as the first non-empty line after the front matter, the forbidden strings, the leader front matter (`effort: low`, an `initialPrompt` that names `team-protocol`, `memory: local`, no `model:`), the `+local` confirmations, the leader's use of `start-teammate` and `end-teammate` with no `tmux list-panes` in the agent, the neutral subagent and report text, the psmux forms with `not tested on Windows`, the PowerShell forms, and the statement that the checks decide a start or a shutdown. Replace the agent assertions in `LeaderAgentTests.cs` that the new tests cover. Verify that the new tests fail.
 - [ ] 2.2 Rewrite `src/ClaudeTeam/team-leader.md` as design decisions 2, 4, and 7 say. Verify that the agent content tests pass.
 - [ ] 2.3 Rewrite `src/ClaudeTeam/skills/team-protocol/SKILL.md` as design decisions 2, 6, and 7 say. Verify that its content tests pass.
 - [ ] 2.4 Rewrite `src/ClaudeTeam/skills/start-teammate/SKILL.md` and `src/ClaudeTeam/skills/end-teammate/SKILL.md` as design decisions 2, 5, and 7 say. Verify that their content tests pass.
@@ -19,7 +19,8 @@ Load the `dotnet-workflow` skill before the first dotnet command. Write each fai
 
 - [ ] 3.1 Write failing tests in `InstallerTests.cs` and `LeaderAgentTests.cs`: `--install-leader-agent repo` writes the agent and then the three skills; `both` writes the repository file before the user profile file for each file and prints the `Note:` line last; `repo` and `global` print no `Note:` line; a dry run prints the `Note:` line and writes nothing; an existing skill is kept without `--force` and replaced with it; outside git, each repository skill gives the outside-git line and the exit code is 1; no `-local` skill and no other agent is written. Verify that they fail.
 - [ ] 3.2 Extend `LeaderAgent.Install` or `Installer.Run` to install the skills, and add the `Note:` line (design decision 3). Verify that the tests from 3.1 and every earlier install test pass.
-- [ ] 3.3 Write a failing test in `HelpTests.cs` that the text for `--install-leader-agent` names the three skills. Then update `Help.cs`. Verify that the test passes.
+- [ ] 3.3 Write a failing test in `InstallerTests.cs` that `--install-leader-agent` prints the `Reminder:` line from the install spec (after the result lines, before the `Note:` line, also in a dry run, for every target), that `--install-peer-rule` alone and `--update` print no `Reminder:` line, and that the tool writes no `.gitignore`. Verify that it fails. Then implement the line (design decision 4a) and verify that it passes.
+- [ ] 3.4 Write a failing test in `HelpTests.cs` that the text for `--install-leader-agent` names the three skills. Then update `Help.cs`. Verify that the test passes.
 
 ## 4. Update option
 
@@ -43,7 +44,7 @@ Load the `dotnet-workflow` skill before the first dotnet command. Write each fai
 
 ## 7. Documentation
 
-- [ ] 7.1 Update `README.md`: the install section names the skills, the `Note:` line, `--update` with the advice to run `--dry-run` first, and the missing-skill warning; a short section describes the `-local` extension point and says that a `-local` skill lives in the repository. Verify that each command in the new text matches the help output of `claude-team --help` from `dotnet run --project src/ClaudeTeam -- --help`.
+- [ ] 7.1 Update `README.md`: the install section names the skills, the `Note:` line, `--update` with the advice to run `--dry-run` first, and the missing-skill warning; a short section describes the `-local` extension point and says that a `-local` skill lives in the repository; the install section says that the leader keeps its memory in `.claude/agent-memory-local/` and tells users to ignore that folder in git. Verify that each command in the new text matches the help output of `claude-team --help` from `dotnet run --project src/ClaudeTeam -- --help`.
 
 ## 8. Windows check (needs a human)
 

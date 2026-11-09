@@ -96,12 +96,22 @@ Alternatives that the operator rejected: a separate `--install-team-skills` opti
 
 ### 4. Front matter of the shipped leader
 
-The operator decided: `name`, `description`, a neutral `initialPrompt` that invokes `team-protocol`, and `effort: low`. No `model:` and no `memory:`. Reason, in the words of the operator: "the users can change the effort-level if their specific project requires it".
+The operator decided: `name`, `description`, a neutral `initialPrompt` that invokes `team-protocol`, and `effort: low`. `memory: local`. No `model:`. Reason for the effort, in the words of the operator: "the users can change the effort-level if their specific project requires it".
 
 - Proposed `initialPrompt`: `"Invoke the team-protocol skill before anything else. Then follow your agent definition."`
 - The body also tells the leader to invoke `team-protocol` (on the line after the local extension line). If `initialPrompt` does not run, the body still loads the protocol. Whether `initialPrompt` runs for a `--agent` main session: NOT RE-DERIVED (second-hand: the current repository leader uses it, and I did not observe the result).
 - How a user changes the effort: edit `effort:` in the installed `team-leader.md`. `--install-leader-agent --force` replaces the file with the shipped text, so the edit is lost on a forced reinstall. A repository agent hides a user profile agent (second-hand, see Context). So a project can keep an edited repository copy, and the user profile keeps the shipped copy.
-- This repository does not edit its copy, because the copy test requires the shipped text. Its leader keeps `effort: low`. It loses `model: opus` and `memory: local`. The operator can pass `-- --model opus` at launch.
+- This repository does not edit its copy, because the copy test requires the shipped text. Its leader keeps `effort: low`. It loses `model: opus` only, and keeps `memory: local`. The operator can pass `-- --model opus` at launch.
+
+### 4a. Leader memory
+
+The operator decided: the shipped leader sets `memory: local`. Each user gets a leader memory for each repository, in `.claude/agent-memory-local/team-leader/`.
+Reasons: the operator said "we should still keep the memory for the team-leader agent". This repository's leader keeps its memory as it is now, because this repository already ignores the folder in `.claude/.gitignore`. Other users get the same benefit. A memory stays tied to the project that it came from.
+
+- The tool tells users to ignore `.claude/agent-memory-local/` in git, with the `Reminder:` line after an install of the agent and in the README (install delta, "Memory ignore reminder"). The tool edits no `.gitignore`.
+- Accepted cost: in a repository that does not ignore the folder, a user can commit the memory by mistake. The reminder reduces this risk. It does not remove it.
+- Whether Claude Code ignores `.claude/agent-memory-local/` by itself in other repositories: NOT RE-DERIVED (not tested; I did not observe it). If it does, the reminder is redundant and harmless.
+- The spec allows `memory: local` and still forbids `model:`.
 
 ### 5. psmux and PowerShell forms
 
@@ -127,7 +137,8 @@ The operator decided: the assignment is the only source for the report path, the
 | leader: `.claude/rules/decisions.md` | `team-leader-local` |
 | leader: "Never start an implementer ... as a subagent" | shipped, as "Never start a long-running role as a subagent without the approval of the operator." |
 | leader: reuse of teammates, startup check, peer-leaders rule | shipped (no convention of this repository) |
-| leader front matter: `model: opus`, `memory: local` | dropped (decision 4) |
+| leader front matter: `model: opus` | dropped (decision 4) |
+| leader front matter: `memory: local` | shipped (decision 4a) |
 | `team-protocol`: Sonnet default for subagents | `team-protocol-local` |
 | `team-protocol`: main-checkout `.scratch/<task>/` report path | `team-protocol-local` |
 | `team-protocol`: friction goes to the team lead and then to `friction-scribe` | `team-protocol-local` |
@@ -149,10 +160,11 @@ The operator decided: the assignment is the only source for the report path, the
 - [A stale user profile skill hides the repository skill, also in this repository] → No warning, by the choice of the operator. `claude-team --update global --dry-run` shows it, with the label `older shipped version` or `edited`. No test can read `~/.claude`, so the copy test does not cover this case.
 - [The precedence facts are second-hand] → The design depends on them only for the `Note:` line and for the rule that a `-local` skill lives in the repository. A wrong fact gives a wrong note, not a failed install.
 - [A user with an old installed `team-leader.md` runs `--install-leader-agent` without `--force`] → The tool keeps the old agent and writes the new skills. The old agent does not call the skills, so nothing breaks. `--update` replaces the old agent.
+- [A user commits the leader memory by mistake in a repository that does not ignore `.claude/agent-memory-local/`] → The install output and the README tell users to ignore the folder. The tool edits no `.gitignore`. The operator accepted this cost.
 - [An update overwrites an edit that the user wanted] → The dry run shows the diff and the label `edited` first. The README tells users to run the dry run before the update.
 - [A developer edits a shipped file and forgets the hash] → The hash test fails.
 - [psmux behavior is untested] → Each psmux form says `not tested on Windows`. The checks decide a start or a shutdown. A human task runs the checks on Windows.
-- [This repository's leader loses `model: opus` and `memory: local`] → The operator passes `-- --model opus` when needed.
+- [This repository's leader loses `model: opus`] → The operator passes `-- --model opus` when needed.
 - [The help text and the warnings are CLI strings] → They are new behavior in this change, so the specs of this change cover them.
 
 ## Migration Plan

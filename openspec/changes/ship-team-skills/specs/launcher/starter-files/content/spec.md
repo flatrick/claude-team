@@ -82,15 +82,16 @@ Source: `.claude/agents/team-leader.md` (lines 12, 20-21). The shipped agent has
 ### Requirement: Team-leader agent front matter
 
 The embedded team-leader agent SHALL start with front matter whose first field is `name: team-leader`.
-The front matter SHALL set `description`, `effort: low`, and an `initialPrompt` that names `team-protocol`, and SHALL NOT set `model:` or `memory:`.
-Source: `LeaderAgentTests.cs`, `src/ClaudeTeam/team-leader.md`. The `effort` and `initialPrompt` fields have no code yet.
+The front matter SHALL set `description`, `effort: low`, `memory: local`, and an `initialPrompt` that names `team-protocol`, and SHALL NOT set `model:`.
+Source: `LeaderAgentTests.cs`, `src/ClaudeTeam/team-leader.md`. The `effort`, `initialPrompt`, and `memory` fields have no code yet.
 
 #### Scenario: Agent front matter
 
 - **WHEN** the embedded agent text is read
 - **THEN** it starts with `---` followed by `name: team-leader`
 - **AND** its front matter contains `effort: low` and an `initialPrompt` line that names `team-protocol`
-- **AND** it contains no `model:` line and no `memory:` line
+- **AND** its front matter contains the line `memory: local`
+- **AND** it contains no `model:` line
 
 ### Requirement: No repository conventions in shipped text
 

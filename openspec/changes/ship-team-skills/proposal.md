@@ -17,8 +17,11 @@ The users of the tool do not get the files that this repository uses and tests. 
   A repository creates only the `-local` skills that it needs. The tool never ships or installs a `-local` skill.
   The operator decided this. Reasons: each addition loads with its base text, for the same audience and at the same trigger (AGENTS.md rule 3). A skill call works even before the skill listing of a teammate arrives.
 - A teammate that loaded `team-protocol-local` starts its first message with `team-protocol loaded +local`. The shipped `start-teammate` tells the leader to require `+local` when `team-protocol-local` exists.
-- The shipped leader has the front matter fields `name`, `description`, a neutral `initialPrompt` that invokes `team-protocol`, and `effort: low`. It sets no `model:` and no `memory:`.
-  The operator decided this. Reason, in the words of the operator: "the users can change the effort-level if their specific project requires it". The model and the memory are choices of the user.
+- The shipped leader has the front matter fields `name`, `description`, a neutral `initialPrompt` that invokes `team-protocol`, `effort: low`, and `memory: local`. It sets no `model:`.
+  The operator decided this. Reason for the effort, in the words of the operator: "the users can change the effort-level if their specific project requires it". The model is a choice of the user.
+- The shipped leader keeps `memory: local`, so each user gets a leader memory for each repository, in `.claude/agent-memory-local/team-leader/`.
+  The operator decided this. Reasons: the operator said "we should still keep the memory for the team-leader agent"; this repository's leader keeps its memory as now; other users get the same benefit; a memory stays tied to its project.
+  After an install of the agent, the tool prints one `Reminder:` line that tells users to ignore `.claude/agent-memory-local/` in git. The README says the same. The tool edits no `.gitignore`. Accepted cost: in a repository that does not ignore the folder, a user can commit the memory by mistake.
 - The shipped `start-teammate` and `end-teammate` give a psmux form next to each `tmux` command, and a PowerShell form where they need bash or `printenv`. Each psmux form says `not tested on Windows` until a human runs it on Windows.
   The skills say that psmux can differ from tmux and give no error, so the leader judges a start or a shutdown only by the verification checks.
   The operator decided this. Reason: psmux differs from tmux in small ways without an error. For example, a call from the Claude harness that creates several panes under tmux creates only one pane under psmux and reports no error.
@@ -32,7 +35,7 @@ The users of the tool do not get the files that this repository uses and tests. 
   The operator decided this. Reason: without the skill, the leader fails at its first step. Users can adapt their copies, so a difference is not an error.
 - A new option `--update <target>` adds each missing shipped file and replaces each shipped file that differs from the text in the tool. With `--dry-run`, it writes nothing, prints a line diff for each changed file, and labels it `older shipped version` or `edited` from an embedded list of hashes of shipped versions.
   The operator decided this. Reasons: users can adapt their files, so the tool shows the changes and does not warn. A file that a later version adds must arrive with the next update. The hash list needs no new state at the target and works for earlier installs.
-- The help text and the README describe the shipped skills and the `-local` extension point.
+- The help text and the README describe the shipped skills and the `-local` extension point. The README also tells users to ignore `.claude/agent-memory-local/`.
 
 ## Capabilities
 
