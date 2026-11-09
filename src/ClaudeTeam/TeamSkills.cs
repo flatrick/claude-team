@@ -19,4 +19,14 @@ public static class TeamSkills
         => Names.SelectMany(name => Installer.Install(
             target, repoRoot, home, subfolder: Path.Combine("skills", name), fileName: FileName, text: Text(name), force: force, dryRun: dryRun))
             .ToList();
+
+    // One warning that names each team skill that is in neither location, or null when none is missing.
+    public static string? MissingWarning(string projectRoot, string home)
+    {
+        var missing = Names.Where(name => !File.Exists(RepoPath(projectRoot, name)) && !File.Exists(GlobalPath(home, name))).ToList();
+        return missing.Count == 0
+            ? null
+            : $"Warning: the team skills {string.Join(", ", missing)} are not in .claude/skills/ or ~/.claude/skills/. " +
+              "Install them with: claude-team --install-leader-agent <repo|global|both>";
+    }
 }

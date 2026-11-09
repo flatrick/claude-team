@@ -33,8 +33,8 @@ Load the `dotnet-workflow` skill before the first dotnet command. Write each fai
 
 ## 5. Missing-skill warning
 
-- [ ] 5.1 Write failing tests for a testable warning function (for example `TeamSkills.MissingWarning(projectRoot, home)`): one warning that names each missing skill and `--install-leader-agent`; no warning when each skill is in at least one location; no warning when two copies differ. Verify that they fail.
-- [ ] 5.2 Implement the function and call it from `Program.cs` after the peer-rule check, before the dry run. Verify that the tests from 5.1 pass, and that `dotnet run --project src/ClaudeTeam -- --dry-run` in a temporary folder with no skills prints the warning before the dry-run output.
+- [x] 5.1 Write failing tests for a testable warning function (for example `TeamSkills.MissingWarning(projectRoot, home)`): one warning that names each missing skill and `--install-leader-agent`; no warning when each skill is in at least one location; no warning when two copies differ. Verify that they fail.
+- [x] 5.2 Implement the function and call it from `Program.cs` after the peer-rule check, before the dry run. Verify that the tests from 5.1 pass, and that `dotnet run --project src/ClaudeTeam -- --dry-run` in a temporary folder with no skills prints the warning before the dry-run output.
 
 ## 6. Repository copies and local skills
 

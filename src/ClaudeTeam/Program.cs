@@ -52,25 +52,14 @@ if (kind == CommandKind.Update)
 }
 
 var projectRoot = git?.Toplevel ?? workingDirectory;
-var hasAgent = LeaderAgent.IsInstalled(projectRoot, home);
-if (!hasAgent)
-    Console.Error.WriteLine("Warning: no team-leader agent in .claude/agents/ or ~/.claude/agents/. Starting claude without --agent team-leader. " +
-        "Install a starter with: claude-team --install-leader-agent <repo|global|both>");
-if (!PeerRule.IsInstalled(git?.Toplevel, home))
-    Console.Error.WriteLine($"Warning: the peer-leader rule {PeerRule.FileName} is not in .claude/rules/ or ~/.claude/rules/. " +
-        "Install it with: claude-team --install-peer-rule <repo|global|both>");
-
+var preflight = LaunchOutput.Preflight(projectRoot, git?.Toplevel, home);
 var insidePane = !string.IsNullOrWhiteSpace(Environment.GetEnvironmentVariable("TMUX"));
-var plan = LaunchPlan.Build(new LaunchInputs(session, workingDirectory, isWindows, insidePane, hasAgent, options.Forwarded));
+var plan = LaunchPlan.Build(new LaunchInputs(session, workingDirectory, isWindows, insidePane, preflight.HasAgent, options.Forwarded));
 
+LaunchOutput.Write(
+    Console.Error, Console.Out, preflight.Warnings, options.DryRun ? LaunchOutput.DryRunLines(session, plan) : null);
 if (options.DryRun)
-{
-    Console.WriteLine($"session: {session}");
-    Console.WriteLine($"{LaunchPlan.TeamsVariable}=1");
-    foreach (var command in plan.Commands)
-        Console.WriteLine(string.Join(' ', new[] { command.File }.Concat(command.Arguments).Select(a => a.Contains(' ') ? $"'{a}'" : a)));
     return 0;
-}
 
 switch (Multiplexer.Check(backend, session))
 {
