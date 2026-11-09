@@ -58,7 +58,35 @@ The launcher behavior is in [`openspec/specs/launcher/`](openspec/specs/launcher
 
 ## Starter files
 
-The launcher can install a starter `team-leader` agent and the peer-leader rule. It installs them into the repository, the user profile, or both. At launch, it warns when one of them is missing. Run `claude-team --help` for the options. The behavior is in [`openspec/specs/launcher/starter-files/install/spec.md`](openspec/specs/launcher/starter-files/install/spec.md).
+The launcher installs these starter files into the repository (`.claude/`), the user profile (`~/.claude/`), or both:
+
+- the peer-leader rule `claude-team-peer-leaders.md`
+- the `team-leader` agent
+- the team skills `team-protocol`, `start-teammate`, and `end-teammate`
+
+```text
+claude-team --install-peer-rule <repo|global|both>
+claude-team --install-leader-agent <repo|global|both>
+claude-team --update <repo|global|both> --dry-run
+claude-team --update <repo|global|both>
+```
+
+`--install-leader-agent` writes the agent and the three skills to the same target. It keeps an existing file unless you add `--force`.
+With the target `both`, the last line of the output starts with `Note:`. For a name in both places, Claude Code uses the skill in the user profile and the agent in the repository. Keep both copies the same.
+
+`--update` adds each missing shipped file and replaces each file that differs from the text in the tool. This includes the rule. An update overwrites your edits in these files. Run it with `--dry-run` first. The dry run writes nothing. It prints each change as a diff, and it labels a replaced file `older shipped version` or `edited`.
+
+At launch, the launcher warns when the agent, the rule, or a team skill is missing from both locations. It does not warn about a copy that differs from the shipped text. Run `claude-team --help` for the options. The behavior is in [`openspec/specs/launcher/starter-files/install/spec.md`](openspec/specs/launcher/starter-files/install/spec.md).
+
+### Leader memory
+
+The shipped agent sets `memory: local`. Claude Code keeps the memory of the leader in `.claude/agent-memory-local/` of each repository. Add `.claude/agent-memory-local/` to the `.gitignore` of each repository where you run the leader, so that you do not commit the memory. The install prints a `Reminder:` line about this. The tool edits no `.gitignore` file.
+
+### Local extensions
+
+Each shipped file starts with a call to a `-local` skill: `team-leader-local`, `team-protocol-local`, `start-teammate-local`, or `end-teammate-local`. If the skill does not exist, the call gives `Unknown skill` and the agent continues. A `-local` skill holds the conventions of one repository. Create it in the `.claude/skills/` folder of that repository. Do not put it in `~/.claude/skills/`: a user profile skill hides a repository skill of the same name. The tool never installs or updates a `-local` skill. A teammate that loaded `team-protocol-local` writes `team-protocol loaded +local` in its first message.
+
+The `.claude/agents/team-leader.md` and `.claude/skills/<skill name>/SKILL.md` files of this repository are copies of the shipped sources in `src/ClaudeTeam/`. A test fails when a copy differs. This repository keeps its own conventions in `.claude/skills/*-local/`.
 
 ## Several leaders and teammates
 

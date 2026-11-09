@@ -30,7 +30,7 @@ public static class Help
                                         and replace each one that differs, at repo, global, or both.
                                         With --dry-run, show the changes as a diff and write nothing.
                                         Then exit. Run --dry-run first: an update replaces edited files.
-          --force                       Replace an existing rule or agent file.
+          --force                       Replace an existing rule, agent, or skill file.
           -h, --help                    Show this help.
           --version                     Print the version and the short commit. Then exit.
           --                            Forward the remaining arguments to claude.
