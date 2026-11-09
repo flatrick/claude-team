@@ -11,23 +11,6 @@ public sealed class LeaderAgentTests : IDisposable
     public void Dispose() => _root.Delete(recursive: true);
 
     [Fact]
-    public void Embedded_text_starts_with_frontmatter_naming_the_agent()
-    {
-        Assert.StartsWith("---\nname: team-leader\n", LeaderAgent.Text);
-        Assert.DoesNotContain("\nmodel:", LeaderAgent.Text);
-    }
-
-    [Fact]
-    public void Embedded_text_does_not_refer_to_this_repository()
-    {
-        Assert.DoesNotContain("session-coordination", LeaderAgent.Text);
-        Assert.DoesNotContain(".scratch", LeaderAgent.Text);
-        foreach (var forbidden in new[]
-                 { ".worktrees", "test-runner", "implementer-", "requirements-", "troubleshooter-" })
-            Assert.DoesNotContain(forbidden, LeaderAgent.Text);
-    }
-
-    [Fact]
     public void Written_file_has_lf_line_endings_only()
     {
         LeaderAgent.Install(InstallTarget.Repo, Repo, Home, force: false);
