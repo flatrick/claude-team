@@ -38,9 +38,9 @@ Load the `dotnet-workflow` skill before the first dotnet command. Write each fai
 
 ## 6. Repository copies and local skills
 
-- [ ] 6.1 Generalize `PeerRuleCopyTests.cs` into one copy test with a case for the peer rule, the agent, and each team skill. Verify that the agent and skill cases fail.
-- [ ] 6.2 In one commit, copy the shipped agent and skills to `.claude/agents/team-leader.md` and `.claude/skills/<skill name>/SKILL.md`, and create `.claude/skills/team-leader-local/SKILL.md`, `.claude/skills/team-protocol-local/SKILL.md`, and `.claude/skills/start-teammate-local/SKILL.md` with the moved text from design decision 7. Verify that the copy test passes, and that each row of the design table has its text in the named destination (`rg --hidden -n` for a distinctive phrase of each row).
-- [ ] 6.3 Search for other files that quote the moved text or the old leader front matter (`rg --hidden --glob '!.git/**' -n 'model: opus|agent-spawn-log|dotnet-workflow loaded' .claude/ README.md AGENTS.md`). Update or confirm each hit, and record the command and its result in the ledger.
+- [x] 6.1 Generalize `PeerRuleCopyTests.cs` into one copy test with a case for the peer rule, the agent, and each team skill. Verify that the agent and skill cases fail.
+- [x] 6.2 In one commit, copy the shipped agent and skills to `.claude/agents/team-leader.md` and `.claude/skills/<skill name>/SKILL.md`, and create `.claude/skills/team-leader-local/SKILL.md`, `.claude/skills/team-protocol-local/SKILL.md`, and `.claude/skills/start-teammate-local/SKILL.md` with the moved text from design decision 7. Verify that the copy test passes, and that each row of the design table has its text in the named destination (`rg --hidden -n` for a distinctive phrase of each row).
+- [x] 6.3 Search for other files that quote the moved text or the old leader front matter (`rg --hidden --glob '!.git/**' -n 'model: opus|agent-spawn-log|dotnet-workflow loaded' .claude/ README.md AGENTS.md`). Update or confirm each hit, and record the command and its result in the ledger.
 
 ## 7. Documentation
 
