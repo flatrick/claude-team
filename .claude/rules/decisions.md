@@ -87,6 +87,9 @@ Captured in:
 
 - Each question has one recommended option or more.
 - Each option has the three items "What", "Why it may be relevant" and "Cost".
+- Label each option with one plain capital letter: A, B, C, D, and so on, in order. Do not use a variant such as "A'" or "D3". Do not use a number.
+- When an option changes, for example after a review, replace the option in place and letter the list again. Do not keep the old option and the new option side by side.
+- Reason: a variant label such as "A'" next to "A" does not look like a different option. The operator cannot tell the options apart.
 
 ## Procedure
 
