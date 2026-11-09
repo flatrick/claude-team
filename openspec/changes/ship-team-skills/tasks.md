@@ -17,10 +17,10 @@ Load the `dotnet-workflow` skill before the first dotnet command. Write each fai
 
 ## 3. Install of the skills with the agent
 
-- [ ] 3.1 Write failing tests in `InstallerTests.cs` and `LeaderAgentTests.cs`: `--install-leader-agent repo` writes the agent and then the three skills; `both` writes the repository file before the user profile file for each file and prints the `Note:` line last; `repo` and `global` print no `Note:` line; a dry run prints the `Note:` line and writes nothing; an existing skill is kept without `--force` and replaced with it; outside git, each repository skill gives the outside-git line and the exit code is 1; no `-local` skill and no other agent is written. Verify that they fail.
-- [ ] 3.2 Extend `LeaderAgent.Install` or `Installer.Run` to install the skills, and add the `Note:` line (design decision 3). Verify that the tests from 3.1 and every earlier install test pass.
-- [ ] 3.3 Write a failing test in `InstallerTests.cs` that `--install-leader-agent` prints the `Reminder:` line from the install spec (after the result lines, before the `Note:` line, also in a dry run, for every target), that `--install-peer-rule` alone and `--update` print no `Reminder:` line, and that the tool writes no `.gitignore`. Verify that it fails. Then implement the line (design decision 4a) and verify that it passes.
-- [ ] 3.4 Write a failing test in `HelpTests.cs` that the text for `--install-leader-agent` names the three skills. Then update `Help.cs`. Verify that the test passes.
+- [x] 3.1 Write failing tests in `InstallerTests.cs` and `LeaderAgentTests.cs`: `--install-leader-agent repo` writes the agent and then the three skills; `both` writes the repository file before the user profile file for each file and prints the `Note:` line last; `repo` and `global` print no `Note:` line; a dry run prints the `Note:` line and writes nothing; an existing skill is kept without `--force` and replaced with it; outside git, each repository skill gives the outside-git line and the exit code is 1; no `-local` skill and no other agent is written. Verify that they fail.
+- [x] 3.2 Extend `LeaderAgent.Install` or `Installer.Run` to install the skills, and add the `Note:` line (design decision 3). Verify that the tests from 3.1 and every earlier install test pass.
+- [x] 3.3 Write a failing test in `InstallerTests.cs` that `--install-leader-agent` prints the `Reminder:` line from the install spec (after the result lines, before the `Note:` line, also in a dry run, for every target), that `--install-peer-rule` alone and `--update` print no `Reminder:` line, and that the tool writes no `.gitignore`. Verify that it fails. Then implement the line (design decision 4a) and verify that it passes.
+- [x] 3.4 Write a failing test in `HelpTests.cs` that the text for `--install-leader-agent` names the three skills. Then update `Help.cs`. Verify that the test passes.
 
 ## 4. Update option
 
