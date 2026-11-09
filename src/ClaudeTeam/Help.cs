@@ -21,7 +21,9 @@ public static class Help
                                         ~/.claude/rules/ (global), or both. Then exit.
           --install-leader-agent <target>
                                         Write {LeaderAgent.FileName} to .claude/agents/ (repo),
-                                        ~/.claude/agents/ (global), or both. Then exit.
+                                        ~/.claude/agents/ (global), or both. Also write the skills
+                                        {string.Join(", ", TeamSkills.Names)} to
+                                        .claude/skills/ or ~/.claude/skills/. Then exit.
                                         Both install options may be given in one run.
           --force                       Replace an existing rule or agent file.
           -h, --help                    Show this help.

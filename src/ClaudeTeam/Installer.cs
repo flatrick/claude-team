@@ -6,6 +6,12 @@ public sealed record InstallRun(IReadOnlyList<string> Lines, int ExitCode);
 
 public static class Installer
 {
+    public const string MemoryReminder =
+        "Reminder: add .claude/agent-memory-local/ to the .gitignore of each repository where you run the team leader, so that the leader memory is not committed.";
+
+    public const string MixedPrecedenceNote =
+        "Note: for a name in both places, Claude Code uses the skill in the user profile and the agent in the repository. Keep both copies the same.";
+
     public static string ReadEmbedded(string resourceName)
     {
         using var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream(resourceName)
@@ -35,7 +41,10 @@ public static class Installer
         if (peerRule is { } ruleTarget)
             results.AddRange(PeerRule.Install(target: ruleTarget, repoRoot: repoRoot, home: home, force: force, dryRun: dryRun));
         if (leaderAgent is { } agentTarget)
+        {
             results.AddRange(LeaderAgent.Install(target: agentTarget, repoRoot: repoRoot, home: home, force: force, dryRun: dryRun));
+            results.AddRange(TeamSkills.Install(target: agentTarget, repoRoot: repoRoot, home: home, force: force, dryRun: dryRun));
+        }
         var lines = results.Select(result => result.Outcome switch
         {
             InstallOutcome.Written => dryRun ? $"Would write {result.Path}" : $"Wrote {result.Path}",
@@ -44,6 +53,10 @@ public static class Installer
                 : $"Kept the existing {result.Path}. Use --force to replace it.",
             _ => $"Cannot install {result.Path} to the repository: the current folder is not in a git repository.",
         }).ToList();
+        if (leaderAgent is not null)
+            lines.Add(MemoryReminder);
+        if (leaderAgent == InstallTarget.Both)
+            lines.Add(MixedPrecedenceNote);
         return new InstallRun(lines, results.Any(result => result.Outcome == InstallOutcome.NoRepository) ? 1 : 0);
     }
 
