@@ -135,4 +135,52 @@ public class OptionsTests
         Assert.Null(result.Options);
         Assert.False(string.IsNullOrWhiteSpace(result.Error));
     }
+
+    [Theory]
+    [InlineData("repo", InstallTarget.Repo)]
+    [InlineData("GLOBAL", InstallTarget.Global)]
+    [InlineData("Both", InstallTarget.Both)]
+    public void Parses_update_in_any_letter_case(string value, InstallTarget expected)
+    {
+        var options = Options.Parse(["--update", value, "--dry-run"]).Options!;
+        Assert.Equal(expected, options.Update);
+        Assert.True(options.DryRun);
+        Assert.Null(options.InstallPeerRule);
+        Assert.Null(options.InstallLeaderAgent);
+    }
+
+    [Fact]
+    public void Update_is_null_by_default() => Assert.Null(Options.Parse([]).Options!.Update);
+
+    [Theory]
+    [InlineData("--update")]
+    [InlineData("--update", "elsewhere")]
+    [InlineData("--update", "0")]
+    [InlineData("--update", "repo,global")]
+    [InlineData("--update", " repo ")]
+    public void Rejects_a_missing_or_unknown_update_target(params string[] args)
+    {
+        var result = Options.Parse(args);
+        Assert.Null(result.Options);
+        Assert.Equal("Supply repo, global, or both after --update.", result.Error);
+    }
+
+    [Theory]
+    [InlineData("--update", "repo", "--install-leader-agent", "repo")]
+    [InlineData("--install-peer-rule", "global", "--update", "repo")]
+    [InlineData("--update", "both", "--install-peer-rule", "repo", "--force")]
+    public void Rejects_update_with_an_install_option(params string[] args)
+    {
+        var result = Options.Parse(args);
+        Assert.Null(result.Options);
+        Assert.Equal("Use --update without --install-peer-rule or --install-leader-agent.", result.Error);
+    }
+
+    [Fact]
+    public void Force_with_only_update_stays_rejected()
+    {
+        var result = Options.Parse(["--update", "repo", "--force"]);
+        Assert.Null(result.Options);
+        Assert.Equal("Use --force only with --install-peer-rule or --install-leader-agent.", result.Error);
+    }
 }
