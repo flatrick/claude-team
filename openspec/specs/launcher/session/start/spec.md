@@ -47,7 +47,7 @@ Source: `src/ClaudeTeam/LaunchPlan.cs` (`Build`), `src/ClaudeTeam/PeerRule.cs` (
 
 The tool SHALL treat the team-leader agent as installed when `team-leader.md` exists in `.claude/agents/` under the project root or in `~/.claude/agents/`.
 The project root SHALL be the git top-level folder, or the current folder outside git.
-Source: `src/ClaudeTeam/Program.cs` (lines 38-39), `src/ClaudeTeam/LeaderAgent.cs` (`IsInstalled`), `tests/ClaudeTeam.Tests/LeaderAgentTests.cs`.
+Source: `src/ClaudeTeam/Program.cs` (`projectRoot` and `LaunchOutput.Preflight`, lines 54-55), `src/ClaudeTeam/LeaderAgent.cs` (`IsInstalled`), `tests/ClaudeTeam.Tests/LeaderAgentTests.cs`.
 
 #### Scenario: Agent only in the user profile
 
@@ -57,7 +57,7 @@ Source: `src/ClaudeTeam/Program.cs` (lines 38-39), `src/ClaudeTeam/LeaderAgent.c
 ### Requirement: Missing-agent warning
 
 When the team-leader agent is not installed, the tool SHALL write a warning to standard error that names `claude-team --install-leader-agent <repo|global|both>`, and SHALL continue the launch.
-Source: `src/ClaudeTeam/Program.cs` (lines 40-42).
+Source: `src/ClaudeTeam/LaunchOutput.cs` (`Preflight`).
 
 #### Scenario: Agent nowhere
 
@@ -70,7 +70,7 @@ Source: `src/ClaudeTeam/Program.cs` (lines 40-42).
 If `claude-team-peer-leaders.md` exists neither in `.claude/rules/` under the git top-level folder nor in `~/.claude/rules/`, the tool SHALL write a warning to standard error that names `claude-team --install-peer-rule <repo|global|both>`.
 The tool SHALL then continue the launch.
 Outside git, only `~/.claude/rules/` SHALL count.
-Source: `src/ClaudeTeam/Program.cs` (lines 43-45), `src/ClaudeTeam/PeerRule.cs` (`IsInstalled`), `tests/ClaudeTeam.Tests/PeerRuleTests.cs`.
+Source: `src/ClaudeTeam/LaunchOutput.cs` (`Preflight`), `src/ClaudeTeam/PeerRule.cs` (`IsInstalled`), `tests/ClaudeTeam.Tests/PeerRuleTests.cs`.
 
 #### Scenario: Rule missing
 
@@ -104,7 +104,7 @@ Source: `src/ClaudeTeam/LaunchPlan.cs` (`Build`), `tests/ClaudeTeam.Tests/Launch
 
 The tool SHALL treat the launch as inside a pane when the `TMUX` environment variable is set and not blank.
 Inside a pane, the tool SHALL add `-d` to `new-session` and SHALL then run `<backend> switch-client -t =<session>`.
-Source: `src/ClaudeTeam/Program.cs` (line 47), `src/ClaudeTeam/LaunchPlan.cs` (`Build`), `tests/ClaudeTeam.Tests/LaunchPlanTests.cs` (`Inside_a_pane_creates_a_detached_session_and_switches_to_it`).
+Source: `src/ClaudeTeam/Program.cs` (`insidePane`, line 56), `src/ClaudeTeam/LaunchPlan.cs` (`Build`), `tests/ClaudeTeam.Tests/LaunchPlanTests.cs` (`Inside_a_pane_creates_a_detached_session_and_switches_to_it`).
 
 #### Scenario: Inside tmux
 
@@ -116,7 +116,7 @@ Source: `src/ClaudeTeam/Program.cs` (line 47), `src/ClaudeTeam/LaunchPlan.cs` (`
 
 The tool SHALL set `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1` in the environment of each launch command, `new-session` and `switch-client`, in addition to the `-e` argument of `new-session`.
 The `has-session` check SHALL run without that variable in its environment.
-Source: `src/ClaudeTeam/Program.cs` (lines 69-76), `src/ClaudeTeam/Processes.cs` (`Run`, `Capture`), `src/ClaudeTeam/Multiplexer.cs` (`Check`).
+Source: `src/ClaudeTeam/Program.cs` (`environment`, lines 74-81), `src/ClaudeTeam/Processes.cs` (`Run`, `Capture`), `src/ClaudeTeam/Multiplexer.cs` (`Check`).
 
 #### Scenario: Launch commands get the variable
 
@@ -134,7 +134,7 @@ Source: `src/ClaudeTeam/Program.cs` (lines 69-76), `src/ClaudeTeam/Processes.cs`
 When `--dry-run` is given without an install option, the tool SHALL print `session: <session>`, then `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1`, then each launch command on its own line, SHALL start nothing, and SHALL exit with code 0.
 Each argument that contains a space SHALL be printed in single quotes.
 The dry run SHALL NOT check the backend or an existing session.
-Source: `src/ClaudeTeam/Program.cs` (lines 50-57).
+Source: `src/ClaudeTeam/Program.cs` (`LaunchOutput.Write` and the dry-run return, lines 59-62).
 
 #### Scenario: Dry run without tmux installed
 
@@ -164,7 +164,7 @@ The tool SHALL check for the session with `<backend> has-session -t =<session>` 
 If that command exits with code 0, the tool SHALL write a message to standard error.
 The message says that the session exists and that nothing started. It gives commands to start under `<session>-2`, to attach, and to kill the session.
 The tool SHALL then exit with code 1.
-Source: `src/ClaudeTeam/Multiplexer.cs` (`Check`, `ExistsMessage`), `src/ClaudeTeam/Program.cs` (lines 59-67).
+Source: `src/ClaudeTeam/Multiplexer.cs` (`Check`, `ExistsMessage`), `src/ClaudeTeam/Program.cs` (lines 69-71).
 
 #### Scenario: Session already running
 
@@ -176,7 +176,7 @@ Source: `src/ClaudeTeam/Multiplexer.cs` (`Check`, `ExistsMessage`), `src/ClaudeT
 ### Requirement: Missing backend
 
 The tool SHALL write `Cannot run '<backend>'. Install it and put it on PATH.` to standard error and exit with code 127 when the backend cannot be started.
-Source: `src/ClaudeTeam/Multiplexer.cs` (`Check`), `src/ClaudeTeam/Processes.cs` (`NotFound`, `Capture`), `src/ClaudeTeam/Program.cs` (lines 61-63).
+Source: `src/ClaudeTeam/Multiplexer.cs` (`Check`), `src/ClaudeTeam/Processes.cs` (`NotFound`, `Capture`), `src/ClaudeTeam/Program.cs` (`SessionState.BackendMissing` case, lines 66-68).
 
 #### Scenario: tmux not on PATH
 
@@ -188,7 +188,7 @@ Source: `src/ClaudeTeam/Multiplexer.cs` (`Check`), `src/ClaudeTeam/Processes.cs`
 The tool SHALL run the launch commands in order and SHALL stop at the first command that exits with a nonzero code, returning that code.
 When a command cannot be started, the tool SHALL write `Cannot start '<file>'. Install it and put it on PATH.` with the system message to standard error and return 127.
 The tool SHALL exit with code 0 when every command succeeds.
-Source: `src/ClaudeTeam/Program.cs` (lines 71-77), `src/ClaudeTeam/Processes.cs` (`Run`).
+Source: `src/ClaudeTeam/Program.cs` (the `plan.Commands` loop, lines 76-81), `src/ClaudeTeam/Processes.cs` (`Run`).
 
 #### Scenario: new-session fails
 

@@ -25,7 +25,7 @@ Source: `src/ClaudeTeam/Options.cs` (`Parse`), `tests/ClaudeTeam.Tests/OptionsTe
 ### Requirement: Parse errors exit with code 2
 
 The tool SHALL write the parse error and the line `Run 'claude-team --help' for usage.` to standard error and exit with code 2 when parsing fails, and it SHALL start nothing.
-Source: `src/ClaudeTeam/Program.cs` (lines 3-9).
+Source: `src/ClaudeTeam/Program.cs` (the `parsed.Options` check, lines 4-9).
 
 #### Scenario: Invalid option
 
@@ -93,7 +93,7 @@ Source: `src/ClaudeTeam/Options.cs` (`TryParseInstallTarget`), `tests/ClaudeTeam
 ### Requirement: Force requires an install option
 
 The tool SHALL reject `--force` unless `--install-peer-rule` or `--install-leader-agent` is also given.
-Source: `src/ClaudeTeam/Options.cs` (lines 63-64).
+Source: `src/ClaudeTeam/Options.cs` (`Parse`, the `force` check, lines 77-78).
 
 #### Scenario: Force alone
 
@@ -104,7 +104,7 @@ Source: `src/ClaudeTeam/Options.cs` (lines 63-64).
 
 The tool SHALL print the help text and exit with code 0 when `-h` or `--help` is given and parsing succeeds, before any install or launch.
 The help text SHALL name the multiplexer backend for the current platform and the session name resolved for the current folder.
-Source: `src/ClaudeTeam/Program.cs` (lines 16-22), `src/ClaudeTeam/Help.cs`.
+Source: `src/ClaudeTeam/Program.cs` (the `CommandKind.Help` branch, lines 20-24), `src/ClaudeTeam/Help.cs`.
 
 #### Scenario: Help with an install option
 

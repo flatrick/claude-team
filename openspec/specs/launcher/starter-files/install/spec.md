@@ -11,7 +11,7 @@ It installs them into a repository, into the user profile, or into both. Both fi
 
 The tool SHALL run in install mode when `--install-peer-rule` or `--install-leader-agent` is given and help is not requested.
 In install mode, the tool SHALL start no session, SHALL print one line per target file, and SHALL then exit.
-Source: `src/ClaudeTeam/Program.cs` (lines 24-36).
+Source: `src/ClaudeTeam/Program.cs` (the `CommandKind.Install` branch, lines 32-44).
 
 #### Scenario: Install instead of launch
 
@@ -115,16 +115,6 @@ Source: `src/ClaudeTeam/ClaudeTeam.csproj` (`EmbeddedResource`), `src/ClaudeTeam
 - **WHEN** the tool installs the team-leader agent
 - **THEN** the file contains no carriage return
 
-### Requirement: Repository copy of the peer rule
-
-The repository's own `.claude/rules/claude-team-peer-leaders.md` SHALL be identical to the embedded source `src/ClaudeTeam/claude-team-peer-leaders.md`, and the test suite SHALL fail when they differ.
-Source: `tests/ClaudeTeam.Tests/PeerRuleCopyTests.cs` (`Repository_rule_copy_matches_the_embedded_source`).
-
-#### Scenario: Edited copy
-
-- **WHEN** only one of the two files is edited
-- **THEN** `Repository_rule_copy_matches_the_embedded_source` fails
-
 ### Requirement: Memory ignore reminder
 
 The shipped agent sets `memory: local`, so Claude Code keeps the leader memory in `.claude/agent-memory-local/team-leader/`.
@@ -169,10 +159,15 @@ The line SHALL start with `Note:`, SHALL appear also in a dry run, and SHALL NOT
 
 Source: `src/ClaudeTeam/Installer.cs` (`MixedPrecedenceNote`, `Run`), `src/ClaudeTeam/Updater.cs` (`Run`), `tests/ClaudeTeam.Tests/InstallerTests.cs` (`Both_target_writes_the_repository_file_before_the_user_profile_file_and_ends_with_the_note`, `Single_targets_print_no_note`), `tests/ClaudeTeam.Tests/UpdaterTests.cs` (`Both_handles_the_repository_file_before_the_user_profile_file_and_ends_with_the_note`, `Single_targets_print_no_note_and_no_reminder`).
 
-### Requirement: Repository copies of the team-leader agent and the team skills
+### Requirement: Repository copies of the shipped files
 
-The repository's own `.claude/agents/team-leader.md` and `.claude/skills/<skill name>/SKILL.md` for each team skill SHALL be identical to their embedded sources, and the test suite SHALL fail when a copy differs.
+The repository's own `.claude/rules/claude-team-peer-leaders.md`, `.claude/agents/team-leader.md`, and `.claude/skills/<skill name>/SKILL.md` for each team skill SHALL be identical to their embedded sources, and the test suite SHALL fail when a copy differs.
 The embedded sources are the single source of these files. This makes sure that the repository tests the text that users get, and that the two copies cannot drift apart.
+
+#### Scenario: Edited rule copy
+
+- **WHEN** only `.claude/rules/claude-team-peer-leaders.md` is edited and its embedded source is not
+- **THEN** the copy test fails
 
 #### Scenario: Edited skill copy
 
