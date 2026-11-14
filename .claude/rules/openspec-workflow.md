@@ -13,18 +13,18 @@ The specs in `openspec/specs/` describe current behavior.
 - Name the change after the worktree slug. The change folder, the worktree `.worktrees/<slug>/`, and the ledger `.scratch/agent-ledgers/<slug>/` use the same name.
 - Create, edit, and archive the change in its worktree. Commit the artifacts on the same branch as the code. Never write change artifacts in the main checkout.
 - A `requirements-*` preset writes the proposal, the delta specs, the design, and the tasks. Use `requirements-hard` when the design is unsettled or the change touches several specs.
-- An `implementer-*` preset applies the tasks with `/opsx:apply`. It does not rewrite the proposal, specs, or design. It reports a needed change to the team lead.
-- Run `/opsx:verify` before a PR into main. Verify includes the code review. Check that every intended change was made and that the change fulfills its proposal.
+- An `implementer-*` preset applies the tasks with the `openspec-apply-change` skill. It does not rewrite the proposal, specs, or design. It reports a needed change to the team lead.
+- Run the `openspec-verify-change` skill before a PR into main. Verify includes the code review. Check that every intended change was made and that the change fulfills its proposal.
 - Run `openspec validate <change> --strict` before you commit change artifacts. Keep validation free of warnings, as [openspec-validation-warnings.md](openspec-validation-warnings.md) says.
-- Archive the change with `/opsx:archive` in the worktree before the branch merges, so the synced specs merge with the code.
-- When an `/opsx:*` command says to ask or confirm with the user, the operator decides, and the question goes through [decisions.md](decisions.md).
+- Archive the change with the `openspec-archive-change` skill in the worktree before the branch merges, so the synced specs merge with the code.
+- When an `openspec-*` skill says to ask or confirm with the user, the operator decides, and the question goes through [decisions.md](decisions.md).
   A teammate asks the team lead, who asks the operator.
-  Whoever runs the command, including the team lead, asks the operator for each decision as `decisions.md` says.
+  Whoever runs the skill, including the team lead, asks the operator for each decision as `decisions.md` says.
   Discussion and findings can stay in the chat.
-  The command text "track decisions in the conversation" and its limit to writing only change artifacts do not cover decision files.
+  The text "Track decisions in the conversation, not in files" in `openspec-explore` and the limit to write only change artifacts in the `openspec-*` skills do not cover decision files.
 - An artifact states each decision and its reason in full.
-- Write the results of `/opsx:verify` and of each review to the ledger, as [agent-findings-ledger.md](agent-findings-ledger.md) says.
-- Do not edit `.claude/commands/opsx/`. `openspec update` manages these files. Put repository constraints in this rule or in `openspec/config.yaml`.
+- Write the results of the `openspec-verify-change` skill and of each review to the ledger, as [agent-findings-ledger.md](agent-findings-ledger.md) says.
+- Do not edit the `openspec-*` skills in `.claude/skills/`. `openspec update` manages these files. Put repository constraints in this rule or in `openspec/config.yaml`.
 
 ## Spec layout
 
@@ -52,4 +52,4 @@ A change folder outside its worktree separates the change from its code, in the 
 
 Behavioral.
 `openspec validate --strict` checks the format of specs, not whether they match the code.
-`/opsx:verify` and the reviewer check that a behavior change also changed `openspec/`, and that each requirement cites its source file.
+The `openspec-verify-change` skill and the reviewer check that a behavior change also changed `openspec/`, and that each requirement cites its source file.

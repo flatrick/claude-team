@@ -36,7 +36,7 @@ operations:
       - Work only in the change's worktree.
       - The teammate asks the team lead when a task needs an operator decision.
       - Report a needed proposal, spec, or design change to the team lead instead of rewriting it during apply.
-      - During /opsx:verify, also do the code review required before a PR into main (.claude/rules/openspec-workflow.md). Write the findings to the ledger.
+      - When you run the openspec-verify-change skill, also do the code review required before a PR into main (.claude/rules/openspec-workflow.md). Write the findings to the ledger.
   archive:
     guidance:
       - Archive in the change's worktree before the branch merges.
