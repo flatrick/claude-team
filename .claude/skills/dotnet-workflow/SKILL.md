@@ -25,7 +25,7 @@ It can also run against a stale binary and give no warning.
 Run each step in order, and wait for each step to finish.
 
 1. Create the log folder: `mkdir -p .scratch/logs`.
-2. Build: `dotnet build ClaudeTeam.slnx &> .scratch/logs/build-$(date +%Y%m%d-%H%M).log`.
+2. Build: `dotnet build ClaudeTeam.slnx --no-incremental &> .scratch/logs/build-$(date +%Y%m%d-%H%M).log`.
 3. Wait for exit code 0. If the build fails, do not run the test. Fix the build error first.
 4. Test: `dotnet test ClaudeTeam.slnx --no-build &> .scratch/logs/test-$(date +%Y%m%d-%H%M).log`.
 5. Read the end of each log file with the Read tool. Do not pipe the output through `head` or `tail`.
@@ -68,7 +68,7 @@ The gate is a clean build and a full test run of `ClaudeTeam.slnx`.
 Run it before you mark a task complete.
 The sequence above is the gate. All steps must pass, in this order.
 
-1. **Clean rebuild.** Do not rely on a cached binary.
+1. **Clean rebuild.** Run step 2 of the sequence. The `--no-incremental` option rebuilds every project, so no cached binary is used.
 2. **Full test run.** A run that executed zero tests is not a pass.
 3. **Read the log.** Read the log file that you wrote under `.scratch/logs/`.
 
