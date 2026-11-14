@@ -10,7 +10,7 @@ The default name comes from the git repository and worktree of the current folde
 ### Requirement: Explicit session name
 
 The tool SHALL use the value of `--session` as the session name when it is given, and SHALL resolve a default name only when it is absent.
-Source: `src/ClaudeTeam/Program.cs` (line 16).
+Source: `src/ClaudeTeam/Program.cs` (`session`, line 16).
 
 #### Scenario: Explicit name
 

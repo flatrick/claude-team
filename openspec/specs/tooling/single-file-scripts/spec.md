@@ -10,7 +10,7 @@ It defines the form of every repository tool under `scripts/`, so its requiremen
 ### Requirement: Single-file C# tools
 
 Each tool under `scripts/` SHALL be a single-file C# program that runs with `dotnet run --file scripts/<name>.cs`, with no shell script, batch file, or shell shim around it.
-Source: `scripts/install-tool.cs` (lines 1-3: `#!/usr/bin/env dotnet`, `#:property PublishAot=false`), `.claude/rules/cross-platform-tooling.md`.
+Source: `scripts/install-tool.cs` (lines 1-2: `#!/usr/bin/env dotnet`, `#:property PublishAot=false`), `.claude/rules/cross-platform-tooling.md`.
 Method: `ls scripts/` lists every tool.
 
 #### Scenario: Run on native Windows
