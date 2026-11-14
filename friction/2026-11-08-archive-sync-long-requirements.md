@@ -16,4 +16,9 @@
 - Cause: the leader and the ledger entries state it. The scribe did not run the archive. NOT RE-DERIVED (second-hand — leader and `versioning-implementer` observed it).
 - Effect: One extra teammate round and an amend of the archive commit.
 - Idea (not decided): run `openspec validate --all --strict` on a trial archive before the real one.
+- Case 2 (2026-11-14): change `multiplexer-launch-checks`, teammate `req-mux-checks`, branch `fix/multiplexer-launch-checks`.
+  The archive sync left a length warning in the spec `launcher/session/naming`. The teammate fixed the spec and amended the archive commit `fe7e298`.
+  The requirement is "Sanitize default names". Its long `Source:` line made it too long. The fix moved the `Source:` line below the scenarios (see [2026-11-14-commit-chain-ignored-validation-warning.md](2026-11-14-commit-chain-ignored-validation-warning.md)).
+  Re-derive the amend: `git -C /home/flatrick/src/github/flatrick/claude-team/.worktrees/multiplexer-launch-checks reflog -8 --format='%h %gs'`.
+  The warning text itself: NOT RE-DERIVED (second-hand — `req-mux-checks`, not the scribe).
 - Status: open.
