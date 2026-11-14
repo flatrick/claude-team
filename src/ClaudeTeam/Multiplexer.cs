@@ -12,6 +12,14 @@ public static class Multiplexer
             _ => SessionState.Absent,
         };
 
+    // Returns an error message when tmux is older than the minimum, and null otherwise.
+    // A failed or unparsable "tmux -V" returns null.
+    public static string? CheckVersion()
+    {
+        var (exitCode, output) = Processes.Capture("tmux", "-V");
+        return exitCode == 0 && !TmuxVersion.IsSupported(output) ? TmuxVersion.TooOldMessage(output) : null;
+    }
+
     public static string ExistsMessage(string backend, string session) => $"""
         A {backend} session named '{session}' already exists. Nothing was started.
         Choose one:

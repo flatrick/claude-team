@@ -35,7 +35,12 @@ public static class SessionName
         return string.IsNullOrWhiteSpace(last) ? null : last;
     }
 
-    public static string Sanitize(string name) => name.Replace('.', '_').Replace(':', '_');
+    public static string Sanitize(string name)
+        => string.Create(name.Length, name, static (span, source) =>
+        {
+            for (var i = 0; i < source.Length; i++)
+                span[i] = source[i] is '.' or ':' || char.IsWhiteSpace(source[i]) ? '_' : source[i];
+        });
 
     private static string FolderName(string path) => Path.GetFileName(Trim(path));
 

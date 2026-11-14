@@ -54,7 +54,19 @@ if (kind == CommandKind.Update)
 var projectRoot = git?.Toplevel ?? workingDirectory;
 var preflight = LaunchOutput.Preflight(projectRoot, git?.Toplevel, home);
 var insidePane = !string.IsNullOrWhiteSpace(Environment.GetEnvironmentVariable("TMUX"));
-var plan = LaunchPlan.Build(new LaunchInputs(session, workingDirectory, isWindows, insidePane, preflight.HasAgent, options.Forwarded));
+var inputs = new LaunchInputs(
+    Session: session,
+    WorkingDirectory: workingDirectory,
+    IsWindows: isWindows,
+    InsidePane: insidePane,
+    HasTeamLeaderAgent: preflight.HasAgent,
+    Forwarded: options.Forwarded);
+if (LaunchPlan.Validate(inputs) is { } inputError)
+{
+    Console.Error.WriteLine(inputError);
+    return 2;
+}
+var plan = LaunchPlan.Build(inputs);
 
 LaunchOutput.Write(
     Console.Error, Console.Out, preflight.Warnings, options.DryRun ? LaunchOutput.DryRunLines(session, plan) : null);
@@ -69,6 +81,12 @@ switch (Multiplexer.Check(backend, session))
     case SessionState.Exists:
         Console.Error.WriteLine(Multiplexer.ExistsMessage(backend, session));
         return 1;
+}
+
+if (!isWindows && Multiplexer.CheckVersion() is { } versionError)
+{
+    Console.Error.WriteLine(versionError);
+    return 1;
 }
 
 // A running tmux server does not take the variable from the client, so new-session -e passes it too.

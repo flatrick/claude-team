@@ -125,6 +125,9 @@ public class OptionsTests
     [InlineData("--session", "a.b")]
     [InlineData("--session", "a:b")]
     [InlineData("--session", " ")]
+    [InlineData("--session", "my repo")]
+    [InlineData("--session", "a\tb")]
+    [InlineData("--session", " leading")]
     [InlineData("--install-peer-rule")]
     [InlineData("--install-peer-rule", "elsewhere")]
     [InlineData("--force")]
@@ -134,6 +137,19 @@ public class OptionsTests
         var result = Options.Parse(args);
         Assert.Null(result.Options);
         Assert.False(string.IsNullOrWhiteSpace(result.Error));
+    }
+
+    [Theory]
+    [InlineData("my repo")]
+    [InlineData("a\tb")]
+    [InlineData(" leading")]
+    [InlineData("a.b")]
+    [InlineData("a:b")]
+    public void Session_name_rejection_names_the_whitespace_rule(string name)
+    {
+        var result = Options.Parse(["--session", name]);
+        Assert.Null(result.Options);
+        Assert.Equal("Use a nonempty session name without whitespace, control characters, periods, or colons.", result.Error);
     }
 
     [Theory]
