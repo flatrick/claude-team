@@ -57,4 +57,29 @@ public class LaunchPlanTests
         var arguments = Assert.Single(LaunchPlan.Build(Inputs(forwarded: ["--model", "opus"])).Commands).Arguments;
         Assert.Equal(["--model", "opus"], arguments.TakeLast(2));
     }
+
+    [Fact]
+    public void Validate_on_windows_rejects_a_forwarded_argument_with_a_space_and_names_it()
+    {
+        var error = LaunchPlan.Validate(Inputs(windows: true, forwarded: ["--append-system-prompt", "a b"]));
+        Assert.NotNull(error);
+        Assert.Contains("a b", error);
+    }
+
+    [Fact]
+    public void Validate_on_linux_accepts_a_forwarded_argument_with_a_space()
+        => Assert.Null(LaunchPlan.Validate(Inputs(windows: false, forwarded: ["--append-system-prompt", "a b"])));
+
+    [Fact]
+    public void Validate_on_windows_accepts_forwarded_arguments_without_whitespace()
+        => Assert.Null(LaunchPlan.Validate(Inputs(windows: true, forwarded: ["--append-system-prompt", "ab"])));
+
+    [Fact]
+    public void Validate_on_windows_names_the_first_argument_with_a_tab()
+    {
+        var error = LaunchPlan.Validate(Inputs(windows: true, forwarded: ["ok", "x\ty", "p q"]));
+        Assert.NotNull(error);
+        Assert.Contains("x\ty", error);
+        Assert.DoesNotContain("p q", error);
+    }
 }

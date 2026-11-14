@@ -32,9 +32,9 @@ public sealed record Options(
                     if (i + 1 >= args.Length || args[i + 1] == "--")
                         return ParseResult.Fail("Supply a name after --session.");
                     session = args[++i];
-                    if (string.IsNullOrWhiteSpace(session)
-                        || session.Any(character => char.IsControl(character) || character is '.' or ':'))
-                        return ParseResult.Fail("Use a nonempty session name without control characters, periods, or colons.");
+                    if (string.IsNullOrEmpty(session)
+                        || session.Any(character => char.IsWhiteSpace(character) || char.IsControl(character) || character is '.' or ':'))
+                        return ParseResult.Fail("Use a nonempty session name without whitespace, control characters, periods, or colons.");
                     break;
                 case "--install-peer-rule":
                     if (i + 1 >= args.Length || !TryParseInstallTarget(args[i + 1], out var target))

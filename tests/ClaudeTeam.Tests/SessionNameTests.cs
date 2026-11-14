@@ -29,6 +29,8 @@ public class SessionNameTests
     [InlineData("my.repo", "my_repo")]
     [InlineData("a:b", "a_b")]
     [InlineData("plain", "plain")]
+    [InlineData("my repo", "my_repo")]
+    [InlineData("a\tb", "a_b")]
     public void Sanitize_replaces_tmux_target_separators(string name, string expected)
         => Assert.Equal(expected, SessionName.Sanitize(name));
 
@@ -64,5 +66,12 @@ public class SessionNameTests
     {
         var git = new GitInfo("/r/.worktrees/v1.2", "/r/.git/worktrees/v1.2", "/r/.git", null);
         Assert.Equal("r+v1_2", SessionName.Resolve(git, "/r/.worktrees/v1.2"));
+    }
+
+    [Fact]
+    public void Resolve_replaces_whitespace_in_the_worktree_part()
+    {
+        var git = new GitInfo("/r/.worktrees/my tree", "/r/.git/worktrees/my tree", "/r/.git", null);
+        Assert.Equal("r+my_tree", SessionName.Resolve(git, "/r/.worktrees/my tree"));
     }
 }

@@ -16,6 +16,7 @@ public static class Help
                                         "<repo>+<worktree>" in a linked worktree,
                                         the main checkout folder name without origin,
                                         and the current folder name outside git.
+                                        Whitespace in a default name becomes "_".
           --dry-run                     Print the session name, the variable, and the commands. Start nothing.
                                         With an install option, print what would be written and write nothing.
           --install-peer-rule <target>  Write {PeerRule.FileName} to .claude/rules/ (repo),
@@ -34,6 +35,9 @@ public static class Help
           -h, --help                    Show this help.
           --version                     Print the version and the short commit. Then exit.
           --                            Forward the remaining arguments to claude.
+
+        Requires tmux 3.2 or newer (new-session -e). On Linux and macOS, claude-team checks
+        the version before it starts and stops if tmux is older.
 
         If the session exists, claude-team stops and starts nothing.
         Inside a {backend} pane, it creates the session detached and switches to it.
