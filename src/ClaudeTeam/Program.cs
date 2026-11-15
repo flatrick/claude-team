@@ -28,12 +28,12 @@ switch (kind)
     case CommandKind.Install:
     {
         var run = Installer.Run(
-            options.InstallPeerRule,
-            options.InstallLeaderAgent,
-            git?.Toplevel,
-            home,
-            options.Force,
-            options.DryRun);
+            peerRule: options.InstallPeerRule,
+            leaderAgent: options.InstallLeaderAgent,
+            repoRoot: git?.Toplevel,
+            home: home,
+            force: options.Force,
+            dryRun: options.DryRun);
 
         foreach (var line in run.Lines)
             Console.WriteLine(line);
@@ -43,10 +43,10 @@ switch (kind)
     case CommandKind.Update:
     {
         var run = Updater.Run(
-            options.Update!.Value,
-            git?.Toplevel,
-            home,
-            options.DryRun);
+            target: options.Update!.Value,
+            repoRoot: git?.Toplevel,
+            home: home,
+            dryRun: options.DryRun);
 
         foreach (var line in run.Lines)
             Console.WriteLine(line);
@@ -63,12 +63,12 @@ var projectRoot = git?.Toplevel ?? workingDirectory;
 var preflight = LaunchOutput.Preflight(projectRoot, git?.Toplevel, home);
 var insidePane = !string.IsNullOrWhiteSpace(Environment.GetEnvironmentVariable("TMUX"));
 var inputs = new LaunchInputs(
-    session,
-    workingDirectory,
-    isWindows,
-    insidePane,
-    preflight.HasAgent,
-    options.Forwarded);
+    Session: session,
+    WorkingDirectory: workingDirectory,
+    IsWindows: isWindows,
+    InsidePane: insidePane,
+    HasTeamLeaderAgent: preflight.HasAgent,
+    Forwarded: options.Forwarded);
 if (LaunchPlan.Validate(inputs) is { } inputError)
 {
     Console.Error.WriteLine(inputError);

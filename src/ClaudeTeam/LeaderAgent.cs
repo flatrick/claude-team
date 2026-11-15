@@ -24,9 +24,9 @@ public static class LeaderAgent
         Installer.Install(target,
             repoRoot,
             home,
-            "agents",
-            FileName,
-            Text,
-            force,
-            dryRun);
+            subfolder: "agents",
+            fileName: FileName,
+            text: Text,
+            force: force,
+            dryRun: dryRun);
 }

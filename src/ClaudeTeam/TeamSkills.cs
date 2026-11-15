@@ -27,12 +27,12 @@ public static class TeamSkills
                 target,
                 repoRoot,
                 home,
-                Path.Combine("skills",
+                subfolder: Path.Combine("skills",
                     name),
-                FileName,
-                Text(name),
-                force,
-                dryRun))
+                fileName: FileName,
+                text: Text(name),
+                force: force,
+                dryRun: dryRun))
         ];
 
     // One warning that names each team skill that is in neither location, or null when none is missing.
