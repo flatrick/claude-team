@@ -6,8 +6,11 @@ public static class VersionLine
 {
     private const int ShortCommitLength = 7;
 
-    public static string Current() => Format(
-        typeof(VersionLine).Assembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>()?.InformationalVersion);
+    public static string Current()
+        => Format(typeof(VersionLine)
+            .Assembly
+            .GetCustomAttribute<AssemblyInformationalVersionAttribute>()
+            ?.InformationalVersion);
 
     public static string Format(string? informationalVersion)
     {

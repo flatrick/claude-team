@@ -10,10 +10,12 @@ public static class SessionName
             return Sanitize(FolderName(workingDirectory));
 
         var repository = (git.OriginUrl is { } url ? FromRemoteUrl(url) : null)
-            ?? FolderName(Path.GetDirectoryName(Trim(git.CommonDir)) ?? git.CommonDir);
+                         ?? FolderName(Path.GetDirectoryName(Trim(git.CommonDir)) ?? git.CommonDir);
+
         var name = Trim(git.GitDir) == Trim(git.CommonDir)
             ? repository
             : $"{repository}+{FolderName(git.Toplevel)}";
+
         return Sanitize(name);
     }
 
@@ -28,21 +30,30 @@ public static class SessionName
                 return null;
             trimmed = trimmed[path..];
         }
+
         var start = trimmed.LastIndexOfAny(['/', '\\', ':']) + 1;
         var last = trimmed[start..];
         if (last.EndsWith(".git", StringComparison.OrdinalIgnoreCase))
             last = last[..^4];
-        return string.IsNullOrWhiteSpace(last) ? null : last;
+
+        return string.IsNullOrWhiteSpace(last)
+            ? null
+            : last;
     }
 
     public static string Sanitize(string name)
         => string.Create(name.Length, name, static (span, source) =>
         {
             for (var i = 0; i < source.Length; i++)
-                span[i] = source[i] is '.' or ':' || char.IsWhiteSpace(source[i]) ? '_' : source[i];
+                span[i] =
+                    source[i] is '.' or ':' || char.IsWhiteSpace(source[i])
+                        ? '_'
+                        : source[i];
         });
 
-    private static string FolderName(string path) => Path.GetFileName(Trim(path));
+    private static string FolderName(string path)
+        => Path.GetFileName(Trim(path));
 
-    private static string Trim(string path) => path.TrimEnd('/', '\\');
+    private static string Trim(string path)
+        => path.TrimEnd('/', '\\');
 }

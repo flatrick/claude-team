@@ -2,46 +2,49 @@ namespace ClaudeTeam;
 
 public static class Help
 {
-    public static string Text(string backend, string session) => $"""
-        Starts a Claude team leader in a {backend} session named after the current repository.
+    public static string Text(string backend, string session)
+    {
+        return $"""
+                Starts a Claude team leader in a {backend} session named after the current repository.
 
-        Usage:
-          claude-team [--session <name>] [--dry-run] [-- <claude arguments>]
-          claude-team --install-peer-rule <repo|global|both> [--force]
-          claude-team --install-leader-agent <repo|global|both> [--force]
-          claude-team --update <repo|global|both> [--dry-run]
+                Usage:
+                  claude-team [--session <name>] [--dry-run] [-- <claude arguments>]
+                  claude-team --install-peer-rule <repo|global|both> [--force]
+                  claude-team --install-leader-agent <repo|global|both> [--force]
+                  claude-team --update <repo|global|both> [--dry-run]
 
-        Options:
-          --session <name>              Session name. Default: the origin repository name,
-                                        "<repo>+<worktree>" in a linked worktree,
-                                        the main checkout folder name without origin,
-                                        and the current folder name outside git.
-                                        Whitespace in a default name becomes "_".
-          --dry-run                     Print the session name, the variable, and the commands. Start nothing.
-                                        With an install option, print what would be written and write nothing.
-          --install-peer-rule <target>  Write {PeerRule.FileName} to .claude/rules/ (repo),
-                                        ~/.claude/rules/ (global), or both. Then exit.
-          --install-leader-agent <target>
-                                        Write {LeaderAgent.FileName} to .claude/agents/ (repo),
-                                        ~/.claude/agents/ (global), or both. Also write the skills
-                                        {string.Join(", ", TeamSkills.Names)} to
-                                        .claude/skills/ or ~/.claude/skills/. Then exit.
-                                        Both install options may be given in one run.
-          --update <target>             Add each missing shipped file (the rule, the agent, and the skills)
-                                        and replace each one that differs, at repo, global, or both.
-                                        With --dry-run, show the changes as a diff and write nothing.
-                                        Then exit. Run --dry-run first: an update replaces edited files.
-          --force                       Replace an existing rule, agent, or skill file.
-          -h, --help                    Show this help.
-          --version                     Print the version and the short commit. Then exit.
-          --                            Forward the remaining arguments to claude.
+                Options:
+                  --session <name>              Session name. Default: the origin repository name,
+                                                "<repo>+<worktree>" in a linked worktree,
+                                                the main checkout folder name without origin,
+                                                and the current folder name outside git.
+                                                Whitespace in a default name becomes "_".
+                  --dry-run                     Print the session name, the variable, and the commands. Start nothing.
+                                                With an install option, print what would be written and write nothing.
+                  --install-peer-rule <target>  Write {PeerRule.FileName} to .claude/rules/ (repo),
+                                                ~/.claude/rules/ (global), or both. Then exit.
+                  --install-leader-agent <target>
+                                                Write {LeaderAgent.FileName} to .claude/agents/ (repo),
+                                                ~/.claude/agents/ (global), or both. Also write the skills
+                                                {string.Join(", ", TeamSkills.Names)} to
+                                                .claude/skills/ or ~/.claude/skills/. Then exit.
+                                                Both install options may be given in one run.
+                  --update <target>             Add each missing shipped file (the rule, the agent, and the skills)
+                                                and replace each one that differs, at repo, global, or both.
+                                                With --dry-run, show the changes as a diff and write nothing.
+                                                Then exit. Run --dry-run first: an update replaces edited files.
+                  --force                       Replace an existing rule, agent, or skill file.
+                  -h, --help                    Show this help.
+                  --version                     Print the version and the short commit. Then exit.
+                  --                            Forward the remaining arguments to claude.
 
-        Requires tmux 3.2 or newer (new-session -e). On Linux and macOS, claude-team checks
-        the version before it starts and stops if tmux is older.
+                Requires tmux 3.2 or newer (new-session -e). On Linux and macOS, claude-team checks
+                the version before it starts and stops if tmux is older.
 
-        If the session exists, claude-team stops and starts nothing.
-        Inside a {backend} pane, it creates the session detached and switches to it.
+                If the session exists, claude-team stops and starts nothing.
+                Inside a {backend} pane, it creates the session detached and switches to it.
 
-        The session for this folder is named: {session}
-        """;
+                The session for this folder is named: {session}
+                """;
+    }
 }

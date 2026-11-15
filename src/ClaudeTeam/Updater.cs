@@ -14,11 +14,14 @@ public static class Updater
             {
                 if (repoRoot is null)
                 {
-                    lines.Add($"Cannot update {relative} in the repository: the current folder is not in a git repository.");
+                    lines.Add(
+                        $"Cannot update {relative} in the repository: the current folder is not in a git repository.");
                     failed = true;
                 }
                 else
+                {
                     Handle(lines, Path.Combine(repoRoot, relative), file, dryRun);
+                }
             }
 
             if (target is InstallTarget.Global or InstallTarget.Both)
@@ -55,8 +58,13 @@ public static class Updater
         }
 
         var label = ShippedHashes.Contains(file.PublishedPath, installed) ? "older shipped version" : "edited";
+
         lines.Add($"Would replace {path} ({label})");
-        lines.AddRange(LineDiff.Unified(installed, file.Text, path, Path.GetFileName(file.PublishedPath)));
+        lines.AddRange(
+            LineDiff.Unified(installed,
+                file.Text,
+                path,
+                Path.GetFileName(file.PublishedPath)));
     }
 
     private static void Write(string path, string text)

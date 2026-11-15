@@ -1,30 +1,30 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <OutputType>Exe</OutputType>
-    <TargetFramework>net10.0</TargetFramework>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
-    <PackAsTool>true</PackAsTool>
-    <ToolCommandName>claude-team</ToolCommandName>
-    <PackageId>claude-team</PackageId>
-    <MinVerTagPrefix>v</MinVerTagPrefix>
-    <Authors>flatrick</Authors>
-    <Description>Starts a Claude team leader in a tmux (Linux, WSL) or psmux (Windows) session named after the current repository.</Description>
-    <PackageLicenseExpression>Unlicense</PackageLicenseExpression>
-  </PropertyGroup>
+    <PropertyGroup>
+        <OutputType>Exe</OutputType>
+        <TargetFramework>net10.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <PackAsTool>true</PackAsTool>
+        <ToolCommandName>claude-team</ToolCommandName>
+        <PackageId>claude-team</PackageId>
+        <MinVerTagPrefix>v</MinVerTagPrefix>
+        <Authors>flatrick</Authors>
+        <Description>Starts a Claude team leader in a tmux (Linux, WSL) or psmux (Windows) session named after the current repository.</Description>
+        <PackageLicenseExpression>Unlicense</PackageLicenseExpression>
+    </PropertyGroup>
 
-  <ItemGroup>
-    <PackageReference Include="MinVer" Version="8.0.0" PrivateAssets="all" />
-  </ItemGroup>
+    <ItemGroup>
+        <PackageReference Include="MinVer" Version="8.0.0" PrivateAssets="all"/>
+    </ItemGroup>
 
-  <ItemGroup>
-    <EmbeddedResource Include="claude-team-peer-leaders.md" LogicalName="claude-team-peer-leaders.md" />
-    <EmbeddedResource Include="team-leader.md" LogicalName="team-leader.md" />
-    <EmbeddedResource Include="shipped-hashes.txt" LogicalName="shipped-hashes.txt" />
-    <EmbeddedResource Include="skills/team-protocol/SKILL.md" LogicalName="skills/team-protocol/SKILL.md" />
-    <EmbeddedResource Include="skills/start-teammate/SKILL.md" LogicalName="skills/start-teammate/SKILL.md" />
-    <EmbeddedResource Include="skills/end-teammate/SKILL.md" LogicalName="skills/end-teammate/SKILL.md" />
-  </ItemGroup>
+    <ItemGroup>
+        <EmbeddedResource Include="claude-team-peer-leaders.md" LogicalName="claude-team-peer-leaders.md"/>
+        <EmbeddedResource Include="team-leader.md" LogicalName="team-leader.md"/>
+        <EmbeddedResource Include="shipped-hashes.txt" LogicalName="shipped-hashes.txt"/>
+        <EmbeddedResource Include="skills/team-protocol/SKILL.md" LogicalName="skills/team-protocol/SKILL.md"/>
+        <EmbeddedResource Include="skills/start-teammate/SKILL.md" LogicalName="skills/start-teammate/SKILL.md"/>
+        <EmbeddedResource Include="skills/end-teammate/SKILL.md" LogicalName="skills/end-teammate/SKILL.md"/>
+    </ItemGroup>
 
 </Project>

@@ -13,7 +13,8 @@ public static class ShippedFiles
     [
         new($"rules/{PeerRule.FileName}", PeerRule.Text),
         new($"agents/{LeaderAgent.FileName}", LeaderAgent.Text),
-        .. TeamSkills.Names.Select(name => new ShippedFile($"skills/{name}/{TeamSkills.FileName}", TeamSkills.Text(name))),
+        .. TeamSkills.Names.Select(name =>
+            new ShippedFile($"skills/{name}/{TeamSkills.FileName}", TeamSkills.Text(name)))
     ];
 }
 
@@ -32,5 +33,6 @@ public static class ShippedHashes
     public static string Sha256(string text)
         => Convert.ToHexStringLower(SHA256.HashData(Encoding.UTF8.GetBytes(text.ReplaceLineEndings("\n"))));
 
-    public static bool Contains(string publishedPath, string text) => Entries.Contains((publishedPath, Sha256(text)));
+    public static bool Contains(string publishedPath, string text)
+        => Entries.Contains((publishedPath, Sha256(text)));
 }

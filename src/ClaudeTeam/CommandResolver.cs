@@ -1,6 +1,13 @@
 namespace ClaudeTeam;
 
-public enum CommandKind { Help, Version, Install, Update, Launch }
+public enum CommandKind
+{
+    Help,
+    Version,
+    Install,
+    Update,
+    Launch
+}
 
 public static class CommandResolver
 {
@@ -9,12 +16,15 @@ public static class CommandResolver
     {
         if (options.Help)
             return CommandKind.Help;
+        
         if (options.Version)
             return CommandKind.Version;
+
         if (options.InstallPeerRule is not null || options.InstallLeaderAgent is not null)
             return CommandKind.Install;
-        if (options.Update is not null)
-            return CommandKind.Update;
-        return CommandKind.Launch;
+
+        return options.Update is not null
+            ? CommandKind.Update
+            : CommandKind.Launch;
     }
 }

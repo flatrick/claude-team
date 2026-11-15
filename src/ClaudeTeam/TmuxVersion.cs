@@ -13,15 +13,15 @@ public static partial class TmuxVersion
         major = minor = 0;
         var match = VersionPattern().Match(text.Trim());
         return match.Success
-            && int.TryParse(match.Groups[1].Value, out major)
-            && int.TryParse(match.Groups[2].Value, out minor);
+               && int.TryParse(match.Groups[1].Value, out major)
+               && int.TryParse(match.Groups[2].Value, out minor);
     }
 
     // Text that does not parse counts as supported, so a development build does not fail.
     public static bool IsSupported(string text)
         => !TryParse(text, out var major, out var minor)
-            || major > MinimumMajor
-            || (major == MinimumMajor && minor >= MinimumMinor);
+           || major > MinimumMajor
+           || (major == MinimumMajor && minor >= MinimumMinor);
 
     public static string TooOldMessage(string text)
         => $"{text.Trim()} is too old. claude-team needs tmux {MinimumMajor}.{MinimumMinor} or newer (new-session -e). Nothing was started.";
