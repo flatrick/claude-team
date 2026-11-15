@@ -9,10 +9,6 @@ public static class LineDiff
     // so that a difference in the final newline is a difference of that line.
     private const char NoNewlineSuffix = '\0';
 
-    private enum Kind { Same, Removed, Added }
-
-    private readonly record struct Edit(Kind Kind, string Text);
-
     // Unified diff of two texts, made from a longest-common-subsequence table over lines.
     // An empty list means that the texts are the same after line-ending normalization.
     public static IReadOnlyList<string> Unified(string installed, string shipped, string installedPath, string fileName)
@@ -59,7 +55,10 @@ public static class LineDiff
                 lines.Add(NoNewlineMarker);
             }
             else
+            {
                 lines.Add(prefix + edit.Text);
+            }
+
             if (edit.Kind != Kind.Added) oldCount++;
             if (edit.Kind != Kind.Removed) newCount++;
         }
@@ -84,13 +83,12 @@ public static class LineDiff
     {
         var table = new int[a.Length + 1, b.Length + 1];
         for (var i = a.Length - 1; i >= 0; i--)
-            for (var j = b.Length - 1; j >= 0; j--)
-                table[i, j] = a[i] == b[j] ? table[i + 1, j + 1] + 1 : Math.Max(table[i + 1, j], table[i, j + 1]);
+        for (var j = b.Length - 1; j >= 0; j--)
+            table[i, j] = a[i] == b[j] ? table[i + 1, j + 1] + 1 : Math.Max(table[i + 1, j], table[i, j + 1]);
 
         List<Edit> edits = [];
         int x = 0, y = 0;
         while (x < a.Length && y < b.Length)
-        {
             if (a[x] == b[y])
             {
                 edits.Add(new Edit(Kind.Same, a[x]));
@@ -98,13 +96,25 @@ public static class LineDiff
                 y++;
             }
             else if (table[x + 1, y] >= table[x, y + 1])
+            {
                 edits.Add(new Edit(Kind.Removed, a[x++]));
+            }
             else
+            {
                 edits.Add(new Edit(Kind.Added, b[y++]));
-        }
+            }
 
         while (x < a.Length) edits.Add(new Edit(Kind.Removed, a[x++]));
         while (y < b.Length) edits.Add(new Edit(Kind.Added, b[y++]));
         return edits;
     }
+
+    private enum Kind
+    {
+        Same,
+        Removed,
+        Added
+    }
+
+    private readonly record struct Edit(Kind Kind, string Text);
 }

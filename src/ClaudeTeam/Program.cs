@@ -17,55 +17,64 @@ var session = options.Session ?? SessionName.Resolve(git, workingDirectory);
 
 var kind = CommandResolver.Resolve(options);
 
-if (kind == CommandKind.Help)
+switch (kind)
 {
-    Console.WriteLine(Help.Text(backend, session));
-    return 0;
-}
+    case CommandKind.Help:
+        Console.WriteLine(Help.Text(backend, session));
+        return 0;
+    case CommandKind.Version:
+        Console.WriteLine(VersionLine.Current());
+        return 0;
+    case CommandKind.Install:
+    {
+        var run = Installer.Run(
+            options.InstallPeerRule,
+            options.InstallLeaderAgent,
+            git?.Toplevel,
+            home,
+            options.Force,
+            options.DryRun);
 
-if (kind == CommandKind.Version)
-{
-    Console.WriteLine(VersionLine.Current());
-    return 0;
-}
+        foreach (var line in run.Lines)
+            Console.WriteLine(line);
 
-if (kind == CommandKind.Install)
-{
-    var run = Installer.Run(
-        peerRule: options.InstallPeerRule,
-        leaderAgent: options.InstallLeaderAgent,
-        repoRoot: git?.Toplevel,
-        home: home,
-        force: options.Force,
-        dryRun: options.DryRun);
-    foreach (var line in run.Lines)
-        Console.WriteLine(line);
-    return run.ExitCode;
-}
+        return run.ExitCode;
+    }
+    case CommandKind.Update:
+    {
+        var run = Updater.Run(
+            options.Update!.Value,
+            git?.Toplevel,
+            home,
+            options.DryRun);
 
-if (kind == CommandKind.Update)
-{
-    var run = Updater.Run(target: options.Update!.Value, repoRoot: git?.Toplevel, home: home, dryRun: options.DryRun);
-    foreach (var line in run.Lines)
-        Console.WriteLine(line);
-    return run.ExitCode;
+        foreach (var line in run.Lines)
+            Console.WriteLine(line);
+
+        return run.ExitCode;
+    }
+    case CommandKind.Launch:
+        break;
+    default:
+        throw new ArgumentOutOfRangeException();
 }
 
 var projectRoot = git?.Toplevel ?? workingDirectory;
 var preflight = LaunchOutput.Preflight(projectRoot, git?.Toplevel, home);
 var insidePane = !string.IsNullOrWhiteSpace(Environment.GetEnvironmentVariable("TMUX"));
 var inputs = new LaunchInputs(
-    Session: session,
-    WorkingDirectory: workingDirectory,
-    IsWindows: isWindows,
-    InsidePane: insidePane,
-    HasTeamLeaderAgent: preflight.HasAgent,
-    Forwarded: options.Forwarded);
+    session,
+    workingDirectory,
+    isWindows,
+    insidePane,
+    preflight.HasAgent,
+    options.Forwarded);
 if (LaunchPlan.Validate(inputs) is { } inputError)
 {
     Console.Error.WriteLine(inputError);
     return 2;
 }
+
 var plan = LaunchPlan.Build(inputs);
 
 LaunchOutput.Write(
@@ -81,6 +90,10 @@ switch (Multiplexer.Check(backend, session))
     case SessionState.Exists:
         Console.Error.WriteLine(Multiplexer.ExistsMessage(backend, session));
         return 1;
+    case SessionState.Absent:
+        break;
+    default:
+        throw new ArgumentOutOfRangeException();
 }
 
 if (!isWindows && Multiplexer.CheckVersion() is { } versionError)
@@ -91,10 +104,9 @@ if (!isWindows && Multiplexer.CheckVersion() is { } versionError)
 
 // A running tmux server does not take the variable from the client, so new-session -e passes it too.
 var environment = new Dictionary<string, string> { [LaunchPlan.TeamsVariable] = "1" };
-foreach (var command in plan.Commands)
-{
-    var exitCode = Processes.Run(command, environment);
-    if (exitCode != 0)
-        return exitCode;
-}
+foreach (var exitCode in plan.Commands.Select(command =>
+                 Processes.Run(command, environment))
+             .Where(exitCode => exitCode != 0))
+    return exitCode;
+
 return 0;

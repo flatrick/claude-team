@@ -9,7 +9,8 @@ public static class Processes
 
     public static (int ExitCode, string Output) Capture(string file, params string[] arguments)
     {
-        var info = new ProcessStartInfo(file) { RedirectStandardOutput = true, RedirectStandardError = true, UseShellExecute = false };
+        var info = new ProcessStartInfo(file)
+            { RedirectStandardOutput = true, RedirectStandardError = true, UseShellExecute = false };
         foreach (var argument in arguments) info.ArgumentList.Add(argument);
         try
         {

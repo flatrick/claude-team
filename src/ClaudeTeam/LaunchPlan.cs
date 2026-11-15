@@ -14,7 +14,10 @@ public sealed record LaunchPlan(string Backend, IReadOnlyList<Command> Commands)
 {
     public const string TeamsVariable = "CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS";
 
-    public static string BackendFor(bool isWindows) => isWindows ? "psmux" : "tmux";
+    public static string BackendFor(bool isWindows)
+    {
+        return isWindows ? "psmux" : "tmux";
+    }
 
     // psmux joins arguments without quotes, so on Windows a forwarded argument with whitespace would
     // split. Validate returns a message that names the first such argument, or null.
@@ -35,23 +38,29 @@ public sealed record LaunchPlan(string Backend, IReadOnlyList<Command> Commands)
         List<string> claude = ["claude"];
         if (inputs.HasTeamLeaderAgent)
             claude.AddRange(["--agent", "team-leader"]);
-        claude.AddRange(["--teammate-mode", "tmux", "--name", inputs.Session,
-            "--append-system-prompt", PeerRule.Marker, .. inputs.Forwarded]);
+
+        claude.AddRange([
+            "--teammate-mode", "tmux", "--name", inputs.Session,
+            "--append-system-prompt", PeerRule.Marker, .. inputs.Forwarded
+        ]);
 
         // psmux joins arguments without quotes, so a path with spaces would split. For psmux, the
         // session inherits the working directory of the client. Validate rejects a forwarded
         // argument with whitespace on Windows, and Options and SessionName keep whitespace out of the session name.
         List<string> newSession = ["new-session"];
+
         if (inputs.InsidePane)
             newSession.Add("-d");
         newSession.AddRange(["-s", inputs.Session]);
+
         if (!inputs.IsWindows)
             newSession.AddRange(["-c", inputs.WorkingDirectory]);
         newSession.AddRange(["-e", $"{TeamsVariable}=1", .. claude]);
 
         List<Command> commands = [new(backend, newSession)];
         if (inputs.InsidePane)
-            commands.Add(new(backend, ["switch-client", "-t", "=" + inputs.Session]));
+            commands.Add(new Command(backend, ["switch-client", "-t", "=" + inputs.Session]));
+
         return new LaunchPlan(backend, commands);
     }
 }
