@@ -104,9 +104,11 @@ if (!isWindows && Multiplexer.CheckVersion() is { } versionError)
 
 // A running tmux server does not take the variable from the client, so new-session -e passes it too.
 var environment = new Dictionary<string, string> { [LaunchPlan.TeamsVariable] = "1" };
-foreach (var exitCode in plan.Commands.Select(command =>
-                 Processes.Run(command, environment))
-             .Where(exitCode => exitCode != 0))
-    return exitCode;
+foreach (var command in plan.Commands)
+{
+    var exitCode = Processes.Run(command, environment);
+    if (exitCode != 0)
+        return exitCode;
+}
 
 return 0;
