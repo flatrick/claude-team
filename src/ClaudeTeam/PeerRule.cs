@@ -34,9 +34,9 @@ public static class PeerRule
         => Installer.Install(target,
             repoRoot,
             home,
-            "rules",
-            FileName,
-            Text,
-            force,
-            dryRun);
+            subfolder: "rules",
+            fileName: FileName,
+            text: Text,
+            force: force,
+            dryRun: dryRun);
 }

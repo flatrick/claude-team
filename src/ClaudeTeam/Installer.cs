@@ -34,10 +34,10 @@ public static class Installer
         if (target is InstallTarget.Repo or InstallTarget.Both)
             results.Add(repoRoot is null
                 ? new InstallResult(Path.Combine(".claude", subfolder, fileName), InstallOutcome.NoRepository)
-                : Write(Path.Combine(repoRoot, ".claude", subfolder, fileName), text, force, dryRun));
+                : Write(Path.Combine(repoRoot, ".claude", subfolder, fileName), text: text, force: force, dryRun: dryRun));
 
         if (target is InstallTarget.Global or InstallTarget.Both)
-            results.Add(Write(Path.Combine(home, ".claude", subfolder, fileName), text, force, dryRun));
+            results.Add(Write(Path.Combine(home, ".claude", subfolder, fileName), text: text, force: force, dryRun: dryRun));
         return results;
     }
 
@@ -52,12 +52,12 @@ public static class Installer
         List<InstallResult> results = [];
 
         if (peerRule is { } ruleTarget)
-            results.AddRange(PeerRule.Install(ruleTarget, repoRoot, home, force, dryRun));
+            results.AddRange(PeerRule.Install(target: ruleTarget, repoRoot: repoRoot, home: home, force: force, dryRun: dryRun));
 
         if (leaderAgent is { } agentTarget)
         {
-            results.AddRange(LeaderAgent.Install(agentTarget, repoRoot, home, force, dryRun));
-            results.AddRange(TeamSkills.Install(agentTarget, repoRoot, home, force, dryRun));
+            results.AddRange(LeaderAgent.Install(target: agentTarget, repoRoot: repoRoot, home: home, force: force, dryRun: dryRun));
+            results.AddRange(TeamSkills.Install(target: agentTarget, repoRoot: repoRoot, home: home, force: force, dryRun: dryRun));
         }
 
         var lines = results.Select(result => result.Outcome switch
