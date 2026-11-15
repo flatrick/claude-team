@@ -13,3 +13,7 @@ Thumbs.db
 # .NET build output
 bin/
 obj/
+
+# IDE files
+.idea/
+*.DotSettings.user
