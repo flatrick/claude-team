@@ -13,3 +13,15 @@
 - Not isolated: the reviewer did not find out which Read caused which delivery. A probe must read one file at a time.
 - Cause: not verified.
 - Status: open.
+
+## Case 2026-11-25: a Write in a worktree delivered the startup rules again
+
+- Claude Code version: 2.1.332 (Claude Code).
+- Setup: team session-40a2bfec. Teammate `friction-scribe` (preset friction-scribe). Its startup rules came from the main checkout. Its worktree was `.worktrees/friction-log`.
+- Observation: The scribe used the Write tool to make a new file in `friction/` of its worktree. The harness then delivered the worktree copies of the rules without a path filter.
+  - Before the Write, the scribe saw no worktree copy. It did this work first: Bash calls that ran `cd` into the worktree, and Bash calls that printed files of the worktree.
+  - The scribe made no Read tool call on a worktree file before the delivery.
+  - The scribe saw no `CLAUDE.md` and no `AGENTS.md` from the worktree.
+- Evidence: NOT RE-DERIVED (conditions gone — the delivery is only in the context of the scribe). The scribe saw it in its own context.
+  On 2026-11-25, `diff -rq .claude/rules .worktrees/friction-log/.claude/rules` printed nothing.
+- Cause: not verified.
