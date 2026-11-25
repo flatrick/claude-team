@@ -9,8 +9,11 @@
 - Evidence:
   - Re-derive the match: `rg -n rider-implementer ~/.claude/teams/session-5ddbdd7b/config.json`. On 2026-11-15 it matched only line 32.
     Line 32 is the `prompt` field of friction-scribe, which names rider-implementer.
+    Check of 2026-11-25: NOT RE-DERIVED (conditions gone — the config file of `session-5ddbdd7b` does not exist).
   - Re-derive the member list: `jq -r '.members[].name' ~/.claude/teams/session-5ddbdd7b/config.json`. On 2026-11-15 it printed team-lead and friction-scribe.
+    Check of 2026-11-25: NOT RE-DERIVED (conditions gone — the config file does not exist).
   - Re-derive the panes: `tmux list-panes -a`. On 2026-11-15 it listed %0 and %2 and not %1.
+    Check of 2026-11-25: NOT RE-DERIVED (conditions gone — the tmux server now shows the panes of a different team: %0, %3, and %1).
   - The 124 exit code: NOT RE-DERIVED (second-hand — the leader ran it, not me). The grep that the leader ran matches the same text as the `rg` command above.
   - The match goes away when the prompt leaves the config. After that, the `rg` command returns nothing. NOT RE-DERIVED (conditions gone) for that point.
 - Cause: verified. The `grep` command searches the whole config file. It does not search only the member names. A teammate name in the `prompt` field of another member matches.

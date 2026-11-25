@@ -22,5 +22,7 @@
   The archive sync left a length warning in the spec `launcher/session/naming`. The teammate fixed the spec and amended the archive commit `fe7e298`.
   The requirement is "Sanitize default names". Its long `Source:` line made it too long. The fix moved the `Source:` line below the scenarios (see [2026-11-14-commit-chain-ignored-validation-warning.md](2026-11-14-commit-chain-ignored-validation-warning.md)).
   Re-derive the amend: `git -C /home/flatrick/src/github/flatrick/claude-team/.worktrees/multiplexer-launch-checks reflog -8 --format='%h %gs'`.
+  Check of 2026-11-25: NOT RE-DERIVED (conditions gone — `git worktree list` does not show this worktree, so its reflog command fails).
+  `git log -1 --format='%h %s' fe7e298` still prints `fe7e298 docs(openspec): archive multiplexer-launch-checks`. It does not show the amend, and no ref contains the commit.
   The warning text itself: NOT RE-DERIVED (second-hand — `req-mux-checks`, not the scribe).
 - Status: open.

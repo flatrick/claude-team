@@ -13,6 +13,8 @@
   NOT RE-DERIVED (conditions gone — the leader rewrote the option list in place, so the layout with "A'" and "D3" no longer exists).
   The rule text on option letters: `rg -n -i 'letter|recommended' .claude/rules/decisions.md`.
   It shows the template `**A. <name> (recommended)**`. It has no instruction to use plain letters or to revise options in place.
+  Check of 2026-11-25: the command now also shows lines 90 and 91. They require plain capital letters and a new letter sequence when an option changes. Commit `5c13658` added them.
+  Replacement for the recorded result: `git show '5c13658^:.claude/rules/decisions.md' | rg -n -i 'letter|recommended'` shows only lines 71, 82, and 88. `origin/main` contains `5c13658`.
 - Cause: inferred, not verified. The leader copied the labels of the reviewer into the list for the operator without re-lettering.
 - Effect: The operator could not tell the options apart. The operator had to ask for a rewrite before the operator could answer.
 - Open questions: Does `.claude/rules/decisions.md` need a sentence that says "label options A, B, C, D in sequence, and revise options in place"?

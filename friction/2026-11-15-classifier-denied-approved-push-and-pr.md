@@ -13,7 +13,9 @@
   - The denial: NOT RE-DERIVED (second-hand — rider-implementer reported it, not the leader or the scribe).
   - After the denial, the leader ran `git ls-remote --heads origin style/rider-reformat`. The leader reports that it returned nothing.
     NOT RE-DERIVED (conditions gone — the branch now exists on the remote). The same command now returns `f4b1a2cbf6e3aa9b5f59812c673fbe88553e30e6	refs/heads/style/rider-reformat`.
+    Check of 2026-11-25: `git ls-remote --heads origin style/rider-reformat` now prints nothing again. The remote no longer has the branch. This does not re-derive the state after the denial.
   - The pull request exists: `gh pr view 30 --json state` returns `{"state":"OPEN"}` (run by the scribe on 2026-11-15).
+    Check of 2026-11-25: `gh pr view 30 --json state,mergedAt` returns `{"mergedAt":"2026-11-15T18:57:10Z","state":"MERGED"}`. The state changed from `OPEN` to `MERGED`.
 - Cause: not verified. The likely reason is that the approval of the operator in the leader session does not reach the classifier of the teammate session. This is a guess. Nobody tested it.
 - Effect: One extra round trip to the operator. The PR opened later than planned.
 - Status: open

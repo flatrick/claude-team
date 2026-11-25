@@ -13,6 +13,11 @@
   An earlier `install-tool.cs -- install` from main had already warned about uncommitted changes for the same folder.
   The leader did not foresee this when it planned the tag step.
 - Evidence: `git -C /home/flatrick/src/github/flatrick/claude-team status --short` (prints `?? .vscode/`).
+  Check of 2026-11-25: this command now prints nothing. Line 7 of `.git/info/exclude` is `.vscode/`.
+  `git check-ignore -v .vscode` in the main checkout prints `.git/info/exclude:7:.vscode/	.vscode`.
+  `git status --short --ignored .vscode` prints `!! .vscode/`. Thus the folder exists, and Git now ignores it.
+  The report of `release-v020` said that the operator approved this line. NOT RE-DERIVED (second-hand — `release-v020`, not the scribe).
+  The earlier output `?? .vscode/`: NOT RE-DERIVED (conditions gone — the local exclude file now hides the folder).
   The log of the tag command held this line: "The working tree has uncommitted changes. Commit or discard them first."
   Spec: `sed -n 10,14p /home/flatrick/src/github/flatrick/claude-team/openspec/specs/tooling/release/tag/spec.md`.
   The ledger of `release-v020` (key `rel-tag-refused-untracked-vscode`) recorded exit code 1, `?? .vscode/` in `git status -sb`, and HEAD `698a881`. It recorded that no tag `v0.2.0` existed after the command.
