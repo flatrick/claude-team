@@ -17,6 +17,10 @@
   Check of 2026-11-25 (Claude Code 2.1.332): the scribe ran `ListAgents` while it was the one pane teammate (pane `%3`).
   A teammate does not see its own row, so this run does not test the claim. The leader must run the step.
   In this run, the leader showed two times: as a teammate (`team-lead`) and as a peer session (`claude-team`, tmux pane `%0`).
+  Leader run of 2026-11-25: to re-derive it, run `ListAgents` from the leader session while a pane teammate runs. This is one run on one version (2.1.332 in the scribe session).
+  The output that the team lead quoted: "This session is claude-team [5cc809] — the name other sessions use to message it (it is not listed below; a message to it would be a message to yourself). Teammates (1): friction-scribe [2bda67] · friction-scribe · pane · started 28m ago".
+  The team lead reported that the pane teammate showed only under "Teammates", not as a peer session. The quote does not include a list of peer sessions.
+  NOT RE-DERIVED (second-hand — the team lead ran it, not the scribe). One run does not show that the earlier observation cannot occur again.
   NOT RE-DERIVED (second-hand — the leader observed the `ListAgents` row and the message; the friction scribe did not).
 - Second case: before 20:07:50 UTC (the time of the reply of `friction-scribe`), `ListAgents` showed one online peer, `death-angel-curried-peacock` (Remote Control, idle).
   The leader asked it for an acknowledgment before a reinstall from main.
