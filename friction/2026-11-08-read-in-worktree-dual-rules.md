@@ -6,7 +6,9 @@
   The two Reads delivered the unscoped rules a second time, from the worktree copies.
   They also delivered rule copies from the worktree and from the main checkout.
   The main copies included a rule that the branch deleted (`dotnet/build-parallelism.md`).
-- Evidence: `/home/flatrick/src/github/flatrick/claude-team/.scratch/agent-ledgers/rules-load-review/20261108T111516Z-rules-load-reviewer.md`, key `dual-checkout-rule-delivery-in-worktree`.
+- Evidence: a reviewer saw the deliveries in its own context. It had read `tests/ClaudeTeam.Tests/ClaudeTeam.Tests.csproj` and `src/ClaudeTeam/PeerRule.cs` in the worktree `.worktrees/dotnet-workflow-delivery`. It also recorded that the main `named-arguments.md` did not arrive.
+  NOT RE-DERIVED (second-hand — the reviewer saw this, not the scribe).
+  A later result for the cause: https://github.com/flatrick/claude-team/issues/16#issuecomment-7174314489
 - Effect: A teammate sees the old main rule text next to the new worktree text.
   Rule edits of a branch do not govern sessions that started in main until the branch merges and the session restarts.
   The always-loaded rules cost double in a worktree.

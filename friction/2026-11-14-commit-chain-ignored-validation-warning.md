@@ -15,7 +15,7 @@
   - The state after the amend: `openspec validate --all --strict` in that worktree printed `Totals: 14 passed, 0 failed (14 items)` on 2026-11-14.
   - The location of the requirement and the fix: `sed -n 87,106p /home/flatrick/src/github/flatrick/claude-team/.worktrees/multiplexer-launch-checks/openspec/specs/launcher/session/naming/spec.md`. On 2026-11-14 the scribe saw the heading `### Requirement: Sanitize default names` at line 87 and the `Source:` line at line 106, after the last scenario.
     The state before the fix is not shown by this command. The team lead gave the link between the long `Source:` line and the warning.
-  - The warning text, the command chain, and the exit code: NOT RE-DERIVED (second-hand — `req-mux-checks` and the team lead, not the scribe). The report is `/home/flatrick/src/github/flatrick/claude-team/.scratch/multiplexer-launch-checks/report.md`. Find the lines with `rg -n -i 'warning|amend' /home/flatrick/src/github/flatrick/claude-team/.scratch/multiplexer-launch-checks/report.md`.
+  - The warning text, the command chain, and the exit code: NOT RE-DERIVED (second-hand — `req-mux-checks` and the team lead, not the scribe). The report of `req-mux-checks` said: "The archive first left one length warning in the naming spec (Source line); I moved it below the scenarios and amended the archive commit."
   - The report does not say whether the chain used `;` or `&&`, or whether a warning gives exit code 0.
 - Cause: inferred, not verified. The chain did not gate the commit on a validation without warnings.
   Open: does `openspec validate --strict` exit non-zero on a warning? Test: run it on a spec with a requirement over 500 characters, then run `echo $?`.

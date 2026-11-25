@@ -29,8 +29,7 @@
   - The `read` flags of the teammate inbox file.
   - `ps` output for the pids and the parent pids of any new `claude` process, with their cwd.
   - The output of `claude --version`.
-- Evidence (local only, gitignored): `/home/flatrick/src/github/flatrick/claude-team/.scratch/friction-evidence/F-003-inbox-routing-20261107/`.
-  It holds `TIMELINE.md`, `claude-version.txt`, the pane capture, the team config before the stop, and the inbox files.
-  Earlier captures: `/home/flatrick/src/github/flatrick/claude-team/.scratch/claude-dir-cleanup/pane-capture-*.log`.
+- Evidence: The evidence was a set of local temporary files. It held a timeline file, the output of `claude --version`, a pane capture, the team config before the stop, and the inbox files. There were also earlier pane captures.
+  NOT RE-DERIVED (conditions gone — the evidence files were temporary, and the scribe did not find them on 2026-11-25).
 - Effect: The leader could not send messages to the teammate. The leader replaced the teammate.
 - Status: open — cause not verified.

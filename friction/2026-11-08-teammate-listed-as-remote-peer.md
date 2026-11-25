@@ -10,8 +10,9 @@
   The peer answered with a cross-session message from `from-name="death-angel-parallel-prism"`.
   The harness routed the message as "a Claude session on another machine, over Remote Control".
   The peer named itself `versioning-implementer`.
-- Evidence: the cross-session message in the leader session. Source: `/home/flatrick/src/github/flatrick/claude-team/.scratch/versioning/friction-pending.md`, item 1.
-  Spawn record: `rg -n 'versioning-implementer' /home/flatrick/src/github/flatrick/claude-team/.scratch/agent-spawn-log.md` (pane `%2`).
+- Evidence: the cross-session message in the leader session. The friction note of the run said: "A teammate also shows in `ListAgents` as a Remote Control peer session with a host-based name (`death-angel-parallel-prism` was `versioning-implementer`). The leader took it for a possible peer leader and paused a global install to ask it."
+  It also said that the reply of the peer had `from-name="death-angel-parallel-prism"`, and that the peer named itself `versioning-implementer`.
+  Spawn record, copied from the spawn log: teammate `versioning-implementer`, preset `implementer-standard`, stamp `20261108T191907Z`, pane `%2`, result "passed first time".
   Re-derive: run `ListAgents` while one pane teammate runs, and compare its rows with `~/.claude/teams/<team>/config.json`.
   NOT RE-DERIVED (second-hand — the leader observed the `ListAgents` row and the message; the friction scribe did not).
 - Second case: before 20:07:50 UTC (the time of the reply of `friction-scribe`), `ListAgents` showed one online peer, `death-angel-curried-peacock` (Remote Control, idle).

@@ -10,7 +10,7 @@
   The notices were stamped 19:22:59 and 19:23:34 UTC.
   When the leader checked, the inbox file `~/.claude/teams/session-b1124c40/inboxes/versioning-implementer.json` was already empty.
   Re-derive the inbox state: `cat ~/.claude/teams/session-b1124c40/inboxes/versioning-implementer.json` (it holds `[]` now; the state at that time is gone).
-- Evidence: the idle notices in the leader session. Source: `/home/flatrick/src/github/flatrick/claude-team/.scratch/versioning/friction-pending.md`, item 2.
+- Evidence: the idle notices in the leader session. The friction note of the run said: "Idle notifications from a teammate arrive after the leader's later message was sent, so they read as if the teammate ignored the message. Two times in this run (pack approval, task 1.3 stop)."
   NOT RE-DERIVED (conditions gone — the timestamps exist only in the idle notices of the leader session).
 - Cause: not verified.
   Hypothesis: the teammate went idle after its previous turn, and the harness delivered the notice late.

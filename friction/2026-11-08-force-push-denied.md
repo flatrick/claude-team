@@ -10,7 +10,7 @@
   The harness denied the push with `[Git Destructive]` (the teammate's ledger names the auto mode classifier).
   The teammate stopped and did not retry.
   The remote branch kept the old release commit `f5013ca`. The local branch had `0489b34` and `a6b8bd5`.
-- Evidence: ledger key `rel-force-push-denied` in `/home/flatrick/src/github/flatrick/claude-team/.scratch/agent-ledgers/release-v0.2.0/20261108T201120Z-release-v020-round2.md`.
+- Evidence: the ledger of `release-v020`, key `rel-force-push-denied`. It said: "`git push --force-with-lease origin chore/release-v0.2.0` was denied by the auto mode classifier ([Git Destructive]). I did not retry or use another route."
   Re-derive: `git -C /home/flatrick/src/github/flatrick/claude-team/.worktrees/release-v0.2.0 status -sb` gave `[ahead 2, behind 1]`.
   Re-derive: `git -C /home/flatrick/src/github/flatrick/claude-team/.worktrees/release-v0.2.0 rev-parse origin/chore/release-v0.2.0` gave `f5013ca85934ebef4fb75e7d39a367baae76eba5`.
   The denial happened before 20:11:41 UTC (the idle notice of the teammate).

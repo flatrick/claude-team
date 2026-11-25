@@ -12,11 +12,16 @@
   The implementer did not build each intermediate commit. It gated only the final tree.
 - Evidence: Both reports are second-hand.
   NOT RE-DERIVED (second-hand — `req-archive` and `impl-ship-team-skills` observed the conflicts, not the scribe; the conflicted rebases are gone).
-  Case 1: `rg -n 'Attempt' /home/flatrick/src/github/flatrick/claude-team/.scratch/ship-team-skills/archive-report.md` gives lines 6 and 7.
-  Case 2: `rg -n 'Autosquash' -A4 /home/flatrick/src/github/flatrick/claude-team/.scratch/ship-team-skills/squash-report.md` gives steps 1 to 4.
-  The squash report gives the tree before and after the squash: both `14aca1dd88c564dfac7db59698951b737a5033f5`.
-  The report states that the trees are equal. Re-derive the equality only from the report values: `rg -n 'rev-parse HEAD' /home/flatrick/src/github/flatrick/claude-team/.scratch/ship-team-skills/squash-report.md`.
-  The scribe read the report lines. The scribe did not re-run the rebases.
+  Case 1: the archive report of `req-archive` said:
+  - "Attempt 1: fixup of 5a050db (commit that wrote 8.1). The autosquash rebase conflicted in design, proposal, tasks. I aborted it."
+  - "Attempt 2: `git commit --fixup=fe59f5a` (last commit that changed `tasks.md`), then `GIT_SEQUENCE_EDITOR=: git rebase -i --autosquash 2ad9741`. It succeeded."
+
+  Case 2: the squash report of `impl-ship-team-skills` gave these facts:
+  - The command was `GIT_SEQUENCE_EDITOR=: git rebase -i --autosquash 2ad9741`.
+  - The conflicts were in `openspec/changes/ship-team-skills/specs/launcher/starter-files/install/spec.md`. The teammate resolved each one with `git checkout 9bbd918c686fef8870c178879ad85ed453246bec -- <file>`, four times.
+  - `git rev-parse HEAD^{tree}` gave `14aca1dd88c564dfac7db59698951b737a5033f5` before the autosquash and after it. The old head was `9bbd918c686fef8870c178879ad85ed453246bec`, and the new head was `53063dd950ca6f5f98471f09ceef58095b4d1dbc`.
+  - The equality of the trees comes only from the report values.
+  The scribe read the two reports. The scribe did not re-run the rebases.
 - Cause: inferred, not verified. The convention "fix with a `fixup!` of the commit it belongs to, then autosquash before push" collides with a file that several commits change in sequence.
 - Effect: One aborted rebase, and conflicts in a second rebase. Some intermediate commits do not show the stage-by-stage spec text. The final tree is correct.
 - Open questions: Does the fixup convention need a rule for a file that several commits change? The report of `req-archive` suggests the last commit that touched the file.
