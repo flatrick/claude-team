@@ -98,7 +98,7 @@ Why: every incident or review adds process, and nothing removes it, so process o
 >
 > | date | subject | link |
 > |---|---|---|
-> | 2026-11-01 | launch-retry | `.scratch/agent-ledgers/launch-retry/` |
+> | 2026-11-01 | launch-retry | `friction/2026-11-01-launch-retry.md` |
 
 The directive is identical in both. The good version is shorter and records an occurrence in one row.
 

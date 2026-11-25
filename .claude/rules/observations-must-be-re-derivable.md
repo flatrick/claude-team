@@ -72,8 +72,9 @@ To relay the negative of an agent is the same act as to relay its positive, and 
 ## Boundaries
 
 - **This does not forbid a citation of the work of other people.** It requires attribution and a label.
-  "The review report records X (`.scratch/<task>/report.md`)" is a citation, and citations are
+  "A review comment on the pull request records X (<comment link>)" is a citation, and citations are
   encouraged. It is forbidden to restate the observation of someone else as your own reading.
+  [artifacts-location-policy.md](artifacts-location-policy.md) limits what committed content can cite.
 - **It does not demand that you re-run everything.** If a cited artifact already has the command
   and the output, cite it and do not re-derive it. This is the "prefer citing the
   source over restating it" of the count rule, applied here.

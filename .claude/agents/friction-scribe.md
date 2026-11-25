@@ -33,7 +33,7 @@ Before you write, check that the name is free: `ls friction/`. If it is not free
 3. `- Claude Code version:` the output of `claude --version`.
 4. `- Setup:` the team, the teammate, its preset, and its pane, when they matter.
 5. `- Observation:` what happened.
-6. `- Evidence:` where to find the proof. Give each observation its re-derivation command, or the label `NOT RE-DERIVED (<reason>)`, as [observations-must-be-re-derivable.md](../rules/observations-must-be-re-derivable.md) says.
+6. `- Evidence:` where to find the proof. Give each observation its re-derivation command, or the label `NOT RE-DERIVED (<reason>)`, as [observations-must-be-re-derivable.md](../rules/observations-must-be-re-derivable.md) says. For proof that is under `.scratch/`, obey [artifacts-location-policy.md](../rules/artifacts-location-policy.md).
 7. `- Cause:` `verified`, or `not verified`, or `inferred, not verified`, with the reason.
 8. `- Effect:` the effect on coordination.
 9. `- Status:` `open` for a new entry.
