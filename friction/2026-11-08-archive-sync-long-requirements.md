@@ -10,9 +10,11 @@
   - `tooling/install-tool/install`, requirement `Install replaces the global tool`.
   `openspec validate versioning --strict` on the change had passed before the archive.
   The length check on the merged requirement text showed only after the sync.
-- Evidence: the ledger entries in `/home/flatrick/src/github/flatrick/claude-team/.worktrees/versioning/.scratch/agent-ledgers/versioning/`:
-  `20261108T200008Z-versioning-implementer-6.md` (key `impl-archive-specs-long-requirement-warnings`) and `20261108T195908Z-versioning-requirements-3.md` (keys `req3-status-requirement-too-long`, `req3-install-replaces-too-long`).
-  Re-derive: `rg -n 'long-requirement|too-long' /home/flatrick/src/github/flatrick/claude-team/.worktrees/versioning/.scratch/agent-ledgers/versioning/`.
+- Evidence: ledger entries of `versioning-implementer` (round 6) and of the requirements teammate (round 3).
+  - `versioning-implementer` recorded this: "After `openspec archive versioning -y`, `openspec validate --all --strict` gave 2 warnings (>500 characters) in tooling/install-tool/commands and tooling/install-tool/install."
+    Its totals were "11 passed, 2 failed (13 items)" before the fix, and "13 passed, 0 failed (13 items)" after commit `69a82e2`.
+  - The requirements teammate recorded that it split each of the two requirements into two requirements.
+  - NOT RE-DERIVED (second-hand — the two teammates observed this, not the scribe).
 - Cause: the leader and the ledger entries state it. The scribe did not run the archive. NOT RE-DERIVED (second-hand — leader and `versioning-implementer` observed it).
 - Effect: One extra teammate round and an amend of the archive commit.
 - Idea (not decided): run `openspec validate --all --strict` on a trial archive before the real one.

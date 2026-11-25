@@ -9,8 +9,10 @@
   The result showed a new online peer, `death-angel-breezy-squid`.
   The leader sent a hold and asked the peer. The peer was `release-v020` itself (third case of F-008).
   The install had already run at 2026-11-08T20:18:41Z, by the statement of `release-v020`.
-- Evidence: the ledger of `release-v020`: `/home/flatrick/src/github/flatrick/claude-team/.scratch/agent-ledgers/release-v0.2.0/20261108T201841Z-release-v020-round6.md` (the file stamp is 20:18:41Z), and its report `/home/flatrick/src/github/flatrick/claude-team/.scratch/release-v0.2.0/report.md`.
-  Re-derive the stamp: `ls /home/flatrick/src/github/flatrick/claude-team/.scratch/agent-ledgers/release-v0.2.0/`.
+- Evidence: a ledger entry and the report of `release-v020`. The file name of the entry had the stamp `20261108T201841Z`.
+  The entry said: "The global tool is now claude-team 0.2.0 built from main at 698a881."
+  It gave the command `dotnet run --file scripts/install-tool.cs -- install` with exit code 0, and the output "Installed claude-team 0.2.0 (commit 698a881, branch main)."
+  NOT RE-DERIVED (second-hand — `release-v020` ran the install, not the scribe). The stamp is the time of the entry. The entry gave no separate time for the install.
   The order of the leader calls: NOT RE-DERIVED (second-hand — the leader reported it; the scribe did not see the batch).
 - Cause: verified by the leader's own account. A check and the action that depends on it were in one batch.
 - Effect: No harm, because no other leader was online.

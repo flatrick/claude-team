@@ -13,13 +13,15 @@
   An earlier `install-tool.cs -- install` from main had already warned about uncommitted changes for the same folder.
   The leader did not foresee this when it planned the tag step.
 - Evidence: `git -C /home/flatrick/src/github/flatrick/claude-team status --short` (prints `?? .vscode/`).
-  Log: `/home/flatrick/src/github/flatrick/claude-team/.scratch/release-v0.2.0/tag.log` (the message above).
+  The log of the tag command held this line: "The working tree has uncommitted changes. Commit or discard them first."
   Spec: `sed -n 10,14p /home/flatrick/src/github/flatrick/claude-team/openspec/specs/tooling/release/tag/spec.md`.
-  Ledger key `rel-tag-refused-untracked-vscode` in `/home/flatrick/src/github/flatrick/claude-team/.scratch/agent-ledgers/release-v0.2.0/20261108T201545Z-release-v020-round4.md`.
+  The ledger of `release-v020` (key `rel-tag-refused-untracked-vscode`) recorded exit code 1, `?? .vscode/` in `git status -sb`, and HEAD `698a881`. It recorded that no tag `v0.2.0` existed after the command.
+  NOT RE-DERIVED (second-hand — `release-v020` ran the command, not the scribe).
   The refusal happened before 20:15:56 UTC.
-  The earlier warning of `install-tool.cs`: `rg -n 'uncommitted' /home/flatrick/src/github/flatrick/claude-team/.scratch/release-v0.2.0/install.log` gives line 1:
+  The earlier warning of `install-tool.cs` was line 1 of an install log:
   "warning: checkout has uncommitted changes; the package is built from the working tree, so it includes them."
+  The two log lines: NOT RE-DERIVED (conditions gone — the logs were temporary files).
   The log does not name `.vscode/`. The link to `.vscode/` is inferred: the status of main shows only that folder.
-- Cause: verified for the refusal (the log, the spec, and the status). The wording problem follows from the log text against the spec text.
+- Cause: verified for the refusal (the log line, the spec, and the status). The wording problem follows from the log text against the spec text.
 - Effect: One more operator decision after the merge.
 - Status: open.
