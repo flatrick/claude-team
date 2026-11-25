@@ -12,7 +12,10 @@
   The remote branch kept the old release commit `f5013ca`. The local branch had `0489b34` and `a6b8bd5`.
 - Evidence: the ledger of `release-v020`, key `rel-force-push-denied`. It said: "`git push --force-with-lease origin chore/release-v0.2.0` was denied by the auto mode classifier ([Git Destructive]). I did not retry or use another route."
   Re-derive: `git -C /home/flatrick/src/github/flatrick/claude-team/.worktrees/release-v0.2.0 status -sb` gave `[ahead 2, behind 1]`.
+    Check of 2026-11-25: NOT RE-DERIVED (conditions gone — the worktree and the local branch `chore/release-v0.2.0` do not exist).
   Re-derive: `git -C /home/flatrick/src/github/flatrick/claude-team/.worktrees/release-v0.2.0 rev-parse origin/chore/release-v0.2.0` gave `f5013ca85934ebef4fb75e7d39a367baae76eba5`.
+    Check of 2026-11-25: the worktree does not exist. Replacement: `git ls-remote origin refs/heads/chore/release-v0.2.0` printed `f5013ca85934ebef4fb75e7d39a367baae76eba5`, the same commit.
+    The replacement works only while the remote branch exists.
   The denial happened before 20:11:41 UTC (the idle notice of the teammate).
   The scribe did not see the denial. NOT RE-DERIVED (second-hand — `release-v020` reported the denial; the denial text is from its ledger).
 - Cause: verified in the ledger: the permission classifier treats a force push as destructive.

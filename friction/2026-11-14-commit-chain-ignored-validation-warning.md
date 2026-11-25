@@ -12,9 +12,13 @@
   The first accounts looked different (the requirement name, and the "Source line"). They describe one event.
 - Evidence:
   - The commit and the amend are in the reflog: `git -C /home/flatrick/src/github/flatrick/claude-team/.worktrees/multiplexer-launch-checks reflog -8 --format='%h %gs'` shows `36f6822 commit: docs(openspec): archive multiplexer-launch-checks` and then `fe7e298 commit (amend): docs(openspec): archive multiplexer-launch-checks`. The scribe ran it on 2026-11-14.
+    Check of 2026-11-25: NOT RE-DERIVED (conditions gone — the worktree and its reflog do not exist). The commits `36f6822` and `fe7e298` are still in the local repository, but no ref contains them.
   - The state after the amend: `openspec validate --all --strict` in that worktree printed `Totals: 14 passed, 0 failed (14 items)` on 2026-11-14.
+    Check of 2026-11-25: NOT RE-DERIVED (conditions gone — the worktree does not exist). The scribe did not run the command in a different checkout.
   - The location of the requirement and the fix: `sed -n 87,106p /home/flatrick/src/github/flatrick/claude-team/.worktrees/multiplexer-launch-checks/openspec/specs/launcher/session/naming/spec.md`. On 2026-11-14 the scribe saw the heading `### Requirement: Sanitize default names` at line 87 and the `Source:` line at line 106, after the last scenario.
     The state before the fix is not shown by this command. The team lead gave the link between the long `Source:` line and the warning.
+    Check of 2026-11-25: the worktree does not exist. Replacement, in the main checkout: `git show cf55131:openspec/specs/launcher/session/naming/spec.md | sed -n 87,106p`.
+    It shows the heading on line 87 and the `Source:` line on line 106. `cf55131` is the archive commit in `origin/main`.
   - The warning text, the command chain, and the exit code: NOT RE-DERIVED (second-hand — `req-mux-checks` and the team lead, not the scribe). The report of `req-mux-checks` said: "The archive first left one length warning in the naming spec (Source line); I moved it below the scenarios and amended the archive commit."
   - The report does not say whether the chain used `;` or `&&`, or whether a warning gives exit code 0.
 - Cause: inferred, not verified. The chain did not gate the commit on a validation without warnings.

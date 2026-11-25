@@ -7,6 +7,8 @@
   The leader reported an unsure "no match" to the operator.
 - Evidence: `.worktrees/` is listed in `.gitignore`.
   The global CLAUDE.md already says to add `--no-ignore` when git-ignored files matter.
+  Check of 2026-11-25: `rg -n 'worktrees' .gitignore` in the main checkout still shows `.worktrees/` (line 8).
+  `rg -n -e '--no-ignore' ~/.claude/CLAUDE.md` returned no match. The statement about the global file: NOT RE-DERIVED (conditions gone — the file no longer has the text `--no-ignore`).
 - Effect: The leader made a possibly false completeness claim to the operator.
 - Cause: verified. `rg` skips git-ignored paths unless the command has `--no-ignore`.
 - Fix: A `ripgrep` skill now exists (agent-skills branch `feat/ripgrep`, copy in `~/.claude/skills/ripgrep`).

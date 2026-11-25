@@ -12,6 +12,8 @@
 - Evidence: `git -C /home/flatrick/src/github/flatrick/claude-team config --get-all branch.main.merge` prints only `refs/heads/main`.
   The scribe ran it and got that output.
   `git config --get-regexp '^branch\.'` in the friction-log worktree lists `branch.<name>.vscode-merge-base` keys for `main`, `docs/friction-log`, and `docs/friction-scribe-agent`. The scribe ran it.
+  Check of 2026-11-25: the first command still prints only `refs/heads/main`.
+  The second command now lists `vscode-merge-base` keys only for `main` and `docs/friction-log`. It lists no key for `docs/friction-scribe-agent`.
   The error itself: NOT RE-DERIVED (second-hand — the leader saw it; the pull state changed after the merge, so the conditions are gone).
 - Cause: not verified.
   A possible lead (not tested): GitHub deleted the merged remote branches, and VS Code added `vscode-merge-base` keys for `main` and both docs branches.
@@ -24,6 +26,9 @@
   Config re-derivation: `git -C /home/flatrick/src/github/flatrick/claude-team config --get-all branch.main.merge` printed `refs/heads/main` when the scribe ran it on 2026-11-09.
   `git -C /home/flatrick/src/github/flatrick/claude-team config --get-regexp '^branch\.'` on 2026-11-09 shows `branch.main.remote origin`, `branch.main.merge refs/heads/main`, and `branch.main.vscode-merge-base origin/main`.
   It also shows `vscode-merge-base` keys for `docs/friction-log` and `feat/ship-team-skills`. The branches `docs/decision-option-letters` and `docs/commit-conventions` have `remote` and `merge` keys only.
+  Check of 2026-11-25: `branch.main.merge` still has the one value `refs/heads/main`, and the three `branch.main` keys are the same.
+  The second command now shows no key for `feat/ship-team-skills`, `docs/decision-option-letters`, or `docs/commit-conventions`. It shows `remote`, `merge`, and `vscode-merge-base` for `docs/friction-log`.
+  `git config --get-regexp '^(pull|fetch)\.'` still shows `pull.ff only` and `fetch.prune true`.
   `git config --get-regexp '^(pull|fetch)\.'` shows `pull.ff only` and `fetch.prune true`.
   Result for the lead of case 1: the `vscode-merge-base` key for `main` still exists after the failure, and `branch.main.merge` has one value. The config alone does not explain the error. The lead is not confirmed and not excluded.
   This is the second failure in two days, each after a rebase-and-merge of a PR.

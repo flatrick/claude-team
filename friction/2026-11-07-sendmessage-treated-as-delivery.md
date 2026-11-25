@@ -8,6 +8,7 @@
   The leader told the operator that work was in progress.
 - Evidence: the inbox file `session-0f676c72/inboxes/claude-dir-cleanup.json` showed `read: false` for those messages.
   See the F-003 evidence folder.
+  Check of 2026-11-25: NOT RE-DERIVED (conditions gone — `~/.claude/teams/session-0f676c72` does not exist, and the scribe did not find the evidence folder).
 - Effect: The operator received a wrong status. The work did not run.
 - Cause: verified. The inbox file showed `read: false`.
   A successful send means that the message reached the inbox, not that the recipient read it.
