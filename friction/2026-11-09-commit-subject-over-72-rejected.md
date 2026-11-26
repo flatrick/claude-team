@@ -24,4 +24,11 @@
   Check of 2026-11-25: NOT RE-DERIVED (conditions gone — the worktree does not exist, so the commit that `HEAD` named is not known from the command).
   Cause: inferred, not verified. A statement of the limit in the brief did not prevent the first long attempt.
   Effect: one extra commit attempt. No work was lost.
-- Status: open
+- Status: closed (accepted)
+  The operator made this decision on 2026-11-26. This status applies to the whole entry, which includes case 2.
+  Reason: the 72-character subject limit of `gir` is intentional, and a retry of a git commit is cheap.
+  The `gir` commit-msg hook is the gate for this limit.
+  The rule `.claude/rules/repo-conventions.md` already states that a subject must not exceed `subjectMax` in `.girconfig`. It has no `paths:` filter, so every session loads it.
+  The rule: `rg -n 'subjectMax' .claude/rules/repo-conventions.md`.
+  The filter: `rg -n '^paths:' .claude/rules/repo-conventions.md` finds nothing.
+  The decision: NOT RE-DERIVED (second-hand — the operator told the team lead, and the team lead told the scribe).
