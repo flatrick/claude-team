@@ -2,7 +2,7 @@
 
 ### Requirement: Shutdown check reads member names only
 
-The wait step of the shipped `end-teammate` skill SHALL compare the teammate name only with the `name` field of each entry in the `members` list of the team config.
+The wait step of the shipped `end-teammate` skill SHALL read the `members` list of the team config. It SHALL compare the teammate name only with the `name` field of each entry in that list.
 It SHALL NOT search the whole config text, and SHALL NOT use `jq`.
 The bash form SHALL run `python3 -I -c` with the standard `json` module inside a `timeout 40` wait loop. The PowerShell form SHALL use `ConvertFrom-Json` and carry the words `not tested on Windows`.
 
@@ -26,7 +26,7 @@ Source: no code yet. This change adds the text to `src/ClaudeTeam/skills/end-tea
 
 ### Requirement: Shutdown check does not confirm on a read error
 
-Each form of the wait step in the shipped `end-teammate` skill SHALL report that the name is gone only after it reads a `members` list that does not have the name.
+Each form of the wait step SHALL report that the name is gone only after it reads a `members` list without the name. This rule applies to the bash form and the PowerShell form of the shipped `end-teammate` skill.
 If a form cannot read or parse the config, it SHALL continue to wait until the time limit.
 The skill SHALL tell the leader which result confirms that the name is gone, and that any other result does not confirm it.
 
@@ -44,8 +44,8 @@ Source: no code yet. This change adds the text to `src/ClaudeTeam/skills/end-tea
 
 ### Requirement: A successful send is not a read
 
-The shipped `team-protocol` skill SHALL say that a successful `SendMessage` result means that the message reached the inbox of the recipient, not that the recipient read it.
-It SHALL give the path of the inbox file of a member, and SHALL say that a message that is still in that file is not yet read.
+The shipped `team-protocol` skill SHALL say that a successful `SendMessage` result means that the message reached the inbox of the recipient. It SHALL say that this result does not mean that the recipient read the message.
+It SHALL give the path of the inbox file of a member. It SHALL say that a message that is still in that file is not yet read.
 
 #### Scenario: Message in the inbox file
 
@@ -57,7 +57,7 @@ Source: no code yet. This change adds the text to `src/ClaudeTeam/skills/team-pr
 
 ### Requirement: Late idle notice checked against the inbox
 
-The shipped `team-protocol` skill SHALL tell the reader what to do if an idle notice arrives after the reader sent a newer message to that teammate.
+The shipped `team-protocol` skill SHALL tell the reader what to do with a late idle notice. A late idle notice arrives after the reader sent a newer message to that teammate.
 The reader SHALL read the inbox file of the teammate.
 If the file is empty or holds only `[]`, the skill SHALL say that the teammate has the message. It SHALL tell the reader to wait for the reply, and not to treat the notice as a refusal.
 

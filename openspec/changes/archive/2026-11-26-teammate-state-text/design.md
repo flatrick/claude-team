@@ -49,7 +49,7 @@ Measured on 2026-11-26 with that rejected form: a config with incomplete JSON an
 
 ### D4: The text of step 5 and step 6
 
-Step 5 keeps its two conditions. Replace its second condition with: "No entry in the `members` list of `~/.claude/teams/<team>/config.json` can have the name."
+Step 5 keeps its two conditions. Replace its second condition with: "No entry in the `members` list of `~/.claude/teams/<team>/config.json` has the name."
 
 Step 6 has this text. The two commands are exact.
 
@@ -67,7 +67,7 @@ Step 6 has this text. The two commands are exact.
   $end = (Get-Date).AddSeconds(40); do { try { $names = (Get-Content "$HOME/.claude/teams/<team>/config.json" -Raw -ErrorAction Stop | ConvertFrom-Json -ErrorAction Stop).members.name; $gone = [bool]$names -and $names -notcontains '<name>' } catch { $gone = $false }; if (-not $gone) { Start-Sleep -Seconds 1 } } until ($gone -or (Get-Date) -ge $end); $gone
   ```
 
-  The output `True` confirms that the name is gone. The output `False` does not confirm it.
+  The output `True` confirms that the name is gone. The output `False` does not confirm it. Any other result does not confirm it.
 
 The implementer can use the layout of the current skill, with each command in one inline code span or in a code block. The command text stays on one line.
 

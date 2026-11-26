@@ -189,7 +189,7 @@ public sealed class ShippedContentTests
         Assert.DoesNotContain("jq", text);
         Assert.DoesNotContain("-match '<name>'", text);
         Assert.Contains(
-            "No entry in the `members` list of `~/.claude/teams/<team>/config.json` can have the name.", text);
+            "No entry in the `members` list of `~/.claude/teams/<team>/config.json` has the name.", text);
     }
 
     [Fact]
@@ -201,6 +201,7 @@ public sealed class ShippedContentTests
         Assert.Contains(
             "The output `True` confirms that the name is gone. The output `False` does not confirm it.", text);
         var powerShell = PowerShellWaitStep();
+        Assert.Contains("The output `False` does not confirm it. Any other result does not confirm it.", powerShell);
         Assert.Contains("catch { $gone = $false }", powerShell);
         Assert.Contains("[bool]$names", powerShell);
     }
