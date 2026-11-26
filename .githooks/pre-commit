@@ -1,0 +1,20 @@
+#!/bin/sh
+# Validate OpenSpec when a commit touches openspec/.
+# See .claude/rules/openspec-validation-warnings.md.
+# The check reads the working tree, not the staged index.
+if git diff --cached --quiet -- ':(top)openspec/'; then
+	exit 0
+fi
+if ! command -v openspec >/dev/null 2>&1; then
+	echo "openspec: not installed, pre-commit check skipped" >&2
+	exit 0
+fi
+if ! openspec validate --all --strict; then
+	echo "openspec: 'validate --all --strict' failed, commit blocked" >&2
+	exit 1
+fi
+if ! openspec validate --archived; then
+	echo "openspec: 'validate --archived' failed, commit blocked" >&2
+	exit 1
+fi
+exit 0

@@ -1,6 +1,7 @@
 # OpenSpec validation warnings
 
 Added: 2026-11-08.
+Updated: 2026-11-26.
 
 ## Rule
 
@@ -24,5 +25,10 @@ Every warning is noise that can hide a real problem.
 
 ## Enforcement
 
-Mechanical when someone runs the two commands; there is no hook.
+Mechanical.
+The `.githooks/pre-commit` hook runs the two commands when a commit stages a change under `openspec/`.
+The hook blocks the commit if a command exits with a non-zero code.
+`git commit --no-verify` skips the hook.
+If `openspec` is not on `PATH`, the hook skips the check and prints a message.
+The hook checks the files in the working tree, not the staged content.
 Run both at the end of each change that touches `openspec/`, and put their output in the report.
