@@ -21,8 +21,7 @@
   - The conflicts were in `openspec/changes/ship-team-skills/specs/launcher/starter-files/install/spec.md`. The teammate resolved each one with `git checkout 9bbd918c686fef8870c178879ad85ed453246bec -- <file>`, four times.
   - `git rev-parse HEAD^{tree}` gave `14aca1dd88c564dfac7db59698951b737a5033f5` before the autosquash and after it. The old head was `9bbd918c686fef8870c178879ad85ed453246bec`, and the new head was `53063dd950ca6f5f98471f09ceef58095b4d1dbc`.
   - The equality of the trees comes only from the report values.
-    Check of 2026-11-25: `git show -s --format='%h %T' 9bbd918 53063dd` in the main checkout printed tree `14aca1dd88c564dfac7db59698951b737a5033f5` for both commits.
-    Thus the trees are equal. No ref was found for the two commits, so this works only while the local repository keeps them.
+    Check of 2026-11-25: NOT RE-DERIVED (conditions gone — no ref contains `9bbd918` or `53063dd`).
   The scribe read the two reports. The scribe did not re-run the rebases.
 - Cause: inferred, not verified. The convention "fix with a `fixup!` of the commit it belongs to, then autosquash before push" collides with a file that several commits change in sequence.
 - Effect: One aborted rebase, and conflicts in a second rebase. Some intermediate commits do not show the stage-by-stage spec text. The final tree is correct.
