@@ -10,7 +10,7 @@ The shipped team skills lead a leader to a wrong view of the state of a teammate
 
 - Step 6 of the shipped `end-teammate` skill checks only the names of the member entries in the team config. The bash form uses `python3 -I -c` with the standard `json` module. The PowerShell form uses `ConvertFrom-Json` and stays marked `not tested on Windows`.
 - Both forms report that the name is gone only when they read a member list that does not have the name. If a form cannot read the config, it does not report this.
-- Step 5 of the same skill says that no member entry can have the name.
+- Step 5 of the same skill says that no member entry has the name.
 - The shipped `team-protocol` skill gets one new section about the state of a message. It covers the meaning of a successful send, a message in an inbox file, and a late idle notice. For a late idle notice, the reader checks the inbox file of the teammate.
 - The bash form of step 6 needs `python3`. `README.md` gets one sentence about this, next to the tmux requirement. The operator decided this. The reason is that a user then learns about the tool before a shutdown check fails.
 
@@ -42,4 +42,3 @@ The operator limited this change to a fix of the shipped text, with no new CLI c
 - The other shipped files: the team-leader agent, `start-teammate`, and the peer-leader rule.
 - Other changes to `README.md`.
 - The friction entries.
-- Other friction entries.
