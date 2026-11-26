@@ -10,8 +10,7 @@
   The limit: `rg -n 'subjectMax' /home/flatrick/src/github/flatrick/claude-team/.girconfig` gives line 4, `subjectMax = 72`.
   The hook `.githooks/commit-msg` only calls `gir hook commit-msg`, so `rg -n '72' .githooks/` finds nothing. The limit is in `.girconfig`.
   The accepted subject: `git -C /home/flatrick/src/github/flatrick/claude-team/.worktrees/ship-team-skills log -1 --format=%s 63c9123 | awk '{print length($0)}'` printed 69 on 2026-11-09.
-    Check of 2026-11-25: the worktree does not exist. Replacement, in the main checkout: `git log -1 --format=%s 63c9123 | awk '{print length($0)}'` printed 69.
-    No ref contains `63c9123`. The replacement works only while the local repository keeps the object.
+    Check of 2026-11-25: NOT RE-DERIVED (conditions gone — the worktree does not exist, and no ref contains `63c9123`).
   The brief does not state the limit: `rg -n -i '72|subject' /home/flatrick/src/github/flatrick/claude-team/.claude/agents/requirements-hard.md` finds nothing.
 - Cause: inferred, not verified. The brief of the requirements preset does not state the subject limit, so the agent learns it from the hook.
 - Effect: One extra commit attempt. No work was lost.
