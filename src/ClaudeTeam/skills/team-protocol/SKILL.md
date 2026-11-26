@@ -46,6 +46,16 @@ Use native tasks and messages to coordinate.
 A message is not an acknowledgment. Wait for a reply before you assume that conflicting work has stopped.
 Keep the configuration of your agent type. Escalate work beyond its scope to the leader or the operator.
 
+## Message state
+
+A successful `SendMessage` result means that the message reached the inbox of the recipient.
+It does not mean that the recipient read the message.
+The inbox file of a member is `~/.claude/teams/<team>/inboxes/<name>.json`.
+A message that is still in this file is not yet read.
+If an idle notice arrives after you sent a newer message, read the inbox file of the teammate.
+If the file is empty or holds only `[]`, the teammate has the message.
+Wait for its reply, and do not treat the notice as a refusal.
+
 ## Subagents
 
 A worker takes the subagent model and the maximum subagent count from its assignment.

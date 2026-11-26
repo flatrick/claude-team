@@ -48,6 +48,8 @@ Inside a multiplexer pane, the launcher creates the session detached. Then it sw
 
 The launcher needs tmux 3.2 or newer, because it uses `new-session -e`. Before a launch on a platform other than Windows, it runs `tmux -V`. If the version is older, it prints a message and exits with code 1. If the version text is not `tmux <major>.<minor>`, for example `tmux next-3.4`, the launcher continues. The version check does not run with `--dry-run` or on Windows.
 
+The shipped `end-teammate` skill needs `python3` for its shutdown check on Linux and macOS.
+
 A default session name replaces whitespace, periods, and colons with `_`. The launcher rejects a `--session` value that contains whitespace, a control character, a period, or a colon. On Windows, psmux joins arguments without quotes, so the launcher also rejects a forwarded argument that contains whitespace. It exits with code 2 and names the argument.
 
 Use `claude-team --dry-run` to print the session name, the variable, and the commands without starting anything.

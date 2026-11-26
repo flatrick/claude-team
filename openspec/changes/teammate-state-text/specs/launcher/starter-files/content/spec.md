@@ -59,12 +59,13 @@ Source: no code yet. This change adds the text to `src/ClaudeTeam/skills/team-pr
 
 The shipped `team-protocol` skill SHALL tell the reader what to do if an idle notice arrives after the reader sent a newer message to that teammate.
 The reader SHALL read the inbox file of the teammate.
-If the file is empty, the skill SHALL say that the teammate has the message. It SHALL tell the reader to wait for the reply, and not to treat the notice as a refusal.
+If the file is empty or holds only `[]`, the skill SHALL say that the teammate has the message. It SHALL tell the reader to wait for the reply, and not to treat the notice as a refusal.
 
 #### Scenario: Late idle notice
 
 - **WHEN** the embedded `team-protocol` skill is read
 - **THEN** it tells the reader to read the inbox file of the teammate when an idle notice arrives after a newer message
-- **AND** it says that, with an empty file, the reader waits for the reply and does not treat the notice as a refusal
+- **AND** it says that, with a file that is empty or holds only `[]`, the teammate has the message
+- **AND** it says that the reader then waits for the reply and does not treat the notice as a refusal
 
 Source: no code yet. This change adds the text to `src/ClaudeTeam/skills/team-protocol/SKILL.md` and the tests to `tests/ClaudeTeam.Tests/ShippedContentTests.cs`.

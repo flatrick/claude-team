@@ -107,7 +107,7 @@ The section has this text:
 > The inbox file of a member is `~/.claude/teams/<team>/inboxes/<name>.json`.
 > A message that is still in this file is not yet read.
 > If an idle notice arrives after you sent a newer message, read the inbox file of the teammate.
-> If the file is empty, the teammate has the message.
+> If the file is empty or holds only `[]`, the teammate has the message.
 > Wait for its reply, and do not treat the notice as a refusal.
 
 The operator chose the inbox check for a late idle notice.
@@ -115,6 +115,15 @@ Reason: no shipped step records the send time, and the `SendMessage` result show
 
 - Rejected: compare the time of the notice with the time of the last message. The reader has no reliable send time.
 - The `SendMessage` result without a time field: NOT RE-DERIVED (conditions gone — the result seen on 2026-11-26 exists only in that session).
+
+The operator decided that a file that is empty and a file that holds only `[]` both count as empty.
+Reason: today an inbox file with no message holds `[]`, not 0 bytes. A reader must not wait for a file of 0 bytes.
+The current observation in D1 gives the command that shows this state.
+
+Known limits of this text:
+
+- The text `[]` ties the guidance to the current JSON format of the inbox file. If the harness changes the format, the text can become wrong.
+- The text does not cover a missing inbox file.
 
 Known limit: an empty inbox file can mean only that the harness delivered the message. That it also means that the model read the message is not verified. The 2026-11-08 friction entry used the empty inbox as proof of the read. The shipped text says that the teammate has the message.
 
