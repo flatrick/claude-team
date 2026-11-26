@@ -33,6 +33,27 @@
   NOT RE-DERIVED (second-hand — the leader saw the row and the reply; the scribe did not).
   NOT RE-DERIVED (second-hand — the leader saw the row; the scribe sent the reply, see the reply text in this session).
   Check of 2026-11-25: "this session" is an earlier session. The reply text: NOT RE-DERIVED (conditions gone — that session ended).
+- Fourth case (2026-11-26, Claude Code 2.1.332 in the scribe session):
+  - Setup: team `session-781049cc`. The leader `claude-team` (preset `team-leader`) ran in the main checkout. Teammate `friction-scribe` (preset `friction-scribe`) ran in tmux pane `%1` on host `death-angel`.
+  - Observation of the leader: before it removed a worktree, the leader ran `ListAgents`.
+    Under "Teammates", the output listed `friction-scribe [9d7051] · pane`.
+    It also listed a new peer, `death-angel-lively-milner [0879f3] · Remote Control · idle`.
+    The first `ListAgents` of the session, before the start of the scribe, did not show this peer.
+    The `SendMessage` result for the peer said "a Claude session on another machine, over Remote Control; not confirmed read ... this route reports nothing back".
+    The peer answered with a cross-session message from `bridge:session_01VBVYU3scZXytq1ctgogP8K`, and said that it is `friction-scribe`.
+    NOT RE-DERIVED (second-hand — the team lead saw the `ListAgents` output, the send result, and the reply; the scribe did not).
+  - Observation of the scribe: a peer-check message arrived as a cross-session message with `from="bridge:session_01VBVYU4S2DV3PfhkZcexZWf"`, `from-name="claude-team"`, and `from-mode="prompting"`.
+    The message said that the leader planned to remove the worktree `.worktrees/review-fixes`. It asked if the scribe is a team leader or a teammate.
+    The scribe replied to the `from` address that it is the teammate `friction-scribe`.
+    The send result for the reply said "delivery is not confirmed" and "this route reports nothing back".
+    NOT RE-DERIVED (conditions gone — the message and the send result are only in the conversation of the scribe session).
+  - The session ID in the reply that the leader got is the same ID as in the `Claude-Session` line that the harness gave the scribe for its commits.
+    The line: `git log -1 --format=%B ed11e05` on the branch `docs/friction-log`.
+    This indicates that the peer was the scribe (inferred, not verified).
+  - Cause: not verified.
+  - Effect: the peer rule made the leader send a peer check to its own teammate and wait before the removal.
+    The cost was one round trip. There was no harm.
+    The route text "another machine" was wrong again for a pane on the same host.
 - Cause: not verified.
 - Effect: The leader lost time and paused a global install. A teammate cannot be told from a peer leader by its name or by its route.
   The route text ("another machine") is wrong for a pane on the same host.
