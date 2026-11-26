@@ -167,6 +167,73 @@ public sealed class ShippedContentTests
         Assert.Contains("A missing line is not a launch failure.", section);
     }
 
+    private static string PowerShellWaitStep()
+    {
+        var text = TeamSkills.Text("end-teammate");
+        return Assert.Single(text.Split('\n'), line => line.TrimStart().StartsWith("- PowerShell", StringComparison.Ordinal));
+    }
+
+    [Fact]
+    public void End_skill_wait_step_reads_member_names_only()
+    {
+        var text = TeamSkills.Text("end-teammate");
+
+        Assert.Contains(
+            """timeout 40 bash -c 'until python3 -I -c "import json,sys; sys.exit(sys.argv[2] in [m.get(\"name\") for m in json.load(open(sys.argv[1]))[\"members\"]])" "$0" "$1"; do sleep 1; done' ~/.claude/teams/<team>/config.json <name>""",
+            text);
+        var powerShell = PowerShellWaitStep();
+        Assert.Contains("ConvertFrom-Json", powerShell);
+        Assert.Contains(".members.name", powerShell);
+        Assert.Contains("not tested on Windows", powerShell);
+        Assert.DoesNotContain("grep", text);
+        Assert.DoesNotContain("jq", text);
+        Assert.DoesNotContain("-match '<name>'", text);
+        Assert.Contains(
+            "No entry in the `members` list of `~/.claude/teams/<team>/config.json` can have the name.", text);
+    }
+
+    [Fact]
+    public void End_skill_wait_step_does_not_confirm_on_a_read_error()
+    {
+        var text = TeamSkills.Text("end-teammate");
+
+        Assert.Contains("Exit code 0 confirms that the name is gone. Any other exit code does not confirm it.", text);
+        Assert.Contains(
+            "The output `True` confirms that the name is gone. The output `False` does not confirm it.", text);
+        var powerShell = PowerShellWaitStep();
+        Assert.Contains("catch { $gone = $false }", powerShell);
+        Assert.Contains("[bool]$names", powerShell);
+    }
+
+    private static string MessageStateSection()
+    {
+        var text = TeamSkills.Text("team-protocol");
+        var start = text.IndexOf("\n## Message state\n", StringComparison.Ordinal);
+        Assert.True(start >= 0, "The team-protocol text has no `## Message state` section.");
+        var end = text.IndexOf("\n## ", start + 1, StringComparison.Ordinal);
+        return end < 0 ? text[start..] : text[start..end];
+    }
+
+    [Fact]
+    public void Protocol_says_that_a_successful_send_is_not_a_read()
+    {
+        var section = MessageStateSection();
+        Assert.Contains("A successful `SendMessage` result means that the message reached the inbox of the recipient.", section);
+        Assert.Contains("It does not mean that the recipient read the message.", section);
+        Assert.Contains("`~/.claude/teams/<team>/inboxes/<name>.json`", section);
+        Assert.Contains("A message that is still in this file is not yet read.", section);
+    }
+
+    [Fact]
+    public void Protocol_checks_a_late_idle_notice_against_the_inbox()
+    {
+        var section = MessageStateSection();
+        Assert.Contains("If an idle notice arrives after you sent a newer message, read the inbox file of the teammate.", section);
+        Assert.Contains("If the file is empty or holds only `[]`, the teammate has the message.", section);
+        Assert.Contains("Wait for its reply, and do not treat the notice as a refusal.", section);
+        Assert.DoesNotContain("timestamp", section, StringComparison.OrdinalIgnoreCase);
+    }
+
     private static void AssertChecksDecide(string text)
     {
         Assert.Contains("psmux can behave differently from tmux and give no error", text);
